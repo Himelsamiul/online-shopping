@@ -8,7 +8,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#"> Help </a>
+                  <a class="nav-link" href=""> Help </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#"> Licenses </a>
@@ -17,11 +17,11 @@
             </nav>
             <div class="copyright">
               2024, made with <i class="fa fa-heart heart text-danger"></i> by
-              <a href="http://www.themekita.com">ThemeKita</a>
+              <a href="">ThemeKita</a>
             </div>
             <div>
               Distributed by
-              <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
+              <a target="_blank" href="">ThemeWagon</a>.
             </div>
           </div>
         </footer>

@@ -1,11 +1,12 @@
 <?php
-namespace App\Http\Controllers\frontend;
+namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-class HomeController extends Controller;
+class HomeController extends Controller
     {
         public function home(){
-          return view('partial.admin.master');
+          return view('backend.master');
         }
+       
 }
 
