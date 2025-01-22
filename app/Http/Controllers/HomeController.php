@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
     {
         public function home(){
-          return view('backend.master');
+          return view('backend.pages.dashboard');
         }
        
 }
