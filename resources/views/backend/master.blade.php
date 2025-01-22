@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="assets/css/demo.css" />
   </head>
   <body>
+  @yield('content')
     <div class="wrapper">
       <!-- Sidebar -->
       
@@ -194,6 +195,6 @@
     <!-- Kaiadmin JS -->
     <script src="assets/js/kaiadmin.min.js"></script>
 
- 
+    @stack('scripts')
   </body>
 </html>

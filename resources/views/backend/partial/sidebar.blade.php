@@ -40,11 +40,6 @@
                 </a>
                 <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
-                    <li>
-                      <a href="../demo1/index.html">
-                        <span class="sub-item">Dashboard 1</span>
-                      </a>
-                    </li>
                   </ul>
                 </div>
               </li>
@@ -57,54 +52,20 @@
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#base">
                   <i class="fas fa-layer-group"></i>
-                  <p>Base</p>
+                  <p>Access Portal</p>
                   <span class="caret"></span>
                 </a>
                 <div class="collapse" id="base">
                   <ul class="nav nav-collapse">
                     <li>
                       <a href="">
-                        <span class="sub-item">Avatars</span>
+                        <span class="sub-item">Login</span>
                       </a>
                     </li>
                     <li>
-                      <a href="components/buttons.html">
-                        <span class="sub-item">Buttons</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="components/gridsystem.html">
-                        <span class="sub-item">Grid System</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="components/panels.html">
-                        <span class="sub-item">Panels</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="components/notifications.html">
-                        <span class="sub-item">Notifications</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="components/sweetalert.html">
-                        <span class="sub-item">Sweet Alert</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="components/font-awesome-icons.html">
-                        <span class="sub-item">Font Awesome Icons</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="components/simple-line-icons.html">
-                        <span class="sub-item">Simple Line Icons</span>
-                      </a>
-                    </li>
                     <li>
                       <a href="components/typography.html">
-                        <span class="sub-item">Typography</span>
+                        <span class="sub-item">Logout</span>
                       </a>
                     </li>
                   </ul>
@@ -168,27 +129,7 @@
                   </ul>
                 </div>
               </li>
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#maps">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <p>Maps</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="maps">
-                  <ul class="nav nav-collapse">
-                    <li>
-                      <a href="maps/googlemaps.html">
-                        <span class="sub-item">Google Maps</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="maps/jsvectormap.html">
-                        <span class="sub-item">Jsvectormap</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
+              
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#charts">
                   <i class="far fa-chart-bar"></i>
@@ -260,9 +201,7 @@
                       <div class="collapse" id="subnav2">
                         <ul class="nav nav-collapse subnav">
                           <li>
-                            <a href="#">
-                              <span class="sub-item">Level 2</span>
-                            </a>
+                            
                           </li>
                         </ul>
                       </div>
