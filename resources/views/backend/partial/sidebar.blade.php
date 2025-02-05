@@ -64,7 +64,7 @@
                     </li>
                     <li>
                     <li>
-                      <a href="components/typography.html">
+                      <a href="{{route('sign.out')}}">
                         <span class="sub-item">Logout</span>
                       </a>
                     </li>
