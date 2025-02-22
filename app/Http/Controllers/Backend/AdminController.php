@@ -9,34 +9,34 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    //  Show the login page
+    public function login()
+    {
+        return view('backend.pages.login');
+    }
+
     public function doLogin(Request $request)
     {
         // Validate input
-        $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Get credentials (only email and password)
-        $credentials = $request->only('email', 'password');
-
         // Attempt login
         if (Auth::attempt($credentials)) {
-            // If login is successful
-            // notify()->success('Login successful');
-            return redirect()->route('home');
+            return redirect()->route('dashboard');
         }
 
-        // If login fails
-        // notify()->error('Invalid credentials');
-        return redirect()->back();
+        // If authentication fails, redirect back with an error
+        return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
     }
 
+    //  Logout the user.
+     
     public function signout()
     {
-        // Logout the user
         Auth::logout();
-        // notify()->success('Logout successful');
-        return view('backend.pages.login');  // Adjust as per your login page view
+        return redirect()->route('admin.login')->with('success', 'Logout successful');
     }
 }

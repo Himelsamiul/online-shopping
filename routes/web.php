@@ -11,6 +11,10 @@ use App\Http\Controllers\Backend\AdminController;
 
 //backend
 
+
+
+
+
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
     Route::post('/do/login', [AdminController::class, 'doLogin'])->name('do.login');
