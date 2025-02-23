@@ -21,7 +21,7 @@ Route::group(['prefix' => 'admin'], function () {
     
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/sign/out', [AdminController::class, 'signout'])->name('sign.out');
-        Route::get('/', [HomeController::class, 'home'])->name('home');
+        Route::get('/dashboard', [HomeController::class, 'home'])->name('dashboard');
     });
 });
 

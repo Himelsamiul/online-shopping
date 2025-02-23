@@ -62,10 +62,10 @@
 
   <body>
     <!-- navbar-->
-    @include('backend.partials.header')
+    @include('backend.partial.header')
 
     <div class="d-flex align-items-stretch">
-      @include('backend.partials.sidebar')
+      @include('backend.partial.sidebar')
 
       <div class="page-holder bg-gray-100">
         <div class="container">
