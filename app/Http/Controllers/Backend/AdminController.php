@@ -39,4 +39,9 @@ class AdminController extends Controller
         Auth::logout();
         return redirect()->route('admin.login')->with('success', 'Logout successful');
     }
+
+
+    public function home(){
+        return view('backend.pages.dashboard');
+      }
 }

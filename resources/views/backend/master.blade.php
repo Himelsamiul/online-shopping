@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     @notifyCss
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
     
     <!-- Prism Syntax Highlighting-->
-    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/vendor/prismjs/plugins/toolbar/prism-toolbar.css">
+    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/vendor/prismjs/plugins/toolbar/prism-toolbar.css">    <!-- hard reload this css-->
     <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/vendor/prismjs/themes/prism-okaidia.css">
     
     <!-- The Main Theme stylesheet (Contains also Bootstrap CSS)-->
@@ -29,7 +29,10 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/favicon.png">
 
-    <style>  
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.17/dist/sweetalert2.min.css" rel="stylesheet">
+    
+    <style>
       .notify {
         z-index: 9999;
         justify-content: start;
@@ -58,20 +61,20 @@
         margin: 0.5rem;
       }
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
     <!-- navbar-->
     @include('backend.partial.header')
 
     <div class="d-flex align-items-stretch">
-      @include('backend.partial.sidebar')
+        @include('backend.partial.sidebar')
 
-      <div class="page-holder bg-gray-100">
-        <div class="container">
-          @yield('content')
+        <div class="page-holder bg-gray-100">
+            <div class="container">
+                @yield('content')
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- JavaScript files -->
@@ -89,27 +92,30 @@
     <script src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/vendor/prismjs/plugins/toolbar/prism-toolbar.min.js"></script>
     <script src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/vendor/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
     <script type="text/javascript">
-      Prism.plugins.NormalizeWhitespace.setDefaults({
-        'remove-trailing': true,
-        'remove-indent': true,
-        'left-trim': true,
-        'right-trim': true,
-      });
+        Prism.plugins.NormalizeWhitespace.setDefaults({
+            'remove-trailing': true,
+            'remove-indent': true,
+            'left-trim': true,
+            'right-trim': true,
+        });
     </script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.17/dist/sweetalert2.min.js"></script>
+
+    <!-- Push custom scripts for SweetAlert -->
+    @stack('scripts')
+
     <script>
-      function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
-      }
-      document.addEventListener('DOMContentLoaded', function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-      });
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
     </script>
-  </body>
+</body>
 </html>
-
-      
-
- 

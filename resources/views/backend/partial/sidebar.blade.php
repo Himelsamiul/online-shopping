@@ -1,40 +1,54 @@
 <div class="sidebar py-3" id="sidebar">
-  <button onclick="toggleSidebar()" class="btn btn-primary mb-3">Toggle Sidebar</button>
-  <input type="text" id="sidebarSearch" placeholder="Search..." class="form-control sidebar-search">
+  <button onclick="toggleSidebar()" class="btn btn-primary mb-3 w-100">Toggle Sidebar</button>
+  <input type="text" id="sidebarSearch" placeholder="Search..." class="form-control sidebar-search mb-2">
 
   <ul class="list-unstyled">
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-muted {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}" role="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('dashboard') }}" role="button" id="dashboardLink" onclick="setActiveLink(this)">
         <i class="fas fa-tachometer-alt me-3"></i><span class="sidebar-link-title">Dashboard</span>
       </a>
     </li>
+
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-muted" href="" role="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Category">
+      <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('categoryMenu', this); setActiveLink(this)">
         <i class="fas fa-tags me-3"></i><span class="sidebar-link-title">Category</span>
+        <i class="fas fa-chevron-right ms-auto"></i>
       </a>
+      <ul id="categoryMenu" class="submenu list-unstyled d-none ps-4">
+        <li><a href="{{route('categories.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Category</a></li>
+        <li><a href="{{route('categories.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Category List</a></li>
+      </ul>
     </li>
+
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-muted " href="" role="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu">
+      <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('menuMenu', this); setActiveLink(this)">
         <i class="fas fa-utensils me-3"></i><span class="sidebar-link-title">Menu</span>
+        <i class="fas fa-chevron-right ms-auto"></i>
       </a>
+      <ul id="menuMenu" class="submenu list-unstyled d-none ps-4">
+        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Menu</a></li>
+        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Menu List</a></li>
+      </ul>
     </li>
+
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-muted " href="" role="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Customer">
-        <i class="fas fa-users me-3"></i><span class="sidebar-link-title">Customer</span>
-      </a>
-    </li>
-    <li class="sidebar-list-item">
-      <a class="sidebar-link text-muted" href="" role="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Orders">
+      <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('ordersMenu', this); setActiveLink(this)">
         <i class="fas fa-receipt me-3"></i><span class="sidebar-link-title">Orders</span>
+        <i class="fas fa-chevron-right ms-auto"></i>
       </a>
+      <ul id="ordersMenu" class="submenu list-unstyled d-none ps-4">
+        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Pending Orders</a></li>
+        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Completed Orders</a></li>
+      </ul>
     </li>
+
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-muted" href="" role="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Report">
+      <a class="sidebar-link text-white d-flex align-items-center" href="">
         <i class="fas fa-file-alt me-3"></i><span class="sidebar-link-title">Report</span>
       </a>
     </li>
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-muted" href="{{ route('sign.out') }}" role="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Logout">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('sign.out') }}">
         <i class="fas fa-sign-out-alt me-3"></i><span class="sidebar-link-title">Logout</span>
       </a>
     </li>
@@ -49,4 +63,67 @@
       item.style.display = text.includes(searchTerm) ? 'block' : 'none';
     });
   });
+
+  function toggleSubmenu(id, element) {
+    const submenu = document.getElementById(id);
+    submenu.classList.toggle('d-none');
+    
+    element.querySelector(".fa-chevron-right").classList.toggle("rotate-icon");
+  }
+
+  function setActiveLink(link) {
+    // Remove active class from all links
+    document.querySelectorAll('.sidebar-link').forEach(function (item) {
+      item.classList.remove('active');
+    });
+    // Add active class to the clicked link
+    link.classList.add('active');
+  }
+
+  function setActiveSubmenuLink(link) {
+    // Remove active class from all submenu links
+    document.querySelectorAll('.submenu .sidebar-link').forEach(function (item) {
+      item.classList.remove('active');
+    });
+    // Add active class to the clicked submenu link
+    link.classList.add('active');
+  }
 </script>
+
+<style>
+  .sidebar {
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  .sidebar-list-item {
+    margin-bottom: 10px;
+  }
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+    color: white;
+  }
+  .sidebar-link:hover {
+    background: #34495e;
+    color: white;
+  }
+  .sidebar-link.active {
+    background: #16a085; /* Highlight color for active link */
+    color: white;
+  }
+  .submenu {
+    padding-left: 20px;
+  }
+  .fa-chevron-right {
+    transition: transform 0.3s;
+  }
+  .rotate-icon {
+    transform: rotate(90deg);
+  }
+</style>
