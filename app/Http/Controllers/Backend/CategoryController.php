@@ -10,24 +10,26 @@ use Illuminate\Support\Facades\Storage;
 class CategoryController extends Controller
 {
     public function list(Request $request)
-    {
-        $query = Category::query();
+{
+    $query = Category::query();
 
-        //name diye filter search
-        if ($request->has('search') && $request->search != '') {
-            $query->where('name', 'LIKE', "%{$request->search}%");
-        }
-
-        // Filter by Status
-        if ($request->has('status') && $request->status != '') {
-            $query->where('status', $request->status);
-        }
-
-        // Paginate 
-        $categories = $query->paginate(3);
-
-        return view('backend.pages.categories.list', compact('categories'));
+    // Search by category name (Dropdown)
+    if ($request->has('search') && $request->search != '') {
+        $query->where('name', $request->search); // Exact match for dropdown selection
     }
+
+    // Filter by Status
+    if ($request->has('status') && $request->status != '') {
+        $query->where('status', $request->status);
+    }
+
+    // Paginate 
+    $categories = $query->paginate(3);
+    $allCategories = Category::all(); // Fetch all categories for dropdown
+
+    return view('backend.pages.categories.list', compact('categories', 'allCategories'));
+}
+
 
 
 
@@ -150,4 +152,6 @@ if ($request->hasFile('image')) {
 
         return redirect()->route('categories.list')->with('success', 'Category deleted successfully.');
     }
+
+    
 }

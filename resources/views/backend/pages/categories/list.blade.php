@@ -13,9 +13,16 @@
     <!-- Search & Filter Form -->
     <form action="{{ route('categories.list') }}" method="GET" class="mb-3">
         <div class="row">
-            <!-- Search by Name -->
+            <!-- Search by Category Name Dropdown -->
             <div class="col-md-4">
-                <input type="text" name="search" class="form-control" placeholder="Search by name" value="{{ request('search') }}">
+                <select name="search" class="form-control">
+                    <option value="">Select Category</option>
+                    @foreach($allCategories as $cat)
+                        <option value="{{ $cat->name }}" {{ request('search') == $cat->name ? 'selected' : '' }}>
+                            {{ $cat->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Filter by Status -->
@@ -27,7 +34,7 @@
                 </select>
             </div>
 
-            <!-- Search Button -->
+            <!-- Search & Reset Buttons -->
             <div class="col-md-4">
                 <button type="submit" class="btn btn-success">Search</button>
                 <a href="{{ route('categories.list') }}" class="btn btn-secondary">Reset</a>
@@ -39,6 +46,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Status</th>
@@ -49,14 +57,13 @@
         <tbody>
             @forelse($categories as $category)
                 <tr>
+                    <td>{{ $category->id }}</td>
                     <td>{{ $category->name }}</td>
                     <td>{{ $category->description }}</td>
                     <td>{{ ucfirst($category->status) }}</td>
                     <td>
                         @if($category->image)
-                        <img class="category-image" src="{{ asset('image/category/' . $category->image) }}" alt="{{ $category->name }}">
-
-
+                            <img class="category-image" src="{{ asset('image/category/' . $category->image) }}" alt="{{ $category->name }}">
                         @else
                             No image
                         @endif
@@ -73,7 +80,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">No categories found.</td>
+                    <td colspan="6" class="text-center">No categories found.</td>
                 </tr>
             @endforelse
         </tbody>
@@ -83,6 +90,15 @@
     <div class="d-flex justify-content-center">
         {{ $categories->links('pagination::bootstrap-4') }}
     </div>
+
+    <style>
+        .category-image {
+            width: 80px; /* Set a fixed width */
+            height: 80px; /* Set a fixed height */
+            object-fit: cover; /* Ensures the image maintains aspect ratio */
+            border-radius: 5px; /* Optional: Adds rounded corners */
+        }
+    </style>
 
     @push('scripts')
     <script>
@@ -102,7 +118,7 @@
             document.querySelectorAll('.delete-form').forEach(function (form) {
                 form.addEventListener('submit', function (event) {
                     event.preventDefault();
-                    const categoryName = form.closest('tr').querySelector('td').textContent;
+                    const categoryName = form.closest('tr').querySelector('td:nth-child(2)').textContent;
                     
                     Swal.fire({
                         title: 'Are you sure?',
@@ -121,5 +137,6 @@
             });
         });
     </script>
+   
     @endpush
 @endsection

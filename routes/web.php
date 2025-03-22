@@ -19,10 +19,14 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
         Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');  
 
-        //crud operations of category
+        // CRUD operations of category
         Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
+        // Bulk delete route
+       Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('categories.bulkDelete');
+
     });
 });

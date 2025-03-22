@@ -29,7 +29,9 @@
             <label for="image">Category Image</label>
             <input type="file" class="form-control" id="image" name="image">
             @if($category->image)
-            <img class="category-image" src="{{ asset('image/category/' . $category->image) }}" alt="{{ $category->name }}">
+                <div class="mt-2">
+                    <img class="img-thumbnail" src="{{ asset('image/category/' . $category->image) }}" alt="{{ $category->name }}" style="width: 150px; height: 150px; object-fit: cover;">
+                </div>
             @endif
         </div>
 
