@@ -15,7 +15,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/sign/out', [AdminController::class, 'signout'])->name('sign.out');
         Route::get('/dashboard', [AdminController::class, 'home'])->name('dashboard');
 
-        // Category Routes
+        // Category Routes ei khan e
         Route::get('/categories', [CategoryController::class, 'list'])->name('categories.list');
         Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
         Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
@@ -26,7 +26,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
-        // Unit Routes
+        // Unit Routes ei gulaa
         Route::get('/units', [UnitController::class, 'unitlist'])->name('units.list');
         Route::get('units/create', [UnitController::class, 'unitcreate'])->name('units.create');
         Route::post('/units', [UnitController::class, 'unitstore'])->name('units.store');
