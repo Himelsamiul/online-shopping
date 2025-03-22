@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\CategoryController;
 
 // Backend Routes
@@ -36,5 +37,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/{unit}', [UnitController::class, 'unitupdate'])->name('units.update');
         Route::delete('/{unit}', [UnitController::class, 'unitdelete'])->name('units.delete');
         Route::get('/{unit}', [UnitController::class, 'unitshow'])->name('units.show');
+
+
+        //product er kaj korsi
+       // Route::get('products', [ProductController::class, 'list'])->name('products.list');
+        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
     });
 });

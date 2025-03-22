@@ -9,6 +9,11 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
+    // Define the relationship: A category can have many products
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

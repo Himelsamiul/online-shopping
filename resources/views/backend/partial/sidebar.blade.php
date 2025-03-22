@@ -20,14 +20,15 @@
       </ul>
     </li>
 
+    <!-- Replaced Menu with Products -->
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('menuMenu', this); setActiveLink(this)">
-        <i class="fas fa-utensils me-3"></i><span class="sidebar-link-title">Menu</span>
+      <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('productsMenu', this); setActiveLink(this)">
+        <i class="fas fa-box me-3"></i><span class="sidebar-link-title">Products</span>
         <i class="fas fa-chevron-right ms-auto"></i>
       </a>
-      <ul id="menuMenu" class="submenu list-unstyled d-none ps-4">
-        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Menu</a></li>
-        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Menu List</a></li>
+      <ul id="productsMenu" class="submenu list-unstyled d-none ps-4">
+        <li><a href="{{route('products.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Product</a></li>
+        <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Product List</a></li>
       </ul>
     </li>
 
