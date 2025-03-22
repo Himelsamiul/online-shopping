@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\UnitController;
 
 // Backend Routes
 
@@ -28,5 +29,14 @@ Route::group(['prefix' => 'admin'], function () {
         // Bulk delete route
        Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('categories.bulkDelete');
 
+
+       
+       Route::get('/units', [UnitController::class, 'unitlist'])->name('units.list');
+
+// Route to display the form to create a new unit
+            Route::get('units/create', [UnitController::class, 'unitcreate'])->name('units.create');
+
+// Route to store the new unit
+       Route::post('/units', [UnitController::class, 'unitstore'])->name('units.store');
     });
 });

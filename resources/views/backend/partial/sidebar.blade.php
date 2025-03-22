@@ -31,6 +31,18 @@
       </ul>
     </li>
 
+    <!-- New "Unit" Sidebar -->
+    <li class="sidebar-list-item">
+      <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('unitMenu', this); setActiveLink(this)">
+        <i class="fas fa-warehouse me-3"></i><span class="sidebar-link-title">Unit</span>
+        <i class="fas fa-chevron-right ms-auto"></i>
+      </a>
+      <ul id="unitMenu" class="submenu list-unstyled d-none ps-4">
+        <li><a href="{{route('units.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Unit</a></li>
+        <li><a href="{{route('units.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Unit List</a></li>
+      </ul>
+    </li>
+
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('ordersMenu', this); setActiveLink(this)">
         <i class="fas fa-receipt me-3"></i><span class="sidebar-link-title">Orders</span>
@@ -47,6 +59,7 @@
         <i class="fas fa-file-alt me-3"></i><span class="sidebar-link-title">Report</span>
       </a>
     </li>
+
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('sign.out') }}">
         <i class="fas fa-sign-out-alt me-3"></i><span class="sidebar-link-title">Logout</span>
