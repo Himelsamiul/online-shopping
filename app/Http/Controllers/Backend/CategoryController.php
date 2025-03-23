@@ -102,36 +102,45 @@ class CategoryController extends Controller
     //update kore submit korkam ,mane edit kore submit korlam ba updagte jeta dhori na jeno same e
     public function update(Request $request, $id)
     {
-        
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:500',
-            'status' => 'required|in:active,inactive', // Ensure status is either active or inactive
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate image file
+            'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         
+            // Image handling
         $category = Category::findOrFail($id);
+    
 
-       //image handel korlam
-       $fileName = '';
         if ($request->hasFile('image')) {
-            // Generate the file name (timestamp + original extension)
-            $fileName = $request->file('image')->getClientOriginalName();
-            
-            // Store the image directly in the public directory (public/image/category)
-            $path = $request->file('image')->move(public_path('image/category'), $fileName);
+            // Delete old image if it exists
+            if ($category->image && file_exists(public_path('image/category/' . $category->image))) {
+                unlink(public_path('image/category/' . $category->image));
+            }
+    
+            // Generate a unique filename (timestamp + extension)
+            $fileName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+    
+            // Store the new image in public/image/category
+            $request->file('image')->move(public_path('image/category'), $fileName);
+    
+            // Update category image field
+            $category->image = $fileName;
         }
-        
-        Category::create([
+    
+        // Update category data
+        $category->update([
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
-            'image' => $fileName,  // Save the generated image file name
+            'image' => $category->image,  // Keep existing image if not updated
         ]);
-
-        return redirect()->route('categories.list')->with('success', 'Category created successfully.');
+    
+        return redirect()->route('categories.list')->with('success', 'Category updated successfully.');
     }
+    
 
 
     // category er details dekhlam
