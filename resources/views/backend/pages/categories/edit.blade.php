@@ -30,12 +30,17 @@
                 <label>Image:</label>
                 <input type="file" name="image" class="form-control" id="imageInput">
                 <br>
+
                 @if($category->image && $category->image != 'no_image.jpg')
-                    <p>Current Image: <img src="{{ asset('image/category/' . $category->image) }}" width="100" id="imagePreview"></p>
-                    <button type="button" class="btn btn-danger" id="removeImage">Remove Image</button>
+                    <p>Current Image:</p>
+                    <img src="{{ asset('image/category/' . $category->image) }}?t={{ time() }}" width="100" id="imagePreview">
+                    <br>
+                    <button type="button" class="btn btn-danger mt-2" id="removeImage">Remove Image</button>
                 @else
                     <p>No Image Available</p>
+                    <img src="" id="imagePreview" style="display: none;" width="100">
                 @endif
+
                 <small>If you don't want to change the image, leave this field empty.</small>
             </div>
 
@@ -44,17 +49,24 @@
     </div>
 
     <script>
-        // Remove image functionality for category
-        document.getElementById('removeImage')?.addEventListener('click', function () {
-            document.getElementById('imagePreview').style.display = 'none'; // Hide preview
-            document.getElementById('imageInput').value = ''; // Clear file input
+        document.getElementById('imageInput')?.addEventListener('change', function (event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById('imagePreview').src = reader.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
 
-            // Add a hidden input to indicate image removal
-            let imageInput = document.createElement('input');
-            imageInput.type = 'hidden';
-            imageInput.name = 'remove_image';
-            imageInput.value = 'yes';
-            document.forms[0].appendChild(imageInput); // Append it to the form
+        document.getElementById('removeImage')?.addEventListener('click', function () {
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('imageInput').value = '';
+
+            let removeInput = document.createElement('input');
+            removeInput.type = 'hidden';
+            removeInput.name = 'remove_image';
+            removeInput.value = 'yes';
+            document.forms[0].appendChild(removeInput);
         });
     </script>
 @endsection

@@ -13,7 +13,6 @@
     <!-- Search & Filter Form -->
     <form action="{{ route('categories.list') }}" method="GET" class="mb-3">
         <div class="row">
-            <!-- Search by Category Name Dropdown -->
             <div class="col-md-4">
                 <select name="search" class="form-control">
                     <option value="">Select Category</option>
@@ -24,8 +23,6 @@
                     @endforeach
                 </select>
             </div>
-
-            <!-- Filter by Status -->
             <div class="col-md-4">
                 <select name="status" class="form-control">
                     <option value="">Filter by status</option>
@@ -33,8 +30,6 @@
                     <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
             </div>
-
-            <!-- Search & Reset Buttons -->
             <div class="col-md-4">
                 <button type="submit" class="btn btn-success">Search</button>
                 <a href="{{ route('categories.list') }}" class="btn btn-secondary">Reset</a>
@@ -62,10 +57,10 @@
                     <td>{{ $category->description }}</td>
                     <td>{{ ucfirst($category->status) }}</td>
                     <td>
-                        @if($category->image)
-                            <img class="category-image" src="{{ asset('image/category/' . $category->image) }}" alt="{{ $category->name }}">
+                        @if($category->image && $category->image !== 'no_image.jpg')
+                            <img class="category-image" src="{{ asset('image/category/' . $category->image) }}?t={{ time() }}" alt="{{ $category->name }}">
                         @else
-                            No image
+                            <img class="category-image" src="{{ asset('image/no_image.jpg') }}" alt="No Image">
                         @endif
                     </td>
                     <td>
@@ -86,17 +81,17 @@
         </tbody>
     </table>
 
-    <!-- Pagination Links -->
+    <!-- Pagination -->
     <div class="d-flex justify-content-center">
         {{ $categories->links('pagination::bootstrap-4') }}
     </div>
 
     <style>
         .category-image {
-            width: 80px; /* Set a fixed width */
-            height: 80px; /* Set a fixed height */
-            object-fit: cover; /* Ensures the image maintains aspect ratio */
-            border-radius: 5px; /* Optional: Adds rounded corners */
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
         }
     </style>
 
@@ -137,6 +132,5 @@
             });
         });
     </script>
-   
     @endpush
 @endsection
