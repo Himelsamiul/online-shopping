@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Unit;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -42,6 +45,10 @@ class AdminController extends Controller
 
 
     public function home(){
-        return view('backend.pages.dashboard');
+        $category = Category::count();
+        $unit = Unit::count();
+        $product = Product::count();
+        return view('backend.pages.dashboard', compact('category', 'unit', 'product'));
+
       }
 }

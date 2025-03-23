@@ -138,14 +138,6 @@ class CategoryController extends Controller
 
 
 
-
-
-
-
-
-
-
-
     // category er details dekhlam
     public function show($id)
     {

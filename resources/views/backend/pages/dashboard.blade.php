@@ -28,8 +28,8 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category">Visitors</p>
-                          <h4 class="card-title">1,294</h4>
+                          <p class="card-category">Total Category</p>
+                          <h4 class="card-title">{{$category}}</h4>
                         </div>
                       </div>
                     </div>
@@ -49,8 +49,8 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category">Subscribers</p>
-                          <h4 class="card-title">1303</h4>
+                          <p class="card-category">Total Units</p>
+                          <h4 class="card-title">{{$unit}}</h4>
                         </div>
                       </div>
                     </div>
@@ -70,8 +70,8 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category">Sales</p>
-                          <h4 class="card-title">$ 1,345</h4>
+                          <p class="card-category">Total Products</p>
+                          <h4 class="card-title">{{$product}}</h4>
                         </div>
                       </div>
                     </div>
