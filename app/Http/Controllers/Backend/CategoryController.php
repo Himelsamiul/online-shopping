@@ -62,9 +62,12 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             // Generate the file name (timestamp + original extension)
             $fileName = $request->file('image')->getClientOriginalName();
-        
-            $request->file('image')->storeAs('image/category', $fileName, 'public');
+            
+            // Store the image directly in the public directory (public/image/category)
+            $path = $request->file('image')->move(public_path('image/category'), $fileName);
         }
+        
+        
         
         
                
@@ -111,14 +114,15 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
        //image handel korlam
-        $fileName = '';
-if ($request->hasFile('image')) {
-    
-    $fileName = $request->file('image')->getClientOriginalName();
-
-    
-    $request->file('image')->storeAs('image/category', $fileName, 'public');
-}
+       $fileName = '';
+        if ($request->hasFile('image')) {
+            // Generate the file name (timestamp + original extension)
+            $fileName = $request->file('image')->getClientOriginalName();
+            
+            // Store the image directly in the public directory (public/image/category)
+            $path = $request->file('image')->move(public_path('image/category'), $fileName);
+        }
+        
         Category::create([
             'name' => $request->name,
             'description' => $request->description,

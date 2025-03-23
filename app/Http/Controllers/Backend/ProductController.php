@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function list()
+    {
+        $products = Product::with('category', 'unit')->paginate(5); // Paginate with 10 items per page
+    return view('backend.pages.product.list', compact('products'));
+    }
+    
+    
     // Show product creation form
     public function create()
     {
@@ -37,10 +44,15 @@ class ProductController extends Controller
             'quantity' => 'required|numeric|min:1'
         ]);
     
-        // Handle image upload
-        $imagePath = '';
+        
+        //image handel korlam
+        $fileName = '';
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
+            // Generate the file name (timestamp + original extension)
+            $fileName = $request->file('image')->getClientOriginalName();
+            
+            // Store the image directly in the public directory (public/image/category)
+            $path = $request->file('image')->move(public_path('image/product'), $fileName);
         }
     
         // Create the product with the validated data
@@ -51,12 +63,12 @@ class ProductController extends Controller
             'category_id' => $validatedData['category_id'],
             'unit_id' => $validatedData['unit_id'],
             'status' => $validatedData['status'], // Store the status
-            'image' => $imagePath, // Store image path
+            'image' => $fileName,  // Store image path
             'quantity' => $validatedData['quantity'], // Default quantity value
         ]);
     
         // Redirect back to product creation page with success message
-        return redirect()->route('products.create')->with('success', 'Product created successfully');
+        return redirect()->route('products.list')->with('success', 'Product created successfully');
     }
     
 }
