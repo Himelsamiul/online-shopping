@@ -101,45 +101,53 @@ class CategoryController extends Controller
 
     //update kore submit korkam ,mane edit kore submit korlam ba updagte jeta dhori na jeno same e
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
-            'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+{
+    // Validation for nullable image
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string|max:500',
+        'status' => 'required|in:active,inactive',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is nullable
+    ]);
 
-        
-            // Image handling
-        $category = Category::findOrFail($id);
-    
+    // Find the category
+    $category = Category::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            // Delete old image if it exists
-            if ($category->image && file_exists(public_path('image/category/' . $category->image))) {
-                unlink(public_path('image/category/' . $category->image));
-            }
-    
-            // Generate a unique filename (timestamp + extension)
-            $fileName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-    
-            // Store the new image in public/image/category
-            $request->file('image')->move(public_path('image/category'), $fileName);
-    
-            // Update category image field
-            $category->image = $fileName;
+    // Update the category fields
+    $category->name = $request->name;
+    $category->description = $request->description;
+    $category->status = $request->status;
+
+    // Check if a new image is uploaded
+    if ($request->hasFile('image')) {
+        // If a new image is uploaded, delete the old image from storage
+        if ($category->image && Storage::exists('public/image/category/'.$category->image)) {
+            Storage::delete('public/image/category/'.$category->image); // Delete old image using Storage facade
         }
-    
-        // Update category data
-        $category->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
-            'image' => $category->image,  // Keep existing image if not updated
-        ]);
-    
-        return redirect()->route('categories.list')->with('success', 'Category updated successfully.');
+
+        // Store the new image
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->storeAs('public/image/category', $imageName); // Save the new image
+        $category->image = $imageName; // Save the new image name
+    } elseif ($request->has('remove_image') && $request->remove_image == 'yes') {
+        // If the image is removed
+        if ($category->image && Storage::exists('public/image/category/'.$category->image)) {
+            Storage::delete('public/image/category/'.$category->image); // Delete old image
+        }
+        $category->image = null;  // Set image to null in the database
     }
+
+    // Save the updated category
+    $category->save();
+
+    return redirect()->route('categories.list')->with('success', 'Category updated successfully.');
+}
+
+    
+    
+    
+    
+
     
 
 
