@@ -133,15 +133,22 @@ class ProductController extends Controller
 
     // Delete product
     public function delete($id)
-    {
-        $product = Product::findOrFail($id);
+{
+    $product = Product::findOrFail($id);
 
-        // Delete image if exists
-        if ($product->image) {
-            unlink(public_path('image/product/' . $product->image));
+    // Check if the image exists and is not the default placeholder
+    if ($product->image && $product->image !== 'no_image.jpg') {
+        $imagePath = public_path('image/product/' . $product->image);
+        
+        if (file_exists($imagePath)) { 
+            unlink($imagePath); // Delete only if it exists
         }
-
-        $product->delete();
-        return redirect()->route('products.list')->with('success', 'Product deleted successfully.');
     }
+
+    // Delete product record from the database
+    $product->delete();
+
+    return redirect()->route('products.list')->with('success', 'Product deleted successfully.');
+}
+
 }

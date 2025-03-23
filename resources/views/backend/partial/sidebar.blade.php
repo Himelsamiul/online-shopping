@@ -28,7 +28,7 @@
       </a>
       <ul id="productsMenu" class="submenu list-unstyled d-none ps-4">
         <li><a href="{{route('products.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Product</a></li>
-        <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Product List</a></li>
+        <li><a href="{{route('products.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Product List</a></li>
       </ul>
     </li>
 
