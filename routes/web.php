@@ -5,6 +5,11 @@ use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Frontend\WebpageController;
+use App\Http\Controllers\Frontend\CustomerController;
+
+Route::get('/', [WebpageController::class, 'webpage'])->name('webpage');
+
 
 // Backend Routes
 Route::group(['prefix' => 'admin'], function () {
