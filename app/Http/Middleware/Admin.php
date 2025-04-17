@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Http\Middleware;
+
+
+namespace App\Http\Middleware;  
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class Admin
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    
+    public function handle(Request $request, Closure $next)
     {
-        if(auth()->guard('admin')->check()){
-            return $next($request);
+        // Check if user is authenticated and is an admin
+        if (Auth::check() && Auth::user()->is_admin) {
+            return $next($request); // Proceed to the next step if user is admin
         }
-        notify()->error('Invalid Email or Password');
-        return redirect()->route('admin.login');
-        
+
+        // Redirect to admin login page if not an admin
+        return redirect()->route('admin.login')->with('error', 'You are not authorized to access this page.');
     }
 }
+
+
+

@@ -7,8 +7,8 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('/r2.jpg') no-repeat center center fixed; /* Add your image path here */
-      background-size: cover; /* Cover the entire area */
+      background: url('/r2.jpg') no-repeat center center fixed;
+      background-size: cover;
       margin: 0;
       padding: 0;
       display: flex;
@@ -29,7 +29,7 @@
     }
 
     .login-container {
-      background-color: rgba(255, 255, 255, 0.4); /* Adjust the alpha value for transparency */
+      background-color: rgba(255, 255, 255, 0.6);
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -44,7 +44,7 @@
       color: #8033FF;
       text-align: center;
       font-weight: bold;
-      font-family: 'Algerian', sans-serif; /* Algerian font */
+      font-family: 'Algerian', sans-serif;
     }
 
     .form-group {
@@ -102,6 +102,18 @@
 <body>
   <div class="login-container">
     <h2>Admin Login</h2>
+
+    <!-- Display server-side validation errors -->
+    @if ($errors->any())
+        <div class="error-message">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('do.login') }}" method="post" id="login-form">
       @csrf
       <div class="form-group">
@@ -114,6 +126,8 @@
       </div>
       <button type="submit">Login</button>
     </form>
+
+    <!-- Client-side error messages (if any) -->
     <p id="error-message" class="error-message"></p>
   </div>
 
