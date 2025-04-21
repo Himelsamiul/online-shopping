@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Unit;
 use Illuminate\Support\Facades\Validator;
@@ -51,8 +52,18 @@ class AdminController extends Controller
         $category = Category::count();
         $unit = Unit::count();
         $product = Product::count();
+        $customerCount = Customer::count();
 
         // Return dashboard view with data
-        return view('backend.pages.dashboard', compact('category', 'unit', 'product'));
+        return view('backend.pages.dashboard', compact('category', 'unit', 'customerCount','product'));
+    }
+
+    public function showCustomers()
+    {
+        // Fetch all customers from the database
+        $customers = Customer::all();
+
+        // Return the customer list view and pass the customers data
+        return view('backend.pages.customerlist', compact('customers'));
     }
 }

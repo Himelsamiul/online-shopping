@@ -21,7 +21,7 @@ Route::post('/customer/success', [WebpageController::class, 'loginsuccess'])->na
 
 
 Route::middleware('auth:customerGuard')->group(function() {
-    Route::get('/customer/logout', [WebpageController::class, 'logoutsuccess'])->name('logout.success');
+    Route::post('/customer/logout', [WebpageController::class, 'logoutsuccess'])->name('logout.success');
 });
 
 
@@ -30,12 +30,13 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
     Route::post('/do/login', [AdminController::class, 'doLogin'])->name('do.login');
 
-    Route::group(['middleware' => 'auth'], function () {
-        // Admin-specific routes
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('/sign/out', [AdminController::class, 'signout'])->name('sign.out');
+        Route::get('/dashboard', [AdminController::class, 'home'])->name('dashboard'); 
 
-            Route::group(['middleware' => ['admin']], function () {
-                Route::get('/admin/dashboard', [AdminController::class, 'home'])->name('dashboard');
-            
+        //customer er list view kortesi
+        Route::get('/customers', [AdminController::class, 'showCustomers'])->name('customers');
+
             // Category Routes
             Route::get('/categories', [CategoryController::class, 'list'])->name('categories.list');
             Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -68,4 +69,4 @@ Route::group(['prefix' => 'admin'], function () {
             });
         });
     });
-});
+

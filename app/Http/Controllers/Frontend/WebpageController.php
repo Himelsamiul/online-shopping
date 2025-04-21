@@ -5,65 +5,61 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class WebpageController extends Controller
 {
+    // Show the homepage
     public function webpage()
     {
         return view('frontend.pages.home');
     }
+
+    // Show the registration form
     public function form_reg()
     {
         return view('frontend.pages.Customer_reg');
     }
 
-
+    // Handle user registration
     public function reg(Request $request)
     {
-
-
-
+        // Validate input
         $checkValidation = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'phone' => 'required',
+            'email' => 'required|email|unique:customers,email', // Ensure the email is unique
+            'password' => 'required|min:6',
+           'phone' => 'required|digits:11|starts_with:01',
+// You can customize phone validation as needed
             'address' => 'required',
-
-
-
         ]);
 
+        // If validation fails
         if ($checkValidation->fails()) {
+            // Handle specific validation errors
             if ($checkValidation->errors()->has('email')) {
                 notify()->error('The email has already been taken.');
-            }else {
-                // Notify the user about other validation errors
+            } else {
+                // Handle other validation errors
                 notify()->error('Something went wrong.');
             }
-            // notify()->error($checkValidation->getMessageBag());
-            // notify()->error('somethings went wrong');
-            return redirect()->back()->with('myError', $checkValidation->getMessageBag());
+
+            return redirect()->back()->withErrors($checkValidation)->withInput();
         }
 
+        // Process image upload
         $fileNameCustomer = '';
-
-        if ($request->hasFile('image'))  //name of image form
-        {
-            //generate name i.e: 20240416170933.jpeg
+        if ($request->hasFile('image')) {
+            // Generate a filename based on the current timestamp
             $fileNameCustomer = date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension();
 
-            //2.3: store it into public folder
-            $request->file('image')->storeAs('/customer', $fileNameCustomer);
-            //public/uploads/category/20244394343.png
-
-
-
+            // Store the image in the public storage
+            $request->file('image')->storeAs('customer', $fileNameCustomer);
         }
 
-
-        Customer::Create([
+        // Create the customer record
+        Customer::create([
             'name' => $request->name,
             'email' => strtolower($request->email),
             'password' => bcrypt($request->password),
@@ -72,56 +68,53 @@ class WebpageController extends Controller
             'image' => $fileNameCustomer,
         ]);
 
-        notify()->success('registration Successfully.');
+        // Notify user of successful registration
+        notify()->success('Registration Successful.');
 
+        // Redirect to login page
         return redirect()->route('customer.login');
     }
+
+    // Show login form
     public function login()
     {
         return view('frontend.pages.Customer_login');
     }
 
-
+    // Handle login success
     public function loginsuccess(Request $request)
     {
-
-
-        //dd($request->all());
-
-
-        $usterInput = ['email' => $request->email, 'password' => $request->password];
-        $checkLogin = auth()->guard('customerGuard')->attempt($usterInput);
-
-        if ($checkLogin) {
-            //dd("login done");
-
-            notify()->success('Login successfull');
-
-            return redirect()->route('home');
+        // Validate the input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6', // Adjust as needed
+        ]);
+    
+        // Prepare the credentials
+        $credentials = $request->only('email', 'password');
+    
+        // Attempt to log the user in using the customerGuard
+        if (auth()->guard('customerGuard')->attempt($credentials)) {
+            notify()->success('Login successful');
+            return redirect()->route('webpage')->with('success', 'Login successful');
         }
-
-
-
-        // dd("login done");
-        notify()->error('invalid user');
-        return redirect()->back();
-
-        //notify()->success('customer login Successfully.');
-
-        // return redirect()->route('customer.login');
-
-
-
+    
+        // If login failed
+        notify()->error('Invalid login credentials');
+        return redirect()->back()->withInput();
     }
-
-
+    
+    // Handle logout functionality
     public function logoutsuccess()
     {
-
+        // Log out using the customer guard
         auth('customerGuard')->logout();
-        return view('frontend.pages.home');
+    
+        // Clear the session data
+        session()->flush();
+    
+        // Redirect to homepage or login page
+        return redirect()->route('webpage')->with('success', 'Logout successful');
     }
-
-
+    
 }
-

@@ -55,6 +55,16 @@
       </ul>
     </li>
 
+
+    <li class="sidebar-list-item">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('customers') }}" role="button" id="customerListLink" onclick="setActiveLink(this)">
+        <i class="fas fa-users me-3"></i><span class="sidebar-link-title">Customers</span>
+      </a>
+        
+    </li>
+
+
+
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="">
         <i class="fas fa-file-alt me-3"></i><span class="sidebar-link-title">Report</span>

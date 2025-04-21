@@ -122,9 +122,7 @@
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
 
-        <div class="form-footer">
-            <p>Already have an account? <a href="{{ route('login') }}">Login here</a></p>
-        </div>
+        
     </div>
 </div>
 

@@ -1,6 +1,6 @@
 @extends('frontend.master')
 
-@section('title', 'Welcome to Kaira Fashion Store')
+<!-- @section('title', 'Welcome to Kaira Fashion Store') -->
 
 @section('content')
 <div class="text-center mb-5">
