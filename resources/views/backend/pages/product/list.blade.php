@@ -23,7 +23,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>SL</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th>Unit</th>
@@ -37,7 +37,8 @@
         <tbody>
             @foreach($products as $product)
             <tr>
-                <td>{{ $product->id }}</td>
+                <!-- Correct SL with pagination -->
+                <td>{{ $products->firstItem() + $loop->index }}</td>
                 <td>{{ $product->name }}</td>
                 <td>{{ $product->category->name }}</td>
                 <td>{{ $product->unit->name }}</td>
@@ -45,20 +46,20 @@
                 <td>{{ $product->quantity }}</td>
                 <td>
                     @if($product->image)
-                    <img class="product-image" src="{{ asset('image/product/' . $product->image) }}" alt="{{ $product->name }}">
+                        <img class="product-image" src="{{ asset('image/product/' . $product->image) }}" alt="{{ $product->name }}">
                     @else
                         No Image
                     @endif
                 </td>
                 <td>{{ ucfirst($product->status) }}</td>
                 <td>
-                    <!-- View Button -->
+                    <!-- View -->
                     <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm">View</a>
-                    
-                    <!-- Edit Button -->
+
+                    <!-- Edit -->
                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    
-                    <!-- Delete Button -->
+
+                    <!-- Delete -->
                     <form action="{{ route('products.delete', $product->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
@@ -70,11 +71,12 @@
         </tbody>
     </table>
 
-    <!-- Pagination Links -->
+    <!-- Pagination -->
     <div class="d-flex justify-content-center mt-3">
         {{ $products->links('pagination::bootstrap-4') }}
     </div>
 
+    <!-- Styling -->
     <style>
         .product-image {
             width: 80px;
@@ -85,8 +87,8 @@
     </style>
 </div>
 
+<!-- SweetAlert Delete Confirmation -->
 <script>
-    // Handle Delete Confirmation with SweetAlert
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach(button => {
         button.addEventListener('click', function(event) {
@@ -110,5 +112,4 @@
         });
     });
 </script>
-
 @endsection

@@ -13,16 +13,16 @@
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>SL</th>
                 <th>Name</th>
                 <th>Status</th>
-                <th>Actions</th> <!-- New Actions Column -->
+                <th>Actions</th> <!-- Actions Column -->
             </tr>
         </thead>
         <tbody>
             @foreach ($units as $unit)
                 <tr>
-                    <td>{{ $unit->id }}</td>
+                    <td>{{ $units->firstItem() + $loop->index }}</td> <!-- Correct serial number -->
                     <td>{{ $unit->name }}</td>
                     <td>{{ $unit->status ? 'Active' : 'Inactive' }}</td>
                     <td>
@@ -76,10 +76,9 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('deleteForm_' + unitId).submit(); // Submit the form if confirmed
+                document.getElementById('deleteForm_' + unitId).submit();
             }
         });
     }
 </script>
-
 @endsection

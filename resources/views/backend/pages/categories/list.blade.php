@@ -41,7 +41,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>SL</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Status</th>
@@ -52,7 +52,7 @@
         <tbody>
             @forelse($categories as $category)
                 <tr>
-                    <td>{{ $category->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $category->name }}</td>
                     <td>{{ $category->description }}</td>
                     <td>{{ ucfirst($category->status) }}</td>
