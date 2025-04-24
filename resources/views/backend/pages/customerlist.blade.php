@@ -1,44 +1,39 @@
 @extends('backend.master')
-@section('content')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer List</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1 class="my-4">Customer List</h1>
 
-        @if($customers->isEmpty())
-            <p>No customers found.</p>
-        @else
-            <table class="table table-bordered">
-                <thead>
+@section('content')
+<div class="container">
+    <h1 class="my-4">Customer List</h1>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if($customers->isEmpty())
+        <div class="alert alert-info">No customers found.</div>
+    @else
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>SL</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($customers as $customer)
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone Number</th>
-                        <th>Address</th>
-                        <th>Action</th>
+                        <td>{{ $loop->iteration }}</td> <!-- Always starts from 1 -->
+                        <td>{{ $customer->name }}</td>
+                        <td>{{ $customer->email }}</td>
+                        <td>{{ $customer->phoneno }}</td>
+                        <td>{{ $customer->address }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach($customers as $customer)
-                        <tr>
-                            <td>{{ $customer->name }}</td>
-                            <td>{{ $customer->email }}</td>
-                            <td>{{ $customer->phoneno }}</td>
-                            <td>{{ $customer->address }}</td>
-                            
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endif
-    </div>
-</body>
-</html>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+</div>
 @endsection
