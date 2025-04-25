@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +15,9 @@ class WebpageController extends Controller
     // Show the homepage
     public function webpage()
     {
-        return view('frontend.pages.home');
+        $products = Product::all();
+        $category = Category::all();
+        return view('frontend.pages.home',compact('category','products'));
     }
 
     // Show the registration form
@@ -72,7 +76,7 @@ class WebpageController extends Controller
         notify()->success('Registration Successful.');
 
         // Redirect to login page
-        return redirect()->route('customer.login');
+        return redirect()->route('login');
     }
 
     // Show login form

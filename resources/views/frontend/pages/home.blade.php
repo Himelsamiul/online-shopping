@@ -1,24 +1,55 @@
 @extends('frontend.master')
-
-<!-- @section('title', 'Welcome to Kaira Fashion Store') -->
-
 @section('content')
-<div class="text-center mb-5">
-    <h1 class="fw-bold text-primary">Welcome to Kaira</h1>
-    <p class="lead text-muted">Your one-stop shop for trendy fashion & accessories!</p>
-</div>
-
-<h2 class="mb-3">Latest Dresses</h2>
-<div class="scrolling-wrapper">
-    @for ($i = 1; $i <= 8; $i++)
-        <div class="card border-0 shadow-sm" style="min-width: 220px;">
-            <img src="https://via.placeholder.com/300x200?text=Dress+{{ $i }}" class="card-img-top" alt="Dress {{ $i }}">
-            <div class="card-body">
-                <h5 class="card-title text-primary">Dress {{ $i }}</h5>
-                <p class="card-text text-muted">$49.99</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Add to Cart</a>
-            </div>
+<section class="banner_main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="text-bg">
+          <h1> <span class="blodark"> Romofyi</span><br>
+            Trands 2045</h1>
+          <p>A huge fashion collection for ever</p>
+          <a class="" href="https://www.free-css.com/free-css-templates"></a></div>
+      </div>
+      <div class="col-md-4">
+        <div class="ban_img">
+          <figure><img src="{{url('frontend/assets/images/ban_img.png')}}" alt="website template image"></figure>
         </div>
-    @endfor
+      </div>
+    </div>
+  </div>
+</section>
+<div class="six_box">
+  <div class="container-fluid">
+    <div class="row">
+      @foreach($category->take(6) as $data)
+      <div class="col-md-2 col-sm-4 pa_left">
+        <div class="six_probpx yellow_bg"><i><img style="width: 90px; height:90px;" src="{{url('image/category/' . $data->image)}}" alt="website template image"></i><span><a href="">{{$data->name}}</a></span></div>
+      </div>
+      @endforeach
+    </div>
+  </div>
+</div>
+<div id="project" class="project">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="titlepage">
+          <h2>Featured Products</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="product_main">
+        @foreach($products->take(15) as $product)
+        <div class="project_box">
+          <div class="dark_white_bg" ><img style="height: 255px; width: 200px;" src="{{url('image/product/' . $product->image)}}" alt="website template image"></div>
+          <h3>{{$product->name}}</h3>
+          <h4>BDT. {{$product->price}}</h4>
+        </div>
+        @endforeach
+        <div class="col-md-12"><a class="read_more" href="{{route('products')}}">See More</a></div>
+      </div>
+    </div>
+  </div>
 </div>
 @endsection
