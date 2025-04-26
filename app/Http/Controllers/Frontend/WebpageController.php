@@ -137,7 +137,7 @@ class WebpageController extends Controller
     {
         $customer = auth()->guard('customerGuard')->user();
 
-        return view('frontend.pages.edit_profile', compact('customer', 'orders'));
+        return view('frontend.pages.edit_profile', compact('customer'));
     }
 
     public function updateProfile(Request $request)
