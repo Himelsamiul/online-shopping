@@ -6,7 +6,9 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,7 +19,7 @@ class WebpageController extends Controller
     {
         $products = Product::all();
         $category = Category::all();
-        return view('frontend.pages.home',compact('category','products'));
+        return view('frontend.pages.home', compact('category', 'products'));
     }
 
     // Show the registration form
@@ -34,8 +36,8 @@ class WebpageController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:customers,email', // Ensure the email is unique
             'password' => 'required|min:6',
-           'phone' => 'required|digits:11|starts_with:01',
-// You can customize phone validation as needed
+            'phone' => 'required|digits:11|starts_with:01',
+            // You can customize phone validation as needed
             'address' => 'required',
         ]);
 
@@ -93,32 +95,102 @@ class WebpageController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:6', // Adjust as needed
         ]);
-    
+
         // Prepare the credentials
         $credentials = $request->only('email', 'password');
-    
+
         // Attempt to log the user in using the customerGuard
         if (auth()->guard('customerGuard')->attempt($credentials)) {
             notify()->success('Login successful');
             return redirect()->route('webpage')->with('success', 'Login successful');
         }
-    
+
         // If login failed
         notify()->error('Invalid login credentials');
         return redirect()->back()->withInput();
     }
-    
+
     // Handle logout functionality
     public function logoutsuccess()
     {
         // Log out using the customer guard
         auth('customerGuard')->logout();
-    
+
         // Clear the session data
         session()->flush();
-    
+
         // Redirect to homepage or login page
         return redirect()->route('webpage')->with('success', 'Logout successful');
+    }
+
+
+    public function profile()
+    {
+        $customer = auth()->guard('customerGuard')->user();
+        $orders = Order::where('customer_id', $customer->id)->get();
+        return view('frontend.pages.profile', compact('customer', 'orders'));
+    }
+
+
+    // Show the Edit Profile Form
+    public function editProfile()
+    {
+        $customer = auth()->guard('customerGuard')->user();
+
+        return view('frontend.pages.edit_profile', compact('customer', 'orders'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $customer = auth()->guard('customerGuard')->user();
+        $customerModel = Customer::find($customer->id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phoneno' => 'required|string|max:20',
+            'address' => 'required|string|max:500',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $customerModel->name = $request->name;
+        $customerModel->phoneno = $request->phoneno;
+        $customerModel->address = $request->address;
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($customerModel->image && file_exists(storage_path('app/customer/' . $customerModel->image))) {
+                unlink(storage_path('app/customer/' . $customerModel->image));
+            }
+
+            // Process new upload
+            $fileNameCustomer = date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->storeAs('customer', $fileNameCustomer);
+
+            $customerModel->image = $fileNameCustomer;
+        }
+
+        $customerModel->save();
+
+        return redirect()->route('profile')->with('success', 'Profile updated successfully!');
+    }
+
+
+    public function downloadReceipt($id)
+    {
+        $order = Order::findOrFail($id);
+    
+        if ($order->customer_id !== auth()->guard('customerGuard')->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+    
+        $cartItems = json_decode($order->cart_data, true);
+    
+        $pdf = Pdf::loadView('frontend.pages.receipt', [
+            'order' => $order,
+            'cartItems' => $cartItems,
+        ]);
+    
+        return $pdf->download('receipt_order_' . $order->id . '.pdf');
     }
     
 }

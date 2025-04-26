@@ -77,7 +77,6 @@ class WebOrderController extends Controller
 
     public function checkoutSubmit(Request $request)
     {
-        // Validate inputs
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -88,14 +87,14 @@ class WebOrderController extends Controller
         $total = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
-
-        // Save to orders table
+        $customer = auth()->guard('customerGuard')->user();
         Order::create([
+            'customer_id' => $customer->id, 
             'name' => $validated['name'],
             'email' => $validated['email'],
             'address' => $validated['address'],
             'total_amount' => $total,
-            'cart_data' => json_encode($cart),
+            'cart_data' => json_encode($cart), 
         ]);
 
         session()->forget('cart');

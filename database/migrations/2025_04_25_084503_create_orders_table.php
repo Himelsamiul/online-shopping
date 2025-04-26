@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('customer_id')->constrained();
             $table->string('name');
             $table->string('email');
             $table->text('address');
             $table->decimal('total_amount', 10, 2);
+            $table->json('cart_data')->nullable();
             $table->timestamps();
         });
         

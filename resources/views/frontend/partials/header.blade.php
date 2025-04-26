@@ -49,6 +49,7 @@
 
               @auth('customerGuard')
               <a href="{{ route('logout.success') }}" class="order">Logout</a>
+              <a href="{{ route('profile') }}" class="order">Profile</a>
               @endauth
 
             </ul>
@@ -65,7 +66,18 @@
               <div class="collapse navbar-collapse" id="navbarsExample04">
                 <ul class="navbar-nav mr-auto">
                   <li class="nav-item"><a class="nav-link" href="{{route('webpage')}}">Home</a></li>
-                  <li class="nav-item"><a class="nav-link" href="{{route('products')}}">Products</a></li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Products
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="productsDropdown">
+                      @foreach($categories as $category)
+                      <a class="dropdown-item" href="{{ route('products', ['categoryId' => $category->id]) }}">
+                        {{ $category->name }}
+                      </a>
+                      @endforeach
+                    </div>
+                  </li>
                   <li class="nav-item"><a class="nav-link" href="pages/contact.php">Contact Us</a></li>
                 </ul>
               </div>

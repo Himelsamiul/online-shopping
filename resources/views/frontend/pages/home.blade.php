@@ -8,7 +8,8 @@
           <h1> <span class="blodark"> Romofyi</span><br>
             Trands 2045</h1>
           <p>A huge fashion collection for ever</p>
-          <a class="" href="https://www.free-css.com/free-css-templates"></a></div>
+          <a class="" href="https://www.free-css.com/free-css-templates"></a>
+        </div>
       </div>
       <div class="col-md-4">
         <div class="ban_img">
@@ -23,7 +24,10 @@
     <div class="row">
       @foreach($category->take(6) as $data)
       <div class="col-md-2 col-sm-4 pa_left">
-        <div class="six_probpx yellow_bg"><i><img style="width: 90px; height:90px;" src="{{url('image/category/' . $data->image)}}" alt="website template image"></i><span><a href="">{{$data->name}}</a></span></div>
+        <div class="six_probpx yellow_bg">
+          <i><img style="width: 90px; height:90px;" src="{{ url('image/category/' . $data->image) }}" alt="website template image"></i>
+          <span><a href="{{ route('products', ['categoryId' => $data->id]) }}">{{ $data->name }}</a></span>
+        </div>
       </div>
       @endforeach
     </div>
@@ -42,8 +46,12 @@
       <div class="product_main">
         @foreach($products->take(15) as $product)
         <div class="project_box">
-          <div class="dark_white_bg" ><img style="height: 255px; width: 200px;" src="{{url('image/product/' . $product->image)}}" alt="website template image"></div>
-          <h3>{{$product->name}}</h3>
+          <div class="dark_white_bg">
+            <a href="{{ route('product.single', $product->id) }}">
+              <img style="height: 255px; width: 200px;" src="{{ url('image/product/' . $product->image) }}" alt="{{ $product->name }}">
+            </a>
+          </div>
+          <h3><a href="{{ route('product.single', $product->id) }}">{{ $product->name }}</a></h3>
           <h4>BDT. {{$product->price}}</h4>
         </div>
         @endforeach

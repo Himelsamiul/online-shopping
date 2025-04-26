@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Frontend\WebOrderController;
@@ -23,16 +24,21 @@ Route::post('/customer/success', [WebpageController::class, 'loginsuccess'])->na
 
 Route::middleware('auth:customerGuard')->group(function () {
     Route::get('/customer/logout', [WebpageController::class, 'logoutsuccess'])->name('logout.success');
+    Route::get('/profile', [WebpageController::class, 'profile'])->name('profile');
+    Route::get('/profile/edit', [WebpageController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/update', [WebpageController::class, 'updateProfile'])->name('profile.update');
     Route::get('/add-to-cart/{productId}', [WebOrderController::class, 'addToCart'])->name('add.to.cart');
     Route::get('/view/add-to-cart', [WebOrderController::class, 'viewCart'])->name('view.cart');
     Route::post('/remove-from-cart/{id}', [WebOrderController::class, 'removeFromCart'])->name('frontend.remove.from.cart');
     Route::post('/update-cart/{id}', [WebOrderController::class, 'updateCart'])->name('frontend.update.cart');
     Route::get('/checkout', [WebOrderController::class, 'checkout'])->name('frontend.checkout');
     Route::post('/checkout/submit', [WebOrderController::class, 'checkoutSubmit'])->name('frontend.checkout.submit');
+    Route::get('/order/{id}/receipt', [WebpageController::class, 'downloadReceipt'])->name('order.receipt');
+
 });
 
-Route::get('/products', [WebProductController::class, 'product'])->name('products');
-
+Route::get('/products/{categoryId?}', [WebProductController::class, 'product'])->name('products');
+Route::get('/product/{id}', [WebProductController::class, 'singleProduct'])->name('product.single');
 
 // Backend Routes
 Route::group(['prefix' => 'admin'], function () {
@@ -75,6 +81,12 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('{product}', [ProductController::class, 'update'])->name('products.update');
             Route::delete('{product}', [ProductController::class, 'delete'])->name('products.delete');
             Route::get('{product}', [ProductController::class, 'show'])->name('products.show');
+        });
+
+        //order
+
+        Route::prefix('/orders')->group(function () {
+            Route::get('list', [OrderController::class, 'list'])->name('order.list');
         });
     });
 });

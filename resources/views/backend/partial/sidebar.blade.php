@@ -45,14 +45,9 @@
     </li>
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('ordersMenu', this); setActiveLink(this)">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('order.list') }}" role="button" id="dashboardLink" onclick="setActiveLink(this)">
         <i class="fas fa-receipt me-3"></i><span class="sidebar-link-title">Orders</span>
-        <i class="fas fa-chevron-right ms-auto"></i>
       </a>
-      <ul id="ordersMenu" class="submenu list-unstyled d-none ps-4">
-        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Pending Orders</a></li>
-        <li><a href="#" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Completed Orders</a></li>
-      </ul>
     </li>
 
 
@@ -60,7 +55,7 @@
       <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('customers') }}" role="button" id="customerListLink" onclick="setActiveLink(this)">
         <i class="fas fa-users me-3"></i><span class="sidebar-link-title">Customers</span>
       </a>
-        
+
     </li>
 
 
@@ -80,9 +75,9 @@
 </div>
 
 <script>
-  document.getElementById('sidebarSearch').addEventListener('input', function () {
+  document.getElementById('sidebarSearch').addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase();
-    document.querySelectorAll('.sidebar-list-item').forEach(function (item) {
+    document.querySelectorAll('.sidebar-list-item').forEach(function(item) {
       const text = item.textContent.toLowerCase();
       item.style.display = text.includes(searchTerm) ? 'block' : 'none';
     });
@@ -91,13 +86,13 @@
   function toggleSubmenu(id, element) {
     const submenu = document.getElementById(id);
     submenu.classList.toggle('d-none');
-    
+
     element.querySelector(".fa-chevron-right").classList.toggle("rotate-icon");
   }
 
   function setActiveLink(link) {
     // Remove active class from all links
-    document.querySelectorAll('.sidebar-link').forEach(function (item) {
+    document.querySelectorAll('.sidebar-link').forEach(function(item) {
       item.classList.remove('active');
     });
     // Add active class to the clicked link
@@ -106,7 +101,7 @@
 
   function setActiveSubmenuLink(link) {
     // Remove active class from all submenu links
-    document.querySelectorAll('.submenu .sidebar-link').forEach(function (item) {
+    document.querySelectorAll('.submenu .sidebar-link').forEach(function(item) {
       item.classList.remove('active');
     });
     // Add active class to the clicked submenu link
@@ -122,9 +117,11 @@
     padding: 15px;
     border-radius: 10px;
   }
+
   .sidebar-list-item {
     margin-bottom: 10px;
   }
+
   .sidebar-link {
     display: flex;
     align-items: center;
@@ -133,20 +130,26 @@
     transition: background 0.3s;
     color: white;
   }
+
   .sidebar-link:hover {
     background: #34495e;
     color: white;
   }
+
   .sidebar-link.active {
-    background: #16a085; /* Highlight color for active link */
+    background: #16a085;
+    /* Highlight color for active link */
     color: white;
   }
+
   .submenu {
     padding-left: 20px;
   }
+
   .fa-chevron-right {
     transition: transform 0.3s;
   }
+
   .rotate-icon {
     transform: rotate(90deg);
   }
