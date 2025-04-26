@@ -1,6 +1,7 @@
 @extends('frontend.master')
 
 @section('content')
+<!-- Profile Section -->
 <div class="container py-5">
     <h2 class="mb-4 text-center">My Profile</h2>
 
@@ -33,91 +34,54 @@
 
         </div>
     </div>
-
 </div>
 
+<!-- Order History Section -->
 <div class="container mt-5">
-    <h2>Order History</h2>
+    <h2 class="mb-4 text-center">Order History</h2>
 
     @if($orders->isEmpty())
-    <p>No orders found.</p>
+    <p class="text-center">No orders found.</p>
     @else
-    <table class="table table-bordered mt-3">
-        <thead>
+    <table class="table table-bordered table-striped">
+        <thead class="text-center">
             <tr>
-                <th>Order Number</th>
-                <th>Product Name</th>
+                <th>SL</th>
+                <th>Total Price (BDT)</th>
                 <th>Transaction ID</th>
-                <th>Payment Status</th>
                 <th>Payment Method</th>
-                <th>Quantity</th>
-                <th>Unit Cost (BDT)</th>
-                <th>Total Cost (BDT)</th> <!-- New column -->
-                <th>Action</th> <!-- New Action column -->
+                <th>Payment Status</th>
+                <th>Date</th>
+                <th>Action</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach($orders as $order)
+        <tbody class="text-center">
+            @foreach($orders as $key => $order)
             @php
-            $cartItems = json_decode($order->cart_data, true);
+                $cartItems = json_decode($order->cart_data, true);
+                $totalPrice = 0;
+                if($cartItems){
+                    foreach($cartItems as $item){
+                        $totalPrice += $item['price'] * $item['quantity'];
+                    }
+                }
             @endphp
-
-            @if($cartItems)
-                @foreach($cartItems as $index => $item)
-                @php
-                    $totalCost = $item['quantity'] * $item['price'];
-                @endphp
-                <tr id="orderRow{{ $order->id }}{{ $index }}">
-                    <td>{{ $order->id }}</td>
-                    <td>{{ $item['name'] }}</td>
-                    <td>{{ $order->transaction_id }}</td>
-                    <td>{{ ucfirst($order->payment_status) }}</td>
-                    <td>{{ $order->payment_method }}</td>
-                    <td>{{ $item['quantity'] }}</td>
-                    <td>{{ number_format($item['price'], 2) }} BDT</td>
-                    <td>{{ number_format($totalCost, 2) }} BDT</td> <!-- Show total cost -->
-                    <td>
-                        <button class="btn btn-sm btn-success" onclick="printSingleOrder('orderRow{{ $order->id }}{{ $index }}')">Print</button>
-                    </td>
-                </tr>
-                @endforeach
-            @else
             <tr>
-                <td colspan="9">No products found for this order.</td>
+                <td>{{ $key+1 }}</td>
+                <td>{{ number_format($totalPrice, 2) }} BDT</td>
+                <td>{{ $order->transaction_id }}</td>
+                <td>{{ ucfirst($order->payment_method) }}</td>
+                <td>{{ ucfirst($order->payment_status) }}</td>
+                <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</td>
+                <td>
+                    <a href="{{ route('order.details', $order->id) }}" class="btn btn-sm btn-primary">
+                        View Products
+                    </a>
+                </td>
             </tr>
-            @endif
             @endforeach
         </tbody>
     </table>
     @endif
 </div>
-
-<!-- Styling -->
-<style>
-    .product-image {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 5px;
-    }
-</style>
-
-<!-- Print Single Row Script -->
-<script>
-function printSingleOrder(rowId) {
-    var row = document.getElementById(rowId).outerHTML;
-    var newWindow = window.open('', '', 'height=600,width=800');
-    newWindow.document.write('<html><head><title>Print Order</title>');
-    newWindow.document.write('</head><body>');
-    newWindow.document.write('<table border="1" style="width:100%; border-collapse:collapse;">');
-    newWindow.document.write('<thead><tr><th>Order Number</th><th>Product Name</th><th>Transaction ID</th><th>Payment Status</th><th>Payment Method</th><th>Quantity</th><th>Unit Cost (BDT)</th><th>Total Cost (BDT)</th></tr></thead>');
-    newWindow.document.write('<tbody>');
-    newWindow.document.write(row);
-    newWindow.document.write('</tbody></table>');
-    newWindow.document.write('</body></html>');
-    newWindow.document.close();
-    newWindow.print();
-}
-</script>
-
 @endsection
