@@ -125,11 +125,13 @@ class WebpageController extends Controller
 
 
     public function profile()
-    {
-        $customer = auth()->guard('customerGuard')->user();
-        $orders = Order::where('customer_id', $customer->id)->get();
-        return view('frontend.pages.profile', compact('customer', 'orders'));
-    }
+{
+    $customer = auth()->guard('customerGuard')->user();  // Get the currently authenticated customer
+    // Fetch orders of the customer
+    $orders = Order::where('customer_id', $customer->id)->get();
+    return view('frontend.pages.profile', compact('customer', 'orders'));  // Pass the customer and orders to the view
+}
+
 
 
     // Show the Edit Profile Form

@@ -19,8 +19,15 @@ return new class extends Migration
             $table->text('address');
             $table->decimal('total_amount', 10, 2);
             $table->json('cart_data')->nullable();
+            
+            // New fields
+            $table->string('transaction_id')->nullable();
+            $table->string('payment_method')->default('cash_on_delivery'); // default cash
+            $table->string('payment_status')->default('pending'); // default pending
+        
             $table->timestamps();
         });
+        
         
     }
 

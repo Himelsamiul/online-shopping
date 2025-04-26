@@ -29,7 +29,6 @@
                 <p><strong>Address: </strong> {{ auth()->guard('customerGuard')->user()->address }}</p>
             </div>
 
-            {{-- Optional: Edit Profile Button --}}
             <a href="{{ route('profile.edit') }}" class="btn btn-primary mt-3">Edit Profile</a>
 
         </div>
@@ -46,60 +45,79 @@
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
-                <th>Order ID</th>
-                <th>Products</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <!-- Add more columns if you want -->
+                <th>Order Number</th>
+                <th>Product Name</th>
+                <th>Transaction ID</th>
+                <th>Payment Status</th>
+                <th>Payment Method</th>
+                <th>Quantity</th>
+                <th>Unit Cost (BDT)</th>
+                <th>Total Cost (BDT)</th> <!-- New column -->
+                <th>Action</th> <!-- New Action column -->
             </tr>
         </thead>
         <tbody>
             @foreach($orders as $order)
+            @php
+            $cartItems = json_decode($order->cart_data, true);
+            @endphp
+
+            @if($cartItems)
+                @foreach($cartItems as $index => $item)
+                @php
+                    $totalCost = $item['quantity'] * $item['price'];
+                @endphp
+                <tr id="orderRow{{ $order->id }}{{ $index }}">
+                    <td>{{ $order->id }}</td>
+                    <td>{{ $item['name'] }}</td>
+                    <td>{{ $order->transaction_id }}</td>
+                    <td>{{ ucfirst($order->payment_status) }}</td>
+                    <td>{{ $order->payment_method }}</td>
+                    <td>{{ $item['quantity'] }}</td>
+                    <td>{{ number_format($item['price'], 2) }} BDT</td>
+                    <td>{{ number_format($totalCost, 2) }} BDT</td> <!-- Show total cost -->
+                    <td>
+                        <button class="btn btn-sm btn-success" onclick="printSingleOrder('orderRow{{ $order->id }}{{ $index }}')">Print</button>
+                    </td>
+                </tr>
+                @endforeach
+            @else
             <tr>
-                <td>{{ $order->id }}</td>
-                <td>
-                    @php
-                    $cartItems = json_decode($order->cart_data, true);
-                    @endphp
-
-                    @if($cartItems)
-                    <ul style="list-style: none; padding: 0;">
-                        @foreach($cartItems as $item)
-                        <li class="d-flex align-items-center mb-2">
-                            <img src="{{ url('image/product/' . $item['image']) }}" class="product-image me-2" alt="{{ $item['name'] }}">
-                            <div>
-                                <strong> Name: {{ $item['name'] }}</strong><br>
-                                Quantity: {{ $item['quantity'] }}<br>
-                                Price: {{ $item['price'] }}
-                            </div>
-                        </li>
-                        @endforeach
-                    </ul>
-                    @else
-                    No products found.
-                    @endif
-                </td>
-                <td>{{ $order->total_amount }}</td>
-                <td>
-                    <a href="{{ route('order.receipt', $order->id) }}" class="btn btn-sm btn-success">
-                        Download Receipt
-                    </a>
-                </td>
-
+                <td colspan="9">No products found for this order.</td>
             </tr>
+            @endif
             @endforeach
         </tbody>
     </table>
     @endif
-    <!-- Styling -->
-    <style>
-        .product-image {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-    </style>
 </div>
+
+<!-- Styling -->
+<style>
+    .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+</style>
+
+<!-- Print Single Row Script -->
+<script>
+function printSingleOrder(rowId) {
+    var row = document.getElementById(rowId).outerHTML;
+    var newWindow = window.open('', '', 'height=600,width=800');
+    newWindow.document.write('<html><head><title>Print Order</title>');
+    newWindow.document.write('</head><body>');
+    newWindow.document.write('<table border="1" style="width:100%; border-collapse:collapse;">');
+    newWindow.document.write('<thead><tr><th>Order Number</th><th>Product Name</th><th>Transaction ID</th><th>Payment Status</th><th>Payment Method</th><th>Quantity</th><th>Unit Cost (BDT)</th><th>Total Cost (BDT)</th></tr></thead>');
+    newWindow.document.write('<tbody>');
+    newWindow.document.write(row);
+    newWindow.document.write('</tbody></table>');
+    newWindow.document.write('</body></html>');
+    newWindow.document.close();
+    newWindow.print();
+}
+</script>
 
 @endsection

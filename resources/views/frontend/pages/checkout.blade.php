@@ -34,6 +34,14 @@
             <textarea name="address" class="form-control" required>{{ old('address', auth()->guard('customerGuard')->user()->address) }}</textarea>
         </div>
 
+        <div class="mb-3">
+            <label>Payment Method *</label>
+            <select name="payment_method" class="form-control" required>
+                <option value="cash_on_delivery">Cash on Delivery</option>
+                <option value="sslcommerz">SSLCommerz (Online Payment)</option>
+            </select>
+        </div>
+
         <h4>Order Summary</h4>
         <table class="table table-bordered">
             <thead>

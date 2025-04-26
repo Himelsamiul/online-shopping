@@ -32,7 +32,6 @@ class WebOrderController extends Controller
     
         return redirect()->back()->with('success', 'Product added to cart!');
     }
-    
 
     public function viewCart()
     {
@@ -78,29 +77,42 @@ class WebOrderController extends Controller
         return view('frontend.pages.checkout', compact('cart', 'total'));
     }
 
-
     public function checkoutSubmit(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'address' => 'required|string',
+            'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery', // Added validation for payment method
         ]);
 
         $cart = session('cart', []);
         $total = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
+
         $customer = auth()->guard('customerGuard')->user();
+
+        // Generate unique transaction ID
+        $transactionId = date('Ym') . strtoupper(uniqid());
+
+        // Determine payment status based on payment method
+        $paymentStatus = $validated['payment_method'] === 'sslcommerz' ? 'paid' : 'pending';
+
+        // Create order with transaction ID, payment method, and payment status
         Order::create([
-            'customer_id' => $customer->id, 
+            'customer_id' => $customer->id,
             'name' => $validated['name'],
             'email' => $validated['email'],
             'address' => $validated['address'],
             'total_amount' => $total,
-            'cart_data' => json_encode($cart), 
+            'cart_data' => json_encode($cart),
+            'transaction_id' => $transactionId, // Store the generated transaction ID
+            'payment_method' => $validated['payment_method'], // Store the selected payment method
+            'payment_status' => $paymentStatus, // Store the determined payment status
         ]);
 
+        // Clear the cart after successful order submission
         session()->forget('cart');
 
         return redirect()->route('frontend.checkout')->with('success', 'Order placed successfully!');
