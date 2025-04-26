@@ -33,7 +33,7 @@ Route::middleware('auth:customerGuard')->group(function () {
     Route::post('/update-cart/{id}', [WebOrderController::class, 'updateCart'])->name('frontend.update.cart');
     Route::get('/checkout', [WebOrderController::class, 'checkout'])->name('frontend.checkout');
     Route::post('/checkout/submit', [WebOrderController::class, 'checkoutSubmit'])->name('frontend.checkout.submit');
-    Route::get('/order/{id}/receipt', [WebpageController::class, 'downloadReceipt'])->name('order.receipt');
+    Route::get('/order/receipt/{id}', [WebpageController::class, 'downloadReceipt'])->name('order.receipt');
 
 });
 

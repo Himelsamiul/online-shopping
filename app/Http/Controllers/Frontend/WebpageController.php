@@ -176,21 +176,20 @@ class WebpageController extends Controller
 
 
     public function downloadReceipt($id)
-    {
-        $order = Order::findOrFail($id);
-    
-        if ($order->customer_id !== auth()->guard('customerGuard')->id()) {
-            abort(403, 'Unauthorized action.');
-        }
-    
-        $cartItems = json_decode($order->cart_data, true);
-    
-        $pdf = Pdf::loadView('frontend.pages.receipt', [
-            'order' => $order,
-            'cartItems' => $cartItems,
-        ]);
-    
-        return $pdf->download('receipt_order_' . $order->id . '.pdf');
+{
+    $order = Order::findOrFail($id);
+
+    if ($order->customer_id !== auth()->guard('customerGuard')->id()) {
+        abort(403, 'Unauthorized action.');
     }
+
+    $cartItems = json_decode($order->cart_data, true);
+
+    return view('frontend.pages.receipt', [
+        'order' => $order,
+        'cartItems' => $cartItems,
+    ]);
+}
+
     
 }

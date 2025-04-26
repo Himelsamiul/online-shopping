@@ -10,17 +10,28 @@
 
     <form action="{{ route('frontend.checkout.submit') }}" method="POST">
         @csrf
+
         <div class="mb-3">
             <label>Name *</label>
-            <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
+            <input type="text" name="name" class="form-control" 
+                   value="{{ auth()->guard('customerGuard')->user()->name }}" readonly required>
         </div>
+
         <div class="mb-3">
             <label>Email *</label>
-            <input type="email" name="email" class="form-control" required value="{{ old('email') }}">
+            <input type="email" name="email" class="form-control" 
+                   value="{{ auth()->guard('customerGuard')->user()->email }}" readonly required>
         </div>
+
+        <div class="mb-3">
+            <label>Phone Number *</label>
+            <input type="text" name="phone" class="form-control" 
+                   value="{{ auth()->guard('customerGuard')->user()->phoneno }}" readonly required>
+        </div>
+
         <div class="mb-3">
             <label>Address *</label>
-            <textarea name="address" class="form-control" required>{{ old('address') }}</textarea>
+            <textarea name="address" class="form-control" required>{{ old('address', auth()->guard('customerGuard')->user()->address) }}</textarea>
         </div>
 
         <h4>Order Summary</h4>
