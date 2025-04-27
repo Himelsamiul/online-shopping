@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56485a0654165d4ac00b2eeb39a0decc",
+    "content-hash": "2d5f81d2a930064161fc205fb56cfac3",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -2306,20 +2306,20 @@
         },
         {
             "name": "mckenziearts/laravel-notify",
-            "version": "v2.6",
+            "version": "v2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mckenziearts/laravel-notify.git",
-                "reference": "d59b86da7453353e6d3d69385a2bd29aa19a8983"
+                "reference": "1b40ba9e6c9ebed08d84629377ebc5ac9dc8ec2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mckenziearts/laravel-notify/zipball/d59b86da7453353e6d3d69385a2bd29aa19a8983",
-                "reference": "d59b86da7453353e6d3d69385a2bd29aa19a8983",
+                "url": "https://api.github.com/repos/mckenziearts/laravel-notify/zipball/1b40ba9e6c9ebed08d84629377ebc5ac9dc8ec2b",
+                "reference": "1b40ba9e6c9ebed08d84629377ebc5ac9dc8ec2b",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
                 "php": "~8.0"
             },
             "require-dev": {
@@ -2372,7 +2372,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-01-23T18:45:09+00:00"
+            "time": "2025-03-06T17:12:38+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -8510,12 +8510,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

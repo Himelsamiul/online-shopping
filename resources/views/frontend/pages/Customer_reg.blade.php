@@ -1,21 +1,98 @@
 @extends('frontend.master')
 @section('content')
 
-<div class="col-9 pt-4">
-    <div class="container">
-        <div class="form-header">
-            <h1>Customer Registration</h1>
-        </div>
+<style>
+.registration-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    padding: 20px;
+}
+
+.registration-form {
+    background: linear-gradient(270deg, #c7d2fe, #d8b4fe, #bae6fd, #fbcfe8, #bbf7d0, #fda4af);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease infinite;
+    padding: 40px 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.registration-form h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #4c4c4c;
+}
+
+.registration-form .form-group {
+    margin-bottom: 20px;
+}
+
+.registration-form .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #4c4c4c;
+}
+
+.registration-form .form-control {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    width: 100%;
+}
+
+.registration-form .form-control:focus {
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+}
+
+.registration-form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #6366f1;
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.registration-form button:hover {
+    background-color: #4f46e5;
+}
+
+@keyframes gradientMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+</style>
+
+<div class="registration-wrapper">
+    <div class="registration-form">
+        <h1>Customer Registration</h1>
 
         <form action="{{ route('customer.done') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label for="name" class="form-label">Customer Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" value="{{ old('name') }}">
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label for="email" class="form-label">Email Address</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" value="{{ old('email') }}">
                 @error('email')
@@ -23,25 +100,23 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label for="phone" class="form-label">Phone Number</label>
                 <input type="number" class="form-control" id="phone" name="phone" placeholder="Enter phone number" value="{{ old('phone') }}">
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label for="address" class="form-label">Address</label>
                 <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address" value="{{ old('address') }}">
             </div>
 
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit">Register</button>
         </form>
-
-        
     </div>
 </div>
 
