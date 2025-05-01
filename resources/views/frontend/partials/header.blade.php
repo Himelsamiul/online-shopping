@@ -12,7 +12,7 @@
           </div>
           <div class="col-md-4">
             <div class="se_fonr1">
-              <span class="time_o"> Open hour: 8.00 - 18.00</span>
+              <span class="time_o"> Open hour: 9.00 - 18.00</span>
             </div>
           </div>
         </div>
