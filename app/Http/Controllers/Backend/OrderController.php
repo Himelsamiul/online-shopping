@@ -11,7 +11,7 @@ class OrderController extends Controller
 {
     public function list()
     {
-        $orders = Order::all();
+        $orders = Order::paginate(10);
         return view('backend.pages.order.list', compact('orders'));
     }
 

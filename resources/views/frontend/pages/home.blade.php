@@ -6,7 +6,7 @@
       <div class="col-md-8">
         <div class="text-bg">
           <h1> <span class="blodark"> Romofyi</span><br>
-            Trands 2045</h1>
+            Trands 2055</h1>
           <p>A huge fashion collection for ever</p>
           <a class="" href="https://www.free-css.com/free-css-templates"></a>
         </div>

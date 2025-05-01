@@ -78,7 +78,9 @@
                       @endforeach
                     </div>
                   </li>
-                  <li class="nav-item"><a class="nav-link" href="pages/contact.php">Contact Us</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{{route('contactus')}}">Contact Us</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{{route('aboutus')}}">About Us</a></li>
+                  <li class="nav-item"><a class="nav-link" href="">FAQ</a></li>
                 </ul>
               </div>
             </nav>

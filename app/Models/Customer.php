@@ -21,4 +21,10 @@ class Customer extends Authenticatable // Extend from Authenticatable class
     protected $casts = [
         'email_verified_at' => 'datetime', // Optional: Cast email_verified_at to datetime if using email verification
     ];
+
+    
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

@@ -33,9 +33,9 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($orders as $data)
+            @foreach($orders as $key => $data)
                 <tr>
-                    <td>{{ $data->id }}</td>
+                    <td>{{ $orders->firstItem() + $key }}</td>
                     <td>{{ $data->name }}</td>
                     <td>{{ $data->email }}</td>
                     <td>{{ $data->address }}</td>
@@ -49,6 +49,11 @@
         </tbody>
     </table>
 
+    <!-- Pagination Links -->
+    <div class="d-flex justify-content-center mt-4">
+        {{ $orders->links('pagination::bootstrap-4') }}
+    </div>
+
     <!-- Styling -->
     <style>
         .product-image {
@@ -56,6 +61,24 @@
             height: 50px;
             object-fit: cover;
             border-radius: 5px;
+        }
+
+        .pagination .page-item .page-link {
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+            margin: 0 3px;
+            border-radius: 4px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
         }
     </style>
 </div>

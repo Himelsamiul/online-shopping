@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\NavbarController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ReportController;
@@ -35,12 +36,18 @@ Route::middleware('auth:customerGuard')->group(function () {
     Route::post('/checkout/submit', [WebOrderController::class, 'checkoutSubmit'])->name('frontend.checkout.submit');
     Route::get('details/{id}', [OrderController::class, 'viewOrderDetails'])->name('customer.order.details');
 
+    //navbar routes
+    Route::get('/about-us', [NavbarController::class, 'aboutus'])->name('aboutus');
+    Route::get('/contact-us', [NavbarController::class, 'contactus'])->name('contactus');
+    Route::post('/contact-us', [NavbarController::class, 'contactusSubmit'])->name('contactus.submit');    
+
+
     // SSLCOMMERZ Start
     Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
     Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 
 
-    
+
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
@@ -52,8 +59,11 @@ Route::middleware('auth:customerGuard')->group(function () {
     //SSLCOMMERZ END
 });
 
-Route::get('/products/{categoryId?}', [WebProductController::class, 'product'])->name('products');
+Route::get('/products/category/{categoryId?}', [WebProductController::class, 'product'])->name('products');
 Route::get('/product/{id}', [WebProductController::class, 'singleProduct'])->name('product.single');
+
+Route::post('/product/{id}/review', [WebProductController::class, 'storeReview'])->name('submit.review');
+
 
 // Backend Routes
 Route::group(['prefix' => 'admin'], function () {
@@ -75,6 +85,12 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
+
+        //contact us view
+        Route::get('/contact-us-view', [NavbarController::class, 'contactusview'])->name('contactusview');
+        Route::delete('/contact-delete/{id}', [NavbarController::class, 'destroy'])->name('contact.destroy');
+
 
         // Unit Routes
         Route::get('/units', [UnitController::class, 'unitlist'])->name('units.list');
@@ -111,4 +127,6 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/', [ReportController::class, 'index'])->name('report');
         });
     });
+
+
 });

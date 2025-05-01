@@ -58,6 +58,11 @@
 
     </li>
 
+    <li class="sidebar-list-item">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('contactusview') }}">
+        <i class="fas fa-envelope me-3"></i><span class="sidebar-link-title">Contacts message </span>
+      </a>
+    </li>
 
 
     <li class="sidebar-list-item">
@@ -66,6 +71,13 @@
       </a>
     </li>
 
+
+    <li class="sidebar-list-item">
+      <a class="sidebar-link text-white d-flex align-items-center" href="">
+        <i class="fas fa-star me-3"></i><span class="sidebar-link-title">Reviews</span>
+      </a>
+    </li>
+   
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('sign.out') }}">
         <i class="fas fa-sign-out-alt me-3"></i><span class="sidebar-link-title">Logout</span>
