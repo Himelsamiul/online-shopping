@@ -12,8 +12,8 @@
         text-align: center; /* Center-align text */
         padding: 20px; /* Add some padding for spacing */
         position: fixed; /* Fix the position at the bottom */
-        bottom: 0; /* Align it to the bottom of the viewport */
-        width: 100%; /* Full width */
+        bottom: 0; 
+        width: 100%;
     }
 </style>
 </head>

@@ -14,7 +14,7 @@ use App\Http\Controllers\SslCommerzPaymentController;
 
 // Frontend
 Route::get('/', [WebpageController::class, 'webpage'])->name('webpage');
-
+//  
 // Customer Registration Routes 
 Route::get('/customer', [WebpageController::class, 'form_reg'])->name('reg');
 Route::post('/customer/done', [WebpageController::class, 'reg'])->name('customer.done');
@@ -39,6 +39,8 @@ Route::middleware('auth:customerGuard')->group(function () {
     Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
     Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 
+
+    
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
