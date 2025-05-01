@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-md-4">
             <ul class="conta_icon">
-              <li><a href="https://www.free-css.com/free-css-templates"><img src="{{url('frontend/assets/images/call.png')}}" alt="website template image">Call us: 0126 - 922 - 0162</a></li>
+              <li><a href="https://www.free-css.com/free-css-templates"><img src="{{url('frontend/assets/images/call.png')}}" alt="website template image">Call us:01851-140972</a></li>
             </ul>
           </div>
           <div class="col-md-4">
@@ -23,7 +23,7 @@
         <div class="row d_flex">
           <div class="col-md-4">
             <ul class="conta_icon d_none1">
-              <li><a href="https://www.free-css.com/free-css-templates"><img src="{{url('frontend/assets/images/email.png')}}" alt="website template image"> mail@domain.com</a></li>
+              <li><a href="https://www.free-css.com/free-css-templates"><img src="{{url('frontend/assets/images/email.png')}}" alt="website template image">abontiahamed@gmail.com</a></li>
             </ul>
           </div>
 
