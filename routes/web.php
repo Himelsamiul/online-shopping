@@ -5,10 +5,12 @@ use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Frontend\WebOrderController;
 use App\Http\Controllers\Frontend\WebpageController;
 use App\Http\Controllers\Frontend\WebProductController;
+use App\Http\Controllers\SslCommerzPaymentController;
 
 // Frontend
 Route::get('/', [WebpageController::class, 'webpage'])->name('webpage');
@@ -31,7 +33,21 @@ Route::middleware('auth:customerGuard')->group(function () {
     Route::post('/update-cart/{id}', [WebOrderController::class, 'updateCart'])->name('frontend.update.cart');
     Route::get('/checkout', [WebOrderController::class, 'checkout'])->name('frontend.checkout');
     Route::post('/checkout/submit', [WebOrderController::class, 'checkoutSubmit'])->name('frontend.checkout.submit');
-    Route::get('details/{id}', [OrderController::class, 'viewOrderDetails'])->name('order.details'); 
+    Route::get('details/{id}', [OrderController::class, 'viewOrderDetails'])->name('customer.order.details');
+
+    // SSLCOMMERZ Start
+    Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+    Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+    Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+    Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+    Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+    Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+    Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+    Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+    //SSLCOMMERZ END
 });
 
 Route::get('/products/{categoryId?}', [WebProductController::class, 'product'])->name('products');
@@ -81,7 +97,16 @@ Route::group(['prefix' => 'admin'], function () {
         // Order Routes
         Route::prefix('/orders')->group(function () {
             Route::get('list', [OrderController::class, 'list'])->name('order.list');
-           // New route for order details
+            // New route for order details
+        });
+
+        // Order details Routes
+        Route::prefix('/order')->group(function () {
+            Route::get('details/{id}', [OrderController::class, 'details'])->name('order.details');
+        });
+
+        Route::prefix('/report')->group(function () {
+            Route::get('/', [ReportController::class, 'index'])->name('report');
         });
     });
 });

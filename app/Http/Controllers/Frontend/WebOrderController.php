@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -12,12 +13,12 @@ class WebOrderController extends Controller
     public function addToCart($productId)
     {
         $cart = session()->get('cart', []);
-    
+
         // Check if the product is already in the cart
         if (isset($cart[$productId])) {
             return redirect()->back()->with('error', 'This product is already in the cart!');
         }
-    
+
         // If the product is not in the cart, add it
         $product = Product::findOrFail($productId);
         $cart[$productId] = [
@@ -26,10 +27,10 @@ class WebOrderController extends Controller
             "price" => $product->price,
             "image" => $product->image
         ];
-    
+
         // Save the updated cart to the session
         session()->put('cart', $cart);
-    
+
         return redirect()->back()->with('success', 'Product added to cart!');
     }
 
@@ -83,36 +84,42 @@ class WebOrderController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'address' => 'required|string',
-            'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery', // Added validation for payment method
+            'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery',
         ]);
 
         $cart = session('cart', []);
+
+        // dd($cart);
         $total = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
 
         $customer = auth()->guard('customerGuard')->user();
-
-        // Generate unique transaction ID
         $transactionId = date('Ym') . strtoupper(uniqid());
-
-        // Determine payment status based on payment method
         $paymentStatus = $validated['payment_method'] === 'sslcommerz' ? 'paid' : 'pending';
 
-        // Create order with transaction ID, payment method, and payment status
-        Order::create([
+        $order = Order::create([
             'customer_id' => $customer->id,
             'name' => $validated['name'],
             'email' => $validated['email'],
             'address' => $validated['address'],
             'total_amount' => $total,
             'cart_data' => json_encode($cart),
-            'transaction_id' => $transactionId, // Store the generated transaction ID
-            'payment_method' => $validated['payment_method'], // Store the selected payment method
-            'payment_status' => $paymentStatus, // Store the determined payment status
+            'transaction_id' => $transactionId,
+            'payment_method' => $validated['payment_method'],
+            'payment_status' => $paymentStatus,
         ]);
 
-        // Clear the cart after successful order submission
+        foreach ($cart as $productId => $item) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'productid' => $productId,
+                'unit_price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['price'] * $item['quantity'],
+            ]);
+        }
+
         session()->forget('cart');
 
         return redirect()->route('frontend.checkout')->with('success', 'Order placed successfully!');

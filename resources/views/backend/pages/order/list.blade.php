@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Order Details</h2>
+    <h2>Order</h2>
 
     @if(session('success'))
         <script>
@@ -25,8 +25,11 @@
                 <th>Customer Name</th>
                 <th>Email</th>
                 <th>Address</th>
-                <th>Products</th>
                 <th>Total Amount</th>
+                <th>Transaction ID</th>
+                <th>Payment Method</th>
+                <th>Payment Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -36,29 +39,11 @@
                     <td>{{ $data->name }}</td>
                     <td>{{ $data->email }}</td>
                     <td>{{ $data->address }}</td>
-                    <td>
-                        @php
-                            $cartItems = json_decode($data->cart_data, true);
-                        @endphp
-
-                        @if($cartItems)
-                            <ul style="list-style: none; padding: 0;">
-                                @foreach($cartItems as $item)
-                                    <li class="d-flex align-items-center mb-2">
-                                        <img src="{{ url('image/product/' . $item['image']) }}" class="product-image me-2" alt="{{ $item['name'] }}">
-                                        <div>
-                                            <strong>{{ $item['name'] }}</strong><br>
-                                            Quantity: {{ $item['quantity'] }}<br>
-                                            Price: {{ $item['price'] }}
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @else
-                            No products found.
-                        @endif
-                    </td>
                     <td>BDT. {{ number_format($data->total_amount, 2) }}</td>
+                    <td>{{ $data->transaction_id }}</td>
+                    <td>{{ $data->payment_method }}</td>
+                    <td>{{ $data->payment_status }}</td>
+                    <td><a href="{{ route('order.details', $data->id) }}" class="btn btn-info btn-sm">Order Details</a></td>
                 </tr>
             @endforeach
         </tbody>

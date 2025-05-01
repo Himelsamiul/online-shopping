@@ -125,12 +125,12 @@ class WebpageController extends Controller
 
 
     public function profile()
-{
-    $customer = auth()->guard('customerGuard')->user();  // Get the currently authenticated customer
-    // Fetch orders of the customer
-    $orders = Order::where('customer_id', $customer->id)->get();
-    return view('frontend.pages.profile', compact('customer', 'orders'));  // Pass the customer and orders to the view
-}
+    {
+        $customer = auth()->guard('customerGuard')->user();  // Get the currently authenticated customer
+        // Fetch orders of the customer
+        $orders = Order::where('customer_id', $customer->id)->get();
+        return view('frontend.pages.profile', compact('customer', 'orders'));  // Pass the customer and orders to the view
+    }
 
 
 
@@ -181,18 +181,18 @@ class WebpageController extends Controller
     {
         // Fetch the order based on the ID
         $order = Order::findOrFail($id);
-    
+
         // Check if the order belongs to the authenticated customer
         if ($order->customer_id !== auth()->guard('customerGuard')->id()) {
             abort(403, 'Unauthorized action.');
         }
-    
+
         // Decode the cart_data stored in the order (assuming it's in JSON format)
         $cartItems = json_decode($order->cart_data, true); // This could be a list of product ids, quantities, etc.
-    
+
         // Calculate the total after discount (adjust based on your model and logic)
         $totalAfterDiscount = $order->total - $order->discount; // Assuming you have 'total' and 'discount' fields
-    
+
         // Pass the necessary data to the view
         return view('frontend.pages.receipt', [
             'order' => $order,
@@ -200,6 +200,4 @@ class WebpageController extends Controller
             'totalAfterDiscount' => $totalAfterDiscount,
         ]);
     }
-    
-    
 }

@@ -74,7 +74,7 @@
                 <td>{{ ucfirst($order->payment_status) }}</td>
                 <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</td>
                 <td>
-                    <a href="{{ route('order.details', $order->id) }}" class="btn btn-sm btn-primary">
+                    <a href="{{ route('customer.order.details', $order->id) }}" class="btn btn-sm btn-primary">
                         View Products
                     </a>
                 </td>
