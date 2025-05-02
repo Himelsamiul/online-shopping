@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\NavbarController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\ReviewController;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Frontend\WebOrderController;
 use App\Http\Controllers\Frontend\WebpageController;
@@ -39,14 +40,14 @@ Route::middleware('auth:customerGuard')->group(function () {
     //navbar routes
     Route::get('/about-us', [NavbarController::class, 'aboutus'])->name('aboutus');
     Route::get('/contact-us', [NavbarController::class, 'contactus'])->name('contactus');
-    Route::post('/contact-us', [NavbarController::class, 'contactusSubmit'])->name('contactus.submit');    
+    Route::post('/contact-us', [NavbarController::class, 'contactusSubmit'])->name('contactus.submit');
+
+    Route::post('/product/{id}/review', [WebProductController::class, 'storeReview'])->name('submit.review');
 
 
     // SSLCOMMERZ Start
     Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
     Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
-
-
 
     Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
     Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
@@ -62,7 +63,6 @@ Route::middleware('auth:customerGuard')->group(function () {
 Route::get('/products/category/{categoryId?}', [WebProductController::class, 'product'])->name('products');
 Route::get('/product/{id}', [WebProductController::class, 'singleProduct'])->name('product.single');
 
-Route::post('/product/{id}/review', [WebProductController::class, 'storeReview'])->name('submit.review');
 
 
 // Backend Routes
@@ -125,6 +125,10 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::prefix('/report')->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('report');
+        });
+
+        Route::prefix('/review')->group(function () {
+            Route::get('/', [ReviewController::class, 'list'])->name('review');
         });
     });
 

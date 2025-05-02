@@ -80,6 +80,7 @@ class WebOrderController extends Controller
 
     public function checkoutSubmit(Request $request)
     {
+        // 1. Validate form input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -87,17 +88,35 @@ class WebOrderController extends Controller
             'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery',
         ]);
 
+        // 2. Get cart from session
         $cart = session('cart', []);
 
-        // dd($cart);
+        // 3. Check if cart is empty
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Your cart is empty.');
+        }
+
+        // 4. Check stock availability before placing the order
+        foreach ($cart as $productId => $item) {
+            $product = Product::find($productId);
+            if (!$product || $product->quantity < $item['quantity']) {
+                return redirect()->back()->with('error', "Insufficient stock for product: {$product->name}");
+            }
+        }
+
+        // 5. Calculate total amount
         $total = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
 
+        // 6. Get authenticated customer
         $customer = auth()->guard('customerGuard')->user();
+
+        // 7. Generate transaction ID and payment status
         $transactionId = date('Ym') . strtoupper(uniqid());
         $paymentStatus = $validated['payment_method'] === 'sslcommerz' ? 'paid' : 'pending';
 
+        // 8. Create the order
         $order = Order::create([
             'customer_id' => $customer->id,
             'name' => $validated['name'],
@@ -110,6 +129,7 @@ class WebOrderController extends Controller
             'payment_status' => $paymentStatus,
         ]);
 
+        // 9. Create order details and reduce stock
         foreach ($cart as $productId => $item) {
             OrderDetail::create([
                 'order_id' => $order->id,
@@ -118,10 +138,15 @@ class WebOrderController extends Controller
                 'quantity' => $item['quantity'],
                 'subtotal' => $item['price'] * $item['quantity'],
             ]);
+
+            $product = Product::find($productId);
+            $product->decrement('quantity', $item['quantity']);
         }
 
+        // 10. Clear the cart session
         session()->forget('cart');
 
+        // 11. Redirect with success message
         return redirect()->route('frontend.checkout')->with('success', 'Order placed successfully!');
     }
 }

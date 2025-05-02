@@ -24,7 +24,6 @@
                     <h4 class="mb-3">Leave a Review</h4>
                     <form action="{{ route('submit.review', $product->id) }}" method="POST">
                         @csrf
-
                         <!-- Star Rating -->
                         <div class="form-group mb-3">
                             <label>Your Rating:</label><br>
