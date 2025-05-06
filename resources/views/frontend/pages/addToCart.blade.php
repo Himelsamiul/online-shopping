@@ -9,6 +9,8 @@
     $total = 0;
     @endphp
 
+    <!-- Display any success message -->
+   
     @if(count($cart) > 0)
     <table class="table table-bordered">
         <thead>
@@ -58,7 +60,7 @@
     <div class="alert alert-info">Your cart is empty.</div>
     @endif
 </div>
-@endsection
+
 
 <script>
     function changeQuantity(id, change) {
@@ -72,3 +74,4 @@
         displayQty.innerText = newQty;
     }
 </script>
+@endsection
