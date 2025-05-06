@@ -16,7 +16,12 @@ use App\Http\Controllers\SslCommerzPaymentController;
 
 // Frontend
 Route::get('/', [WebpageController::class, 'webpage'])->name('webpage');
-//  
+Route::get('/about-us', [NavbarController::class, 'aboutus'])->name('aboutus');
+Route::get('/contact-us', [NavbarController::class, 'contactus'])->name('contactus');
+Route::post('/contact-us', [NavbarController::class, 'contactusSubmit'])->name('contactus.submit');
+
+Route::get('/search', [ProductController::class, 'search'])->name('search.products');
+
 // Customer Registration Routes 
 Route::get('/customer', [WebpageController::class, 'form_reg'])->name('reg');
 Route::post('/customer/done', [WebpageController::class, 'reg'])->name('customer.done');
@@ -38,9 +43,8 @@ Route::middleware('auth:customerGuard')->group(function () {
     Route::get('details/{id}', [OrderController::class, 'viewOrderDetails'])->name('customer.order.details');
 
     //navbar routes
-    Route::get('/about-us', [NavbarController::class, 'aboutus'])->name('aboutus');
-    Route::get('/contact-us', [NavbarController::class, 'contactus'])->name('contactus');
-    Route::post('/contact-us', [NavbarController::class, 'contactusSubmit'])->name('contactus.submit');
+
+  
 
     Route::post('/product/{id}/review', [WebProductController::class, 'storeReview'])->name('submit.review');
 

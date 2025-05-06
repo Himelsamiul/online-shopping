@@ -106,12 +106,13 @@
             </nav>
           </div>
           <div class="col-md-4">
-            <div class="search">
-              <form action="#" method="post">
-                <input class="form_sea" type="text" placeholder="Search" name="search">
-                <button type="submit" class="seach_icon"><i class="fa fa-search"></i></button>
-              </form>
-            </div>
+          <div class="search">
+  <form action="{{ route('search.products') }}" method="GET">
+    <input class="form_sea" type="text" placeholder="Search" name="search" value="{{ request('search') }}">
+    <button type="submit" class="seach_icon"><i class="fa fa-search"></i></button>
+  </form>
+</div>
+
           </div>
         </div>
       </div>

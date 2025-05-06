@@ -52,17 +52,36 @@ class WebOrderController extends Controller
     }
 
     public function updateCart(Request $request, $id)
-    {
-        $cart = session()->get('cart', []);
+{
+    $cart = session()->get('cart', []);
+    
+    // Check if product exists in the cart
+    if (isset($cart[$id])) {
+        $quantity = $request->input('quantity');
+        $product = Product::find($id);
 
-        if (isset($cart[$id])) {
-            $quantity = $request->input('quantity');
-            $cart[$id]['quantity'] = max(1, (int) $quantity); // Prevent zero or negative
-            session()->put('cart', $cart);
+        // Check if the product exists and if the requested quantity is available
+        if (!$product) {
+            return response()->json(['error' => 'Product not found!'], 404);
         }
 
-        return redirect()->back()->with('success', 'Cart updated successfully!');
+        // Check if the requested quantity exceeds available stock
+        if ($quantity > $product->quantity) {
+            return response()->json([
+                'error' => 'Not enough stock available. Only ' . $product->quantity . ' item(s) left.'
+            ], 400);
+        }
+
+        // If stock is available, update the cart
+        $cart[$id]['quantity'] = max(1, (int) $quantity); // Prevent zero or negative quantity
+        session()->put('cart', $cart);
+
+        return response()->json(['success' => 'Cart updated successfully!']);
     }
+
+    // If product is not in cart, return an error
+    return response()->json(['error' => 'Product not found in the cart!'], 404);
+}
 
     public function checkout()
     {

@@ -4,6 +4,12 @@
 <div class="container">
     <h2>Order</h2>
 
+    <!-- ✅ Total Order Amount -->
+    <h5>Total Order Amount of All Customers: 
+        <strong class="text-success">BDT. {{ number_format($totalOrderAmount, 2) }}</strong>
+    </h5>
+
+    <!-- ✅ SweetAlert Success -->
     @if(session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -18,36 +24,47 @@
         </script>
     @endif
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>SL</th>
+            <th>Customer Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Total Amount</th>
+            <th>Transaction ID</th>
+            <th>Payment Method</th>
+            <th>Payment Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($orders as $key => $data)
             <tr>
-                <th>SL</th>
-                <th>Customer Name</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Total Amount</th>
-                <th>Transaction ID</th>
-                <th>Payment Method</th>
-                <th>Payment Status</th>
-                <th>Action</th>
+                <td>{{ $orders->firstItem() + $key }}</td>
+                <td>{{ $data->name }}</td>
+                <td>{{ $data->email }}</td>
+                <td>{{ $data->address }}</td>
+                <td>BDT. {{ number_format($data->total_amount, 2) }}</td>
+                <td>{{ $data->transaction_id }}</td>
+                <td>{{ $data->payment_method }}</td>
+                <td>{{ ucfirst($data->payment_status) }}</td>
+                <td>
+                    <a href="{{ route('order.details', $data->id) }}" class="btn btn-info btn-sm">Order Details</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($orders as $key => $data)
-                <tr>
-                    <td>{{ $orders->firstItem() + $key }}</td>
-                    <td>{{ $data->name }}</td>
-                    <td>{{ $data->email }}</td>
-                    <td>{{ $data->address }}</td>
-                    <td>BDT. {{ number_format($data->total_amount, 2) }}</td>
-                    <td>{{ $data->transaction_id }}</td>
-                    <td>{{ $data->payment_method }}</td>
-                    <td>{{ $data->payment_status }}</td>
-                    <td><a href="{{ route('order.details', $data->id) }}" class="btn btn-info btn-sm">Order Details</a></td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        @endforeach
+    </tbody>
+
+    <!-- ✅ Total Row in Table Footer -->
+    <tfoot>
+        <tr>
+            <td colspan="4" class="text-end"><strong>Total Order Amount:</strong></td>
+            <td colspan="5"><strong class="text-success">BDT. {{ number_format($totalOrderAmount, 2) }}</strong></td>
+        </tr>
+    </tfoot>
+</table>
+
 
     <!-- Pagination Links -->
     <div class="d-flex justify-content-center mt-4">
