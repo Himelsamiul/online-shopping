@@ -12,11 +12,22 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     public function list()
-    {
-        $products = Product::with('category', 'unit')->paginate(5);
-        return view('backend.pages.product.list', compact('products'));
-    }
-    
+{
+    // Fetch products with their category and unit relationships, and paginate by 5
+    $products = Product::with('category', 'unit')->paginate(5);
+
+    // Calculate the total number of products
+    $totalProducts = $products->sum('quantity');
+
+    // Calculate the total price of all products (price * quantity)
+    $totalAmount = $products->sum(function ($product) {
+        return $product->price * $product->quantity;
+    });
+
+    // Return the view with products, totalProducts, and totalAmount
+    return view('backend.pages.product.list', compact('products', 'totalProducts', 'totalAmount'));
+}
+
     // Show product creation form
     public function create()
     {

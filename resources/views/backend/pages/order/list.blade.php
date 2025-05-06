@@ -5,9 +5,7 @@
     <h2>Order</h2>
 
     <!-- ✅ Total Order Amount -->
-    <h5>Total Order Amount of All Customers: 
-        <strong class="text-success">BDT. {{ number_format($totalOrderAmount, 2) }}</strong>
-    </h5>
+    
 
     <!-- ✅ SweetAlert Success -->
     @if(session('success'))

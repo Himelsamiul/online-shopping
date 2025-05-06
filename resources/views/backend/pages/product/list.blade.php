@@ -42,7 +42,7 @@
                 <td>{{ $product->name }}</td>
                 <td>{{ $product->category->name }}</td>
                 <td>{{ $product->unit->name }}</td>
-                <td>{{ $product->price }}</td>
+                <td>{{ $product->price }}TK</td>
                 <td>{{ $product->quantity }}</td>
                 <td>
                     @if($product->image)
@@ -69,6 +69,17 @@
             </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <!-- Add the totals row at the bottom of the Price column -->
+            <tr>
+                <td colspan="4"><strong>Total</strong></td> <!-- Total label spanning 4 columns -->
+                <td><strong>{{ $totalAmount }} TK</strong></td> <!-- Total Amount in Price column -->
+                <td><strong>{{ $totalProducts }}</strong></td> <!-- Total Quantity -->
+                <td></td> <!-- Empty for Image column -->
+                <td></td> <!-- Empty for Status column -->
+                <td></td> <!-- Empty for Actions column -->
+            </tr>
+        </tfoot>
     </table>
 
     <!-- Pagination -->

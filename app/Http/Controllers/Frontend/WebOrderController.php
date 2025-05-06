@@ -13,13 +13,16 @@ class WebOrderController extends Controller
     public function addToCart($productId)
     {
         $cart = session()->get('cart', []);
-
+    
         // Check if the product is already in the cart
         if (isset($cart[$productId])) {
-            return redirect()->back()->with('error', 'This product is already in the cart!');
+            return response()->json([
+                'status' => 'exists',
+                'message' => 'This product is already in the cart!'
+            ]);
         }
-
-        // If the product is not in the cart, add it
+    
+        // Add product to cart
         $product = Product::findOrFail($productId);
         $cart[$productId] = [
             "name" => $product->name,
@@ -27,12 +30,15 @@ class WebOrderController extends Controller
             "price" => $product->price,
             "image" => $product->image
         ];
-
-        // Save the updated cart to the session
+    
         session()->put('cart', $cart);
-
-        return redirect()->back()->with('success', 'Product added to cart!');
+    
+        return response()->json([
+            'status' => 'added',
+            'message' => 'Product added to cart!'
+        ]);
     }
+    
 
     public function viewCart()
     {

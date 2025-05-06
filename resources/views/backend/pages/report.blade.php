@@ -1,12 +1,28 @@
 @extends('backend.master')
 
-
 @section('content')
 <div class="container">
     <h2>All Orders Report</h2>
 
+    <!-- Date Filter Form -->
+    <form method="GET" action="{{ route('report') }}" class="mb-3">
+        <div class="form-row">
+            <div class="col">
+                <input type="date" name="start_date" class="form-control" value="{{ request()->get('start_date') }}">
+            </div>
+            <div class="col">
+                <input type="date" name="end_date" class="form-control" value="{{ request()->get('end_date') }}">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Print Button -->
     <button onclick="window.print()" class="btn btn-primary mb-3">Print Report</button>
 
+    <!-- Orders Table -->
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -37,5 +53,10 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {{ $orders->links() }}
+    </div>
 </div>
 @endsection
