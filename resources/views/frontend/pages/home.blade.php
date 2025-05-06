@@ -5,15 +5,15 @@
     <div class="row">
       <div class="col-md-8">
         <div class="text-bg">
-          <h1> <span class="blodark"> Romofyi</span><br>
-            Trands 2055</h1>
+          <h1> <span class="blodark">Shoppaholic</span><br>
+            Trands 2025</h1>
           <p>A huge fashion collection for ever</p>
           <a class="" href="https://www.free-css.com/free-css-templates"></a>
         </div>
       </div>
       <div class="col-md-4">
         <div class="ban_img">
-          <figure><img src="{{url('frontend/assets/images/ban_img.png')}}" alt="website template image"></figure>
+          <figure><img src="{{url('frontend/assets/images/img.jpg')}}" alt="website template image"></figure>
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
 <div class="six_box">
   <div class="container-fluid">
     <div class="row">
-      @foreach($category->take(6) as $data)
+      @foreach($category->take(10) as $data)
       <div class="col-md-2 col-sm-4 pa_left">
         <div class="six_probpx yellow_bg">
           <i><img style="width: 90px; height:90px;" src="{{ url('image/category/' . $data->image) }}" alt="website template image"></i>

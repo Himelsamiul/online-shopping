@@ -2,13 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>E-Commerce</title>
+<title>Shoppaholic</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" type="text/css" href="{{url('frontend/assets/css/bootstrap.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url('frontend/assets/css/plugins.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url('frontend/assets/css/style.css')}}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
 <style type="text/css">
 #freecssfooter{display:block;width:100%;padding:120px 0 20px;overflow:hidden;background-color:transparent;z-index:5000;text-align:center;}
 #freecssfooter div#fcssholder div{display:none;}
