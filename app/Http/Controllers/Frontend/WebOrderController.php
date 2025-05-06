@@ -11,28 +11,25 @@ use Illuminate\Http\Request;
 class WebOrderController extends Controller
 {
     public function addToCart($productId)
-{
-    $cart = session()->get('cart', []);
+    {
+        $cart = session()->get('cart', []);
 
-    // Do not add if the product is already in the cart
-    if (isset($cart[$productId])) {
-        return redirect()->back(); // silently return
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity']++;
+        } else {
+            $product = Product::findOrFail($productId);
+            $cart[$productId] = [
+                "name" => $product->name,
+                "quantity" => 1,
+                "price" => $product->price,
+                "image" => $product->image
+            ];
+        }
+
+        session()->put('cart', $cart);
+
+        return redirect()->back()->with('success', 'Product added to cart!');
     }
-
-    // Add the product to the cart
-    $product = Product::findOrFail($productId);
-    $cart[$productId] = [
-        "name" => $product->name,
-        "quantity" => 1,
-        "price" => $product->price,
-        "image" => $product->image
-    ];
-
-    // Save the cart
-    session()->put('cart', $cart);
-
-    return redirect()->back(); // silently return
-}
 
     public function viewCart()
     {
@@ -52,17 +49,17 @@ class WebOrderController extends Controller
     }
 
     public function updateCart(Request $request, $id)
-{
-    $cart = session('cart', []);
-
-    if (isset($cart[$id])) {
-        $cart[$id]['quantity'] = $request->quantity;
-    }
-
-    session(['cart' => $cart]);
-
-    return back()->with('message', 'Cart updated successfully.');
-}
+     {
+         $cart = session()->get('cart', []);
+ 
+         if (isset($cart[$id])) {
+             $quantity = $request->input('quantity');
+             $cart[$id]['quantity'] = max(1, (int) $quantity); // Prevent zero or negative
+             session()->put('cart', $cart);
+         }
+ 
+         return redirect()->back()->with('success', 'Cart updated successfully!');
+     }
 
 
 
