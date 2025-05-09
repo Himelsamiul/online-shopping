@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderPlacedMail;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class WebOrderController extends Controller
 {
@@ -155,7 +157,9 @@ class WebOrderController extends Controller
             $product = Product::find($productId);
             $product->decrement('quantity', $item['quantity']);
         }
+        // dd($order);
 
+        Mail::to($validated['email'])->send(new OrderPlacedMail($order));
         // 10. Clear the cart session
         session()->forget('cart');
 

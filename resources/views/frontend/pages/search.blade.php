@@ -1,26 +1,27 @@
 @extends('frontend.master')
 @section('content')
 
-  <div class="container">
-    <h2>Search Results for: "{{ $searchTerm }}"</h2>
+<div class="container">
+  <h2>Search Results for: "{{ $searchTerm }}"</h2>
 
-    @if($products->isEmpty())
-      <p>No products found matching your search.</p>
-    @else
-      <div class="row">
-        @foreach($products as $product)
-          <div class="col-md-4">
-            <div class="card">
-            <img style="height: 270px; width: 250px;" src="{{ url('image/product/' . $product->image) }}" alt="{{ $product->name }}">
-              <div class="card-body">
-                <h5 class="card-title">{{ $product->name }}</h5>
-                <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
-               
-              </div>
-            </div>
+  @if($products->isEmpty())
+  <p>No products found matching your search.</p>
+  @else
+  <div class="row">
+    @foreach($products as $product)
+    <div class="col-md-4">
+      <div class="card">
+        <a href="{{route('product.single' , $product->id)}}">
+          <img style="height: 270px; width: 250px;" src="{{ url('image/product/' . $product->image) }}" alt="{{ $product->name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ $product->name }}</h5>
+            <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
           </div>
-        @endforeach
+        </a>
       </div>
-    @endif
+    </div>
+    @endforeach
   </div>
+  @endif
+</div>
 @endsection
