@@ -1,105 +1,119 @@
 @extends('backend.master')
+
 @section('content')
+<!-- Custom Dashboard CSS -->
+<style>
+  /* Add smooth sliding gradient color effect */
+  .card-stats {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(90deg, #ffadad, #ffd6a5, #fdffb6, #caffbf, #9bf6ff, #a0c4ff, #bdb2ff, #ffc3a0);
+    background-size: 300% 100%;
+    animation: slideGradient 5s linear infinite;
+    border-radius: 12px;  /* For rounded corners */
+  }
+
+  /* Keyframe for sliding gradient effect */
+  @keyframes slideGradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+  .dashboard-icon {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    padding: 18px;
+  }
+
+  .dashboard-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-stats .card-body {
+    padding: 1.2rem;
+  }
+
+  .card-category {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0.3rem;
+  }
+
+  /* Center and style the Dashboard heading */
+  .dashboard-heading {
+    text-align: center;
+    color:rgb(66, 113, 160); /* Deep Blue */
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+</style>
+
 <div class="container">
-          <div class="page-inner">
-            <div
-              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
-            >
-              <div>
-                <h3 class="fw-bold mb-3">Dashboard</h3>
-                
-              </div>
-              <div class="ms-md-auto py-2 py-md-0">
-                <!-- <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
-                <a href="#" class="btn btn-primary btn-round">Add Customer</a> -->
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-primary bubble-shadow-small"
-                        >
-                          <i class="fas fa-users"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Total Category</p>
-                          <h4 class="card-title">{{$category}}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+  <div class="page-inner">
+    <div class="d-flex justify-content-center pt-2 pb-4">
+      <div>
+        <h3 class="dashboard-heading">Dashboard</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      @php
+        $stats = [
+          ['label' => 'Total Category', 'value' => $category, 'icon' => 'fas fa-layer-group', 'color' => 'bg-primary'],
+          ['label' => 'Total Units', 'value' => $unit, 'icon' => 'fas fa-balance-scale', 'color' => 'bg-info'],
+          ['label' => 'Total Products', 'value' => $product, 'icon' => 'fas fa-box-open', 'color' => 'bg-success'],
+          ['label' => 'Total Orders', 'value' => $orderCount, 'icon' => 'fas fa-shopping-cart', 'color' => 'bg-warning'],
+          ['label' => 'Total Customers', 'value' => $customerCount, 'icon' => 'fas fa-users', 'color' => 'bg-secondary'],
+          ['label' => 'Total Sale', 'value' => $orderCount, 'icon' => 'fas fa-dollar-sign', 'color' => 'bg-dark'],
+          ['label' => 'Total Message', 'value' => $contactCount, 'icon' => 'fas fa-envelope', 'color' => 'bg-danger'],
+          ['label' => 'Total Review', 'value' => $reviewCount, 'icon' => 'fas fa-star', 'color' => 'bg-success'],
+        ];
+      @endphp
+
+      @foreach($stats as $stat)
+      <div class="col-sm-6 col-md-3 mb-4">
+        <div class="card card-stats card-round shadow-sm">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-icon">
+                <div class="dashboard-icon text-white text-center {{ $stat['color'] }}">
+                  <i class="{{ $stat['icon'] }} fa-2x"></i>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-info bubble-shadow-small"
-                        >
-                          <i class="fas fa-user-check"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Total Units</p>
-                          <h4 class="card-title">{{$unit}}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-success bubble-shadow-small"
-                        >
-                          <i class="fas fa-luggage-cart"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Total Products</p>
-                          <h4 class="card-title">{{$product}}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-secondary bubble-shadow-small"
-                        >
-                          <i class="far fa-check-circle"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Total customers</p>
-                          <h4 class="card-title">{{$customerCount}}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <div class="col col-stats ms-3 ms-sm-0">
+                <div class="numbers">
+                  <p class="card-category">{{ $stat['label'] }}</p>
+                  <h4 class="card-title">{{ $stat['value'] }}</h4>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      @endforeach
+    </div>
+  </div>
+</div>
+
+<!-- Optional JS for Interactivity -->
+<script>
+  document.querySelectorAll('.dashboard-icon').forEach(icon => {
+    icon.addEventListener('mouseenter', () => icon.style.opacity = 0.9);
+    icon.addEventListener('mouseleave', () => icon.style.opacity = 1);
+  });
+</script>
 @endsection

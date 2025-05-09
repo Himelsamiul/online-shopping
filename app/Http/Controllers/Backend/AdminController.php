@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\Unit;
 use Illuminate\Support\Facades\Validator;
 
@@ -53,9 +56,11 @@ class AdminController extends Controller
         $unit = Unit::count();
         $product = Product::count();
         $customerCount = Customer::count();
-
+        $orderCount = Order::count();
+        $reviewCount = Review::count();
+        $contactCount = Contact::count();
         // Return dashboard view with data
-        return view('backend.pages.dashboard', compact('category', 'unit', 'customerCount','product'));
+        return view('backend.pages.dashboard', compact('category', 'unit', 'customerCount','product','orderCount','reviewCount','contactCount'));
     }
 
     public function showCustomers()
