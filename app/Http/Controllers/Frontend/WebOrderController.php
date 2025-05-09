@@ -48,20 +48,34 @@ class WebOrderController extends Controller
         return redirect()->back()->with('success', 'Product removed from cart!');
     }
 
+
     public function updateCart(Request $request, $id)
-     {
-         $cart = session()->get('cart', []);
- 
-         if (isset($cart[$id])) {
-             $quantity = $request->input('quantity');
-             $cart[$id]['quantity'] = max(1, (int) $quantity); // Prevent zero or negative
-             session()->put('cart', $cart);
-         }
- 
-         return redirect()->back()->with('success', 'Cart updated successfully!');
-     }
+    {
+        $cart = session()->get('cart', []);
 
+        if (!isset($cart[$id])) {
+            return redirect()->back()->with('error', 'Product not found in cart.');
+        }
 
+        $quantity = (int) $request->input('quantity');
+        if ($quantity > 10) {
+            return redirect()->back()->with('error', 'You cannot take more than 10 items per product.');
+        }
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found.');
+        }
+
+        if ($product->quantity < $quantity) {
+            return redirect()->back()->with('error', 'Only ' . $product->quantity . ' items available in stock.');
+        }
+
+        $cart[$id]['quantity'] = $quantity;
+        session()->put('cart', $cart);
+
+        return redirect()->back()->with('success', 'Cart updated successfully!');
+    }
 
     public function checkout()
     {

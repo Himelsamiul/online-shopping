@@ -37,10 +37,10 @@
 
           <!-- TEXT LOGO START -->
           <div class="col-md-4 text-center">
-  <a class="logo" href="https://www.free-css.com/free-css-templates" style="font-size: 30px; font-weight: bold; text-decoration: none; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">
-    <span style="color: rgb(47, 93, 140); text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">shop</span><span style="color: #FFD700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">paholic</span>
-  </a>
-</div>
+            <a class="logo" href="https://www.free-css.com/free-css-templates" style="font-size: 30px; font-weight: bold; text-decoration: none; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">
+              <span style="color: rgb(47, 93, 140); text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">shop</span><span style="color: #FFD700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">paholic</span>
+            </a>
+          </div>
 
 
 
@@ -56,6 +56,10 @@
               <li>
                 <a href="{{ route('view.cart') }}">
                   <img src="{{ url('frontend/assets/images/shopping.png') }}" alt="cart">
+                  @php
+                  $cart = session('cart', []);
+                  $cartCount = count($cart);
+                  @endphp
                   <span style="color: red;">({{ $cartCount }})</span>
                 </a>
               </li>
@@ -106,12 +110,12 @@
             </nav>
           </div>
           <div class="col-md-4">
-          <div class="search">
-  <form action="{{ route('search.products') }}" method="GET">
-    <input class="form_sea" type="text" placeholder="Search" name="search" value="{{ request('search') }}">
-    <button type="submit" class="seach_icon"><i class="fa fa-search"></i></button>
-  </form>
-</div>
+            <div class="search">
+              <form action="{{ route('search.products') }}" method="GET">
+                <input class="form_sea" type="text" placeholder="Search" name="search" value="{{ request('search') }}">
+                <button type="submit" class="seach_icon"><i class="fa fa-search"></i></button>
+              </form>
+            </div>
 
           </div>
         </div>
