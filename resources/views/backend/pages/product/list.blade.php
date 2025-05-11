@@ -29,65 +29,69 @@
                 <th>Unit</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Image</th>
+                <th>Stock Value</th>
                 <th>Status</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
+            @php
+                $totalStockValue = 0;
+                $totalProducts = 0;
+            @endphp
+
             @foreach($products as $product)
-            <tr>
-                <!-- Correct SL with pagination -->
-                <td>{{ $products->firstItem() + $loop->index }}</td>
-                <td>{{ $product->name }}</td>
-                <td>{{ $product->category->name }}</td>
-                <td>{{ $product->unit->name }}</td>
-                <td>{{ $product->price }}TK</td>
-                <td>{{ $product->quantity }}</td>
-                <td>
-                    @if($product->image)
-                        <img class="product-image" src="{{ asset('image/product/' . $product->image) }}" alt="{{ $product->name }}">
-                    @else
-                        No Image
-                    @endif
-                </td>
-                <td>{{ ucfirst($product->status) }}</td>
-                <td>
-                    <!-- View -->
-                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm">View</a>
+                @php
+                    $stockValue = $product->price * $product->quantity;
+                    $totalStockValue += $stockValue;
+                    $totalProducts += $product->quantity;
+                @endphp
+                <tr>
+                    <td>{{ $products->firstItem() + $loop->index }}</td>
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->unit->name }}</td>
+                    <td>{{ $product->price }} TK</td>
+                    <td>{{ $product->quantity }}</td>
+                    <td>{{ $stockValue }} TK</td> <!-- Stock Value calculation here -->
+                    <td>{{ ucfirst($product->status) }}</td>
+                    <td>
+                        @if($product->image)
+                            <img class="product-image" src="{{ asset('image/product/' . $product->image) }}" alt="{{ $product->name }}">
+                        @else
+                            No Image
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                    <!-- Edit -->
-                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
-
-                    <!-- Delete -->
-                    <form action="{{ route('products.delete', $product->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm delete-btn" data-product-name="{{ $product->name }}">Delete</button>
-                    </form>
-                </td>
-            </tr>
+                        <form action="{{ route('products.delete', $product->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm delete-btn" data-product-name="{{ $product->name }}">Delete</button>
+                        </form>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
+
         <tfoot>
-            <!-- Add the totals row at the bottom of the Price column -->
             <tr>
-                <td colspan="4"><strong>Total</strong></td> <!-- Total label spanning 4 columns -->
-                <td><strong>{{ $totalAmount }} TK</strong></td> <!-- Total Amount in Price column -->
-                <td><strong>{{ $totalProducts }}</strong></td> <!-- Total Quantity -->
-                <td></td> <!-- Empty for Image column -->
-                <td></td> <!-- Empty for Status column -->
-                <td></td> <!-- Empty for Actions column -->
+                <td colspan="5"><strong>Total</strong></td>
+                <td><strong>{{ $totalProducts }}</strong></td>
+                <td><strong>{{ $totalStockValue }} TK</strong></td> <!-- Total Stock Value -->
+                <td></td>
+                <td></td>
             </tr>
         </tfoot>
     </table>
 
-    <!-- Pagination -->
     <div class="d-flex justify-content-center mt-3">
         {{ $products->links('pagination::bootstrap-4') }}
     </div>
 
-    <!-- Styling -->
     <style>
         .product-image {
             width: 80px;
