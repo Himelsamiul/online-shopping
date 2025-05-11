@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-md-8">
         <div class="text-bg">
-          <h1> <span class="blodark">Shoppaholic</span><br>
+          <h1> <span class="blodark">Easy Shop</span><br>
             Trands 2025</h1>
           <p>A huge fashion collection for ever</p>
           <a class="" href="https://www.free-css.com/free-css-templates"></a>

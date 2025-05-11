@@ -8,7 +8,7 @@
 
         <!-- Company Header -->
         <div class="text-center mb-4">
-            <h1 style="font-size: 36px; color: #003366; font-weight: 800; margin-bottom: 5px;">Shoppaholic</h1>
+            <h1 style="font-size: 36px; color: #003366; font-weight: 800; margin-bottom: 5px;">Easy Shop</h1>
             <h3 style="font-size: 20px; font-weight: bold; color: #555;">Order Details : #{{ $order->id }}</h3>
         </div>
 

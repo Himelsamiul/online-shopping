@@ -38,7 +38,7 @@
           <!-- TEXT LOGO START -->
           <div class="col-md-4 text-center">
             <a class="logo" href="https://www.free-css.com/free-css-templates" style="font-size: 30px; font-weight: bold; text-decoration: none; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">
-              <span style="color: rgb(47, 93, 140); text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">shop</span><span style="color: #FFD700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">paholic</span>
+              <span style="color: rgb(47, 93, 140); text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Easy</span><span style="color: #FFD700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Shop</span>
             </a>
           </div>
 
