@@ -77,7 +77,6 @@
             @enderror
         </div>
 
-
         <div class="form-group">
             <label for="status">Status</label>
             <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
