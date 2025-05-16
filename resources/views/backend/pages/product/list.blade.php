@@ -81,7 +81,7 @@
 
         <tfoot>
             <tr>
-                <td colspan="5"><strong>Total</strong></td>
+                <td colspan="6"><strong>Total</strong></td>
                 <td><strong>{{ $totalProducts }}</strong></td>
                 <td><strong>{{ $totalStockValue }} TK</strong></td> <!-- Total Stock Value -->
                 <td></td>

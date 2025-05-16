@@ -25,11 +25,19 @@
             <tbody>
                 @foreach($customers as $customer)
                     <tr>
-                        <td>{{ $loop->iteration }}</td> <!-- Always starts from 1 -->
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $customer->name }}</td>
                         <td>{{ $customer->email }}</td>
                         <td>{{ $customer->phoneno }}</td>
                         <td>{{ $customer->address }}</td>
+                        <td>
+                            <!-- Delete Form -->
+                            <form action="{{ route('customers.destroy', $customer->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
