@@ -39,7 +39,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <p>&copy; 2045 All Rights Reserved. By <a target="_blank" rel="nofollow noopener" href="//html.design/">HTML Design</a></p>
+            <p>&copy; 2025 All Rights Reserved. By <a target="_blank" rel="nofollow noopener" href="//html.design/">HTML Design</a></p>
           </div>
         </div>
       </div>

@@ -27,12 +27,12 @@
                     <p class="mb-1">
                         <strong>Price:</strong> 
                         @if($product->previous_price && $product->previous_price > $product->price)
-                            <span style="text-decoration: line-through; color: gray;">
+                            <span style="text-decoration: line-through; color: red;">
                                 {{ $product->previous_price }} TK
                             </span>
                             &nbsp;
                         @endif
-                        <span>{{ $product->price }} TK</span>
+                        <span  style="color: green;">{{ $product->price }} TK</span>
                     </p>
 
                     <p class="mb-3"><strong>Available:</strong> {{ $product->quantity }}</p>

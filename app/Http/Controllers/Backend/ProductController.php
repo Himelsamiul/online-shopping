@@ -91,6 +91,7 @@ class ProductController extends Controller
            'name' => 'required|string|max:255',
            'description' => 'required|string|max:500',
            'price' => 'required|numeric',
+           'previous_price' => 'nullable|numeric|min:0',
            'category_id' => 'required|exists:categories,id',
            'unit_id' => 'required|exists:units,id',
            'quantity' => 'required|numeric',
@@ -105,6 +106,7 @@ class ProductController extends Controller
        $product->name = $request->name;
        $product->description = $request->description;
        $product->price = $request->price;
+       $product->previous_price = $request->previous_price;
        $product->category_id = $request->category_id;
        $product->unit_id = $request->unit_id;
        $product->quantity = $request->quantity;
