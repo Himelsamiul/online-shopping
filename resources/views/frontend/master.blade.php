@@ -53,6 +53,7 @@
 <script src="{{url('frontend/assets/js/jquery.migrate.min.js')}}"></script>
 <script src="{{url('frontend/assets/js/jquery.mCustomScrollbar.concat.min.js')}}"></script>
 <script src="{{url('frontend/assets/js/custom.js')}}"></script>
+@yield('scripts')
 <div id="freecssfooter">
   <div id="fcssholder">
     <div id="bsap_2365" class="bsarocks bsap_b893e54e42ad5b76e7b252f59be18e67"></div>

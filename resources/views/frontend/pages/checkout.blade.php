@@ -11,24 +11,24 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <form action="{{ route('frontend.checkout.submit') }}" method="POST">
+    <form action="{{ route('frontend.checkout.submit') }}" method="POST" id="checkoutForm">
         @csrf
 
         <div class="mb-3">
             <label>Name *</label>
-            <input type="text" name="name" class="form-control" 
+            <input type="text" name="name" class="form-control"
                    value="{{ auth()->guard('customerGuard')->user()->name }}" readonly required>
         </div>
 
         <div class="mb-3">
             <label>Email *</label>
-            <input type="email" name="email" class="form-control" 
+            <input type="email" name="email" class="form-control"
                    value="{{ auth()->guard('customerGuard')->user()->email }}" readonly required>
         </div>
 
         <div class="mb-3">
             <label>Phone Number *</label>
-            <input type="text" name="phone" class="form-control" 
+            <input type="text" name="phone" class="form-control"
                    value="{{ auth()->guard('customerGuard')->user()->phoneno }}" readonly required>
         </div>
 
@@ -71,4 +71,25 @@
         </div>
     </form>
 </div>
+
+@endsection
+
+@section('scripts')
+<script>
+
+    $(document).ready(function() {
+
+        const originalAction = $('#checkoutForm').attr('action');
+
+        $('select[name="payment_method"]').on('change', function() {
+            const selectedMethod = $(this).val();
+
+            if (selectedMethod === 'sslcommerz') {
+                $('form').attr('action', '{{ url("/pay") }}');
+            } else {
+                $('form').attr('action', originalAction);
+            }
+        });
+    });
+</script>
 @endsection

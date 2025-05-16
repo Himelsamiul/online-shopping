@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Library\SslCommerz\SslCommerzNotification;
 
 class SslCommerzPaymentController extends Controller
@@ -21,19 +24,44 @@ class SslCommerzPaymentController extends Controller
 
     public function index(Request $request)
     {
-        # Here you have to receive all the order data to initate the payment.
-        # Let's say, your oder transaction informations are saving in a table called "orders"
-        # In "orders" table, order unique identity is "transaction_id". "status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'address' => 'required|string',
+            'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery',
+        ]);
+
+
+        $cart = session('cart', []);
+
+        // 3. Check if cart is empty
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Your cart is empty.');
+        }
+
+        // 4. Check stock availability before placing the order
+        foreach ($cart as $productId => $item) {
+            $product = Product::find($productId);
+            if (!$product || $product->quantity < $item['quantity']) {
+                return redirect()->back()->with('error', "Insufficient stock for product: {$product->name}");
+            }
+        }
+
+        // 5. Calculate total amount
+        $total = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
 
         $post_data = array();
-        $post_data['total_amount'] = '10'; # You cant not pay less than 10
+        $post_data['total_amount'] = $total ; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid(); // tran_id must be unique
 
         # CUSTOMER INFORMATION
         $post_data['cus_name'] = 'Customer Name';
-        $post_data['cus_email'] = 'customer@mail.com';
-        $post_data['cus_add1'] = 'Customer Address';
+        $post_data['cus_email'] = $validated['email'];
+        $post_data['cus_add1'] = $validated['address'];
         $post_data['cus_add2'] = "";
         $post_data['cus_city'] = "";
         $post_data['cus_state'] = "";
@@ -43,7 +71,7 @@ class SslCommerzPaymentController extends Controller
         $post_data['cus_fax'] = "";
 
         # SHIPMENT INFORMATION
-        $post_data['ship_name'] = "Store Test";
+        $post_data['ship_name'] = $validated['email'];
         $post_data['ship_add1'] = "Dhaka";
         $post_data['ship_add2'] = "Dhaka";
         $post_data['ship_city'] = "Dhaka";
@@ -63,24 +91,49 @@ class SslCommerzPaymentController extends Controller
         $post_data['value_c'] = "ref003";
         $post_data['value_d'] = "ref004";
 
-        #Before  going to initiate the payment order status need to insert or update as Pending.
-        $update_product = DB::table('orders')
-            ->where('transaction_id', $post_data['tran_id'])
-            ->updateOrInsert([
-                'name' => $post_data['cus_name'],
-                'email' => $post_data['cus_email'],
-                'phone' => $post_data['cus_phone'],
-                'amount' => $post_data['total_amount'],
-                'status' => 'Pending',
-                'address' => $post_data['cus_add1'],
-                'transaction_id' => $post_data['tran_id'],
-                'currency' => $post_data['currency']
+
+        // 2. Get cart from session
+
+
+        // 6. Get authenticated customer
+        $customer = auth()->guard('customerGuard')->user();
+
+        // 7. Generate transaction ID and payment status
+        $transactionId = date('Ym') . strtoupper(uniqid());
+        $paymentStatus = $validated['payment_method'] === 'sslcommerz' ? 'paid' : 'pending';
+
+        // 8. Create the order
+        $order = Order::create([
+            'customer_id' => $customer->id,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'address' => $validated['address'],
+            'total_amount' => $total,
+            'cart_data' => json_encode($cart),
+            'transaction_id' => $transactionId,
+            'payment_method' => $validated['payment_method'],
+            'payment_status' => $paymentStatus,
+        ]);
+
+        // 9. Create order details and reduce stock
+        foreach ($cart as $productId => $item) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'productid' => $productId,
+                'unit_price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['price'] * $item['quantity'],
             ]);
 
+            $product = Product::find($productId);
+            $product->decrement('quantity', $item['quantity']);
+        }
+
+
         $sslc = new SslCommerzNotification();
+
         # initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )
         $payment_options = $sslc->makePayment($post_data, 'hosted');
-
         if (!is_array($payment_options)) {
             print_r($payment_options);
             $payment_options = array();
@@ -163,6 +216,7 @@ class SslCommerzPaymentController extends Controller
     {
         echo "Transaction is Successful";
 
+        dd('ok');
         $tran_id = $request->input('tran_id');
         $amount = $request->input('amount');
         $currency = $request->input('currency');

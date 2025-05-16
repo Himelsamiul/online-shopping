@@ -22,7 +22,7 @@ Route::post('/contact-us', [NavbarController::class, 'contactusSubmit'])->name('
 
 Route::get('/search', [ProductController::class, 'search'])->name('search.products');
 
-// Customer Registration Routes 
+// Customer Registration Routes
 Route::get('/customer', [WebpageController::class, 'form_reg'])->name('reg');
 Route::post('/customer/done', [WebpageController::class, 'reg'])->name('customer.done');
 
@@ -44,7 +44,7 @@ Route::middleware('auth:customerGuard')->group(function () {
 
     //navbar routes
 
-  
+
 
     Route::post('/product/{id}/review', [WebProductController::class, 'storeReview'])->name('submit.review');
 
