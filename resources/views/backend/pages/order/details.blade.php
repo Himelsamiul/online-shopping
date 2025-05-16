@@ -17,39 +17,31 @@
             <div class="col-6">
                 <div class="detail-line"><strong>Customer</strong>       : {{ $order->name }}</div>
                 <div class="detail-line"><strong>Email</strong>          : {{ $order->email }}</div>
-
                 <div class="detail-line"><strong>Payment Method</strong> : {{ $order->payment_method }}</div>
                 <div class="detail-line"><strong>Payment Status</strong> : {{ ucfirst($order->payment_status) }}</div>
-
-                <!-- <div class="detail-line">
-                    <strong>Subtotals</strong>       : 
-                    @foreach($order->orderDetails as $key => $detail)
-                        BDT {{ number_format($detail->subtotal, 2) }}@if(!$loop->last), @endif
-                    @endforeach
-                </div> -->
-
+                
                 <div class="detail-line">
-                    <strong>Original Total</strong>        : 
-                    BDT {{ number_format($order->orderDetails->sum(function($detail) { return $detail->unit_price * $detail->quantity; }), 2) }}
+                    <strong>Original Total</strong> : 
+                    BDT {{ number_format($order->orderDetails->sum(function($detail) {
+                        return $detail->unit_price * $detail->quantity;
+                    }), 2) }}
                 </div>
-
                 <div class="detail-line">
-                    <strong>Discount</strong>              : 
+                    <strong>Discount</strong> : 
                     BDT {{ number_format(
                         $order->orderDetails->sum(function($detail) {
                             return $detail->unit_price * $detail->quantity;
                         }) - $order->total_amount, 2) }}
                 </div>
-
-                <div class="detail-line"><strong>Payable (After Discount)</strong> : BDT {{ number_format($order->total_amount, 2) }}</div>
+                <div class="detail-line"><strong>Payment Amount</strong> : BDT {{ number_format($order->total_amount, 2) }}</div>
             </div>
 
             <div class="col-6">
                 <div class="detail-line"><strong>Company Location</strong> : Dhaka</div>
                 <div class="detail-line"><strong>Company Email</strong>    : info@shoppaholic.com</div>
                 <div class="detail-line"><strong>Phone Number</strong>     : +880 1234 567890</div>
-                <div class="detail-line"><strong>Printed By</strong>      : Admin</div>
-                <div class="detail-line"><strong>Address</strong>        : {{ $order->address }}</div>
+                <div class="detail-line"><strong>Printed By</strong>       : Admin</div>
+                <div class="detail-line"><strong>Address</strong>          : {{ $order->address }}</div>
             </div>
         </div>
 
@@ -61,7 +53,6 @@
                     <th>Product</th>
                     <th>Unit Price</th>
                     <th>Quantity</th>
-                    <!-- <th>Subtotal</th> -->
                     <th>Total</th>
                 </tr>
             </thead>
@@ -71,17 +62,17 @@
                     <td>{{ $detail->product->name ?? 'N/A' }}</td>
                     <td>BDT {{ number_format($detail->unit_price, 2) }}</td>
                     <td>{{ $detail->quantity }}</td>
-                    <!-- <td>BDT {{ number_format($detail->subtotal, 2) }}</td> -->
                     <td>BDT {{ number_format($detail->unit_price * $detail->quantity, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right;"><strong>Payable (After Discount)</strong></td>
+                    <td>BDT {{ number_format($order->total_amount, 2) }}</td>
+                </tr>
+            </tfoot>
         </table>
-
-        <!-- Grand Total Row -->
-        <div class="text-end mt-2" style="font-weight: bold; font-size: 16px;">
-            Payable (After Discount): BDT {{ number_format($order->total_amount, 2) }}
-        </div>
 
         <!-- Signature Section -->
         <div class="mt-5 signature-section" style="display: flex; justify-content: space-between; align-items: center;">
