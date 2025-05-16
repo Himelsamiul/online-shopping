@@ -66,28 +66,36 @@
         </table>
 
         <div class="text-end">
-            <h4>Total: BDT. {{ number_format($total, 2) }}</h4>
-            <button type="submit" class="btn btn-success">Place Order</button>
+            <h5>Subtotal: BDT. {{ number_format($total, 2) }}</h5>
+
+            @if($discount > 0)
+                <h5 class="text-success">Discount (20%): - BDT. {{ number_format($discount, 2) }}</h5>
+                <div class="alert alert-success">
+                    🎉 You’ve received a 20% discount for orders over 1000 BDT!
+                </div>
+            @endif
+
+            <h4 class="fw-bold">Total Payable: BDT. {{ number_format($finalTotal, 2) }}</h4>
+
+            <input type="hidden" name="discount" value="{{ $discount }}">
+            <input type="hidden" name="final_total" value="{{ $finalTotal }}">
+
+            <button type="submit" class="btn btn-success mt-3">Place Order</button>
         </div>
     </form>
 </div>
-
 @endsection
 
 @section('scripts')
 <script>
-
     $(document).ready(function() {
-
         const originalAction = $('#checkoutForm').attr('action');
-
         $('select[name="payment_method"]').on('change', function() {
             const selectedMethod = $(this).val();
-
             if (selectedMethod === 'sslcommerz') {
-                $('form').attr('action', '{{ url("/pay") }}');
+                $('#checkoutForm').attr('action', '{{ url("/pay") }}');
             } else {
-                $('form').attr('action', originalAction);
+                $('#checkoutForm').attr('action', originalAction);
             }
         });
     });

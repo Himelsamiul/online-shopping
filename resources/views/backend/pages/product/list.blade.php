@@ -27,6 +27,7 @@
                 <th>Name</th>
                 <th>Category</th>
                 <th>Unit</th>
+                <th>Previous Price</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Stock Value</th>
@@ -52,6 +53,7 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->unit->name }}</td>
+                    <td>{{ $product-> previous_price }}</td>
                     <td>{{ $product->price }} TK</td>
                     <td>{{ $product->quantity }}</td>
                     <td>{{ $stockValue }} TK</td> <!-- Stock Value calculation here -->

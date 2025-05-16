@@ -23,7 +23,18 @@
                             {{ $product->name }}
                         </a>
                     </h5>
-                    <p class="mb-1"><strong>Price:</strong> {{ $product->price }} TK</p>
+
+                    <p class="mb-1">
+                        <strong>Price:</strong> 
+                        @if($product->previous_price && $product->previous_price > $product->price)
+                            <span style="text-decoration: line-through; color: gray;">
+                                {{ $product->previous_price }} TK
+                            </span>
+                            &nbsp;
+                        @endif
+                        <span>{{ $product->price }} TK</span>
+                    </p>
+
                     <p class="mb-3"><strong>Available:</strong> {{ $product->quantity }}</p>
                     <a href="{{ route('add.to.cart', $product->id) }}" class="btn btn-primary mt-auto w-100">Add To Cart</a>
                 </div>

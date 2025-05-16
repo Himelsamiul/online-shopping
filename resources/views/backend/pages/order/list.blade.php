@@ -69,8 +69,8 @@
             </tbody>
             <tfoot class="table-light">
                 <tr>
-                    <td colspan="4" class="text-end fw-bold">Total Order Amount:</td>
-                    <td colspan="5" class="fw-bold text-success">BDT. {{ number_format($totalOrderAmount, 2) }}</td>
+                    <td colspan="3" class="text-end fw-bold">Total Order Amount:</td>
+                    <td colspan="4" class="fw-bold text-success">BDT. {{ number_format($totalOrderAmount, 2) }}</td>
                 </tr>
             </tfoot>
         </table>

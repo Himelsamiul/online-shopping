@@ -69,6 +69,16 @@
             @enderror
         </div>
 
+
+        <div class="form-group">
+    <label for="previous_price">Previous Price</label>
+    <input type="number" name="previous_price" id="previous_price" class="form-control @error('previous_price') is-invalid @enderror" value="{{ old('previous_price') }}" step="0.01">
+    @error('previous_price')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+
         <div class="form-group">
             <label for="quantity">Quantity</label>
             <input type="number" name="quantity" id="quantity" class="form-control @error('quantity') is-invalid @enderror" value="{{ old('quantity') }}" required>

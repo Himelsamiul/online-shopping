@@ -17,10 +17,31 @@
             <div class="col-6">
                 <div class="detail-line"><strong>Customer</strong>       : {{ $order->name }}</div>
                 <div class="detail-line"><strong>Email</strong>          : {{ $order->email }}</div>
-                <div class="detail-line"><strong>Address</strong>        : {{ $order->address }}</div>
+
                 <div class="detail-line"><strong>Payment Method</strong> : {{ $order->payment_method }}</div>
                 <div class="detail-line"><strong>Payment Status</strong> : {{ ucfirst($order->payment_status) }}</div>
-                <div class="detail-line"><strong>Total</strong>          : BDT {{ number_format($order->total_amount, 2) }}</div>
+
+                <!-- <div class="detail-line">
+                    <strong>Subtotals</strong>       : 
+                    @foreach($order->orderDetails as $key => $detail)
+                        BDT {{ number_format($detail->subtotal, 2) }}@if(!$loop->last), @endif
+                    @endforeach
+                </div> -->
+
+                <div class="detail-line">
+                    <strong>Original Total</strong>        : 
+                    BDT {{ number_format($order->orderDetails->sum(function($detail) { return $detail->unit_price * $detail->quantity; }), 2) }}
+                </div>
+
+                <div class="detail-line">
+                    <strong>Discount</strong>              : 
+                    BDT {{ number_format(
+                        $order->orderDetails->sum(function($detail) {
+                            return $detail->unit_price * $detail->quantity;
+                        }) - $order->total_amount, 2) }}
+                </div>
+
+                <div class="detail-line"><strong>Payable (After Discount)</strong> : BDT {{ number_format($order->total_amount, 2) }}</div>
             </div>
 
             <div class="col-6">
@@ -28,6 +49,7 @@
                 <div class="detail-line"><strong>Company Email</strong>    : info@shoppaholic.com</div>
                 <div class="detail-line"><strong>Phone Number</strong>     : +880 1234 567890</div>
                 <div class="detail-line"><strong>Printed By</strong>      : Admin</div>
+                <div class="detail-line"><strong>Address</strong>        : {{ $order->address }}</div>
             </div>
         </div>
 
@@ -39,7 +61,8 @@
                     <th>Product</th>
                     <th>Unit Price</th>
                     <th>Quantity</th>
-                    <th>Subtotal</th>
+                    <!-- <th>Subtotal</th> -->
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,11 +71,17 @@
                     <td>{{ $detail->product->name ?? 'N/A' }}</td>
                     <td>BDT {{ number_format($detail->unit_price, 2) }}</td>
                     <td>{{ $detail->quantity }}</td>
-                    <td>BDT {{ number_format($detail->subtotal, 2) }}</td>
+                    <!-- <td>BDT {{ number_format($detail->subtotal, 2) }}</td> -->
+                    <td>BDT {{ number_format($detail->unit_price * $detail->quantity, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
+
+        <!-- Grand Total Row -->
+        <div class="text-end mt-2" style="font-weight: bold; font-size: 16px;">
+            Payable (After Discount): BDT {{ number_format($order->total_amount, 2) }}
+        </div>
 
         <!-- Signature Section -->
         <div class="mt-5 signature-section" style="display: flex; justify-content: space-between; align-items: center;">
@@ -82,7 +111,7 @@
     }
 
     .detail-line strong {
-        width: 150px;
+        width: 180px;
         display: inline-block;
     }
 
@@ -116,7 +145,7 @@
         @page {
             margin: 10mm;
             size: A4;
-            scale: 0.85; /* Scales content to fit */
+            scale: 0.85;
         }
 
         h1 {
@@ -176,10 +205,9 @@
         }
 
         .signature-section {
-            page-break-before: always; /* Forces the signature section on a new page if content overflows */
+            page-break-before: always;
         }
 
-        /* Forces the table and content to fit better and ensures signature stays below */
         .table, .signature-section {
             page-break-before: avoid !important;
         }

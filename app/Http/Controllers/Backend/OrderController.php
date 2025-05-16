@@ -9,14 +9,14 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function list()
-    {
-        $orders = Order::paginate(10);
-        $totalOrderAmount = Order::sum('total_amount');
-    
-        return view('backend.pages.order.list', compact('orders', 'totalOrderAmount'));
-    }
-    
+  public function list()
+{
+    $orders = Order::orderBy('created_at', 'desc')->paginate(10); // ✅ Show latest first
+    $totalOrderAmount = Order::sum('total_amount');
+
+    return view('backend.pages.order.list', compact('orders', 'totalOrderAmount'));
+}
+
 
     public function viewOrderDetails($orderId)
     {

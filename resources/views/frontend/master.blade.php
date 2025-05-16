@@ -10,6 +10,9 @@
 <link rel="stylesheet" type="text/css" href="{{url('frontend/assets/css/plugins.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url('frontend/assets/css/style.css')}}">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Sd4Y0FNgK0sZzW0Y1qjodYxy0phAJ+hdftOt3IR6aBevG3DPn0/nr+6RPZgk9T5q4oInFP5bmZbV2gb3nkztgA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <style type="text/css">
 #freecssfooter{display:block;width:100%;padding:120px 0 20px;overflow:hidden;background-color:transparent;z-index:5000;text-align:center;}
 #freecssfooter div#fcssholder div{display:none;}

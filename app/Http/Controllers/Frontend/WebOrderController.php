@@ -80,90 +80,101 @@ class WebOrderController extends Controller
     }
 
     public function checkout()
-    {
-        $cart = session('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('webpage')->with('error', 'Your cart is empty.');
-        }
-
-        $total = collect($cart)->sum(function ($item) {
-            return $item['price'] * $item['quantity'];
-        });
-
-        return view('frontend.pages.checkout', compact('cart', 'total'));
+{
+    $cart = session('cart', []);
+    if (empty($cart)) {
+        return redirect()->route('webpage')->with('error', 'Your cart is empty.');
     }
 
-    public function checkoutSubmit(Request $request)
-    {
-        // 1. Validate form input
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'address' => 'required|string',
-            'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery',
-        ]);
+    $total = collect($cart)->sum(function ($item) {
+        return $item['price'] * $item['quantity'];
+    });
 
-        // 2. Get cart from session
-        $cart = session('cart', []);
+    $discount = $total > 1000 ? $total * 0.20 : 0;
+    $finalTotal = $total - $discount;
 
-        // 3. Check if cart is empty
-        if (empty($cart)) {
-            return redirect()->back()->with('error', 'Your cart is empty.');
-        }
+    return view('frontend.pages.checkout', compact('cart', 'total', 'discount', 'finalTotal'));
+}
 
-        // 4. Check stock availability before placing the order
-        foreach ($cart as $productId => $item) {
-            $product = Product::find($productId);
-            if (!$product || $product->quantity < $item['quantity']) {
-                return redirect()->back()->with('error', "Insufficient stock for product: {$product->name}");
-            }
-        }
 
-        // 5. Calculate total amount
-        $total = collect($cart)->sum(function ($item) {
-            return $item['price'] * $item['quantity'];
-        });
+  public function checkoutSubmit(Request $request)
+{
+    // 1. Validate form input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'address' => 'required|string',
+        'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery',
+    ]);
 
-        // 6. Get authenticated customer
-        $customer = auth()->guard('customerGuard')->user();
+    // 2. Get cart from session
+    $cart = session('cart', []);
 
-        // 7. Generate transaction ID and payment status
-        $transactionId = date('Ym') . strtoupper(uniqid());
-        $paymentStatus = $validated['payment_method'] === 'sslcommerz' ? 'paid' : 'pending';
-
-        // 8. Create the order
-        $order = Order::create([
-            'customer_id' => $customer->id,
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'address' => $validated['address'],
-            'total_amount' => $total,
-            'cart_data' => json_encode($cart),
-            'transaction_id' => $transactionId,
-            'payment_method' => $validated['payment_method'],
-            'payment_status' => $paymentStatus,
-        ]);
-
-        // 9. Create order details and reduce stock
-        foreach ($cart as $productId => $item) {
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'productid' => $productId,
-                'unit_price' => $item['price'],
-                'quantity' => $item['quantity'],
-                'subtotal' => $item['price'] * $item['quantity'],
-            ]);
-
-            $product = Product::find($productId);
-            $product->decrement('quantity', $item['quantity']);
-        }
-        // dd($order);
-
-        Mail::to($validated['email'])->send(new OrderPlacedMail($order));
-        // 10. Clear the cart session
-        session()->forget('cart');
-
-        // 11. Redirect with success message
-        return redirect()->route('frontend.checkout')->with('success', 'Order placed successfully!');
+    // 3. Check if cart is empty
+    if (empty($cart)) {
+        return redirect()->back()->with('error', 'Your cart is empty.');
     }
+
+    // 4. Check stock availability before placing the order
+    foreach ($cart as $productId => $item) {
+        $product = Product::find($productId);
+        if (!$product || $product->quantity < $item['quantity']) {
+            return redirect()->back()->with('error', "Insufficient stock for product: {$product->name}");
+        }
+    }
+
+    // 5. Calculate original total
+    $total = collect($cart)->sum(function ($item) {
+        return $item['price'] * $item['quantity'];
+    });
+
+    // 6. Get discount and final total from form
+    $discount = $request->input('discount', 0);
+    $finalTotal = $request->input('final_total', $total); // fallback to original total if not provided
+
+    // 7. Get authenticated customer
+    $customer = auth()->guard('customerGuard')->user();
+
+    // 8. Generate transaction ID and payment status
+    $transactionId = date('Ym') . strtoupper(uniqid());
+    $paymentStatus = $validated['payment_method'] === 'sslcommerz' ? 'paid' : 'pending';
+
+    // 9. Create the order
+    $order = Order::create([
+        'customer_id' => $customer->id,
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'address' => $validated['address'],
+        'total_amount' => $finalTotal,
+        'discount' => $discount, // Only if your 'orders' table has this column
+        'cart_data' => json_encode($cart),
+        'transaction_id' => $transactionId,
+        'payment_method' => $validated['payment_method'],
+        'payment_status' => $paymentStatus,
+    ]);
+
+    // 10. Create order details and reduce stock
+    foreach ($cart as $productId => $item) {
+        OrderDetail::create([
+            'order_id' => $order->id,
+            'productid' => $productId,
+            'unit_price' => $item['price'],
+            'quantity' => $item['quantity'],
+            'subtotal' => $item['price'] * $item['quantity'],
+        ]);
+
+        $product = Product::find($productId);
+        $product->decrement('quantity', $item['quantity']);
+    }
+
+    // 11. Send confirmation email
+    Mail::to($validated['email'])->send(new OrderPlacedMail($order));
+
+    // 12. Clear cart session
+    session()->forget('cart');
+
+    // 13. Redirect with success message
+    return redirect()->route('frontend.checkout')->with('success', 'Order placed successfully!');
+}
+
 }

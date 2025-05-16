@@ -118,7 +118,7 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Order Routes
         Route::prefix('/orders')->group(function () {
-            Route::get('list', [OrderController::class, 'list'])->name('order.list');
+            Route::get('/list', [OrderController::class, 'list'])->name('order.list');
             // New route for order details
         });
 
