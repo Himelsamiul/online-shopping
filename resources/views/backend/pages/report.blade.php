@@ -4,18 +4,18 @@
 <div class="container">
     <h2>All Orders Report</h2>
 
-    <!-- Date Filter Form -->
-    <form method="GET" action="{{ route('report') }}" class="mb-3">
-        <div class="form-row">
-            <div class="col">
-                <input type="date" name="start_date" class="form-control" value="{{ request()->get('start_date') }}">
-            </div>
-            <div class="col">
-                <input type="date" name="end_date" class="form-control" value="{{ request()->get('end_date') }}">
-            </div>
-            <div class="col">
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </div>
+    <!-- Search Form -->
+    <form method="GET" action="{{ route('report') }}" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="start_date" class="form-label">Start Date</label>
+            <input type="date" id="start_date" name="start_date" class="form-control" max="{{ date('Y-m-d') }}" value="{{ request('start_date') }}">
+        </div>
+        <div class="col-md-4">
+            <label for="end_date" class="form-label">End Date</label>
+            <input type="date" id="end_date" name="end_date" class="form-control" max="{{ date('Y-m-d') }}" value="{{ request('end_date') }}">
+        </div>
+        <div class="col-md-4 align-self-end">
+            <button type="submit" class="btn btn-success">Search</button>
         </div>
     </form>
 
@@ -56,7 +56,7 @@
 
     <!-- Pagination -->
     <div class="pagination">
-        {{ $orders->links() }}
+        {{ $orders->appends(request()->query())->links() }}
     </div>
 </div>
 @endsection
