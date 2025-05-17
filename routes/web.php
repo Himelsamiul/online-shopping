@@ -26,6 +26,9 @@ Route::get('/search', [ProductController::class, 'search'])->name('search.produc
 Route::get('/customer', [WebpageController::class, 'form_reg'])->name('reg');
 Route::post('/customer/done', [WebpageController::class, 'reg'])->name('customer.done');
 
+Route::delete('/customers/{id}', [WebpageController::class, 'destroy'])->name('customers.destroy');
+
+
 Route::get('/customer/login', [WebpageController::class, 'login'])->name('login');
 Route::post('/customer/success', [WebpageController::class, 'loginsuccess'])->name('customer.success');
 

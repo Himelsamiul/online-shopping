@@ -80,6 +80,13 @@ class WebpageController extends Controller
         // Redirect to login page
         return redirect()->route('login');
     }
+public function destroy($id)
+{
+    $customer = Customer::findOrFail($id); // You can use your actual model name
+    $customer->delete();
+
+    return redirect()->back()->with('success', 'Customer deleted successfully!');
+}
 
     // Show login form
     public function login()

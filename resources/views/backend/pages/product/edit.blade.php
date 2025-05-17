@@ -1,29 +1,90 @@
 @extends('backend.master')
 
 @section('content')
-    <div class="container mt-4">
+<style>
+    .edit-product-container {
+        max-width: 700px;
+        margin: auto;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .edit-product-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #444;
+    }
+
+    .form-control:focus {
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.25);
+    }
+
+    .btn-primary {
+        background-color: #6c63ff;
+        border-color: #6c63ff;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .btn-primary:hover {
+        background-color: #5a54e3;
+        border-color: #5a54e3;
+    }
+
+    .btn-danger {
+        margin-top: 10px;
+    }
+
+    #imagePreview {
+        margin-top: 10px;
+        border-radius: 10px;
+        border: 2px solid #ccc;
+        transition: transform 0.3s ease;
+    }
+
+    #imagePreview:hover {
+        transform: scale(1.1);
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="edit-product-container">
         <h2>Edit Product</h2>
 
         <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Name:</label>
                 <input type="text" name="name" value="{{ $product->name }}" class="form-control" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Description:</label>
-                <textarea name="description" class="form-control" required>{{ $product->description }}</textarea>
+                <textarea name="description" class="form-control" rows="3" required>{{ $product->description }}</textarea>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Price:</label>
                 <input type="number" name="price" value="{{ $product->price }}" class="form-control" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
+                <label>Previous Price:</label>
+                <input type="number" name="previous_price" value="{{ $product->previous_price }}" class="form-control">
+            </div>
+
+            <div class="form-group mb-3">
                 <label>Category:</label>
                 <select name="category_id" class="form-control" required>
                     @foreach($categories as $category)
@@ -34,7 +95,7 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Unit:</label>
                 <select name="unit_id" class="form-control" required>
                     @foreach($units as $unit)
@@ -45,12 +106,12 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Quantity:</label>
                 <input type="number" name="quantity" value="{{ $product->quantity }}" class="form-control" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Status:</label>
                 <select name="status" class="form-control" required>
                     <option value="active" {{ $product->status == 'active' ? 'selected' : '' }}>Active</option>
@@ -58,35 +119,36 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-4">
                 <label>Image:</label>
                 <input type="file" name="image" class="form-control" id="imageInput">
-                <br>
                 @if($product->image && $product->image != 'no_image.jpg')
-                    <p>Current Image: <img src="{{ asset('image/product/' . $product->image) }}" width="100" id="imagePreview"></p>
-                    <button type="button" class="btn btn-danger" id="removeImage">Remove Image</button>
+                    <div class="mt-2">
+                        <p>Current Image:</p>
+                        <img src="{{ asset('image/product/' . $product->image) }}" width="150" id="imagePreview">
+                        <button type="button" class="btn btn-sm btn-danger" id="removeImage">Remove Image</button>
+                    </div>
                 @else
-                    <p>No Image Available</p>
+                    <p class="text-muted">No Image Available</p>
                 @endif
-                <small>If you don't want to change the image, leave this field empty.</small>
+                <small class="text-muted">Leave empty if you don’t want to change the image.</small>
             </div>
 
             <button type="submit" class="btn btn-primary">Update Product</button>
         </form>
     </div>
+</div>
 
-    <script>
-        // Remove image functionality
-        document.getElementById('removeImage')?.addEventListener('click', function () {
-            document.getElementById('imagePreview').style.display = 'none'; // Hide preview
-            document.getElementById('imageInput').value = ''; // Clear file input
+<script>
+    document.getElementById('removeImage')?.addEventListener('click', function () {
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('imageInput').value = '';
 
-            // Add a hidden input to indicate image removal
-            let imageInput = document.createElement('input');
-            imageInput.type = 'hidden';
-            imageInput.name = 'remove_image';
-            imageInput.value = 'true';
-            document.forms[0].appendChild(imageInput); // Append it to the form
-        });
-    </script>
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'remove_image';
+        hiddenInput.value = 'true';
+        document.forms[0].appendChild(hiddenInput);
+    });
+</script>
 @endsection

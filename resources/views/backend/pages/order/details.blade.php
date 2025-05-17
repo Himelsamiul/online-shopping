@@ -67,11 +67,21 @@
                 @endforeach
             </tbody>
             <tfoot>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Payable (After Discount)</strong></td>
-                    <td>BDT {{ number_format($order->total_amount, 2) }}</td>
-                </tr>
-            </tfoot>
+    <tr>
+        <td colspan="3" style="text-align: right;"><strong>Discount</strong></td>
+        <td>
+            BDT {{ number_format(
+                $order->orderDetails->sum(function($detail) {
+                    return $detail->unit_price * $detail->quantity;
+                }) - $order->total_amount, 2) }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align: right;"><strong>Payable (After Discount)</strong></td>
+        <td>BDT {{ number_format($order->total_amount, 2) }}</td>
+    </tr>
+</tfoot>
+
         </table>
 
         <!-- Signature Section -->
