@@ -26,12 +26,15 @@
 
     @php
         $discount = $total > 1000 ? $total * 0.20 : 0;
-        $finalTotal = $total - $discount;
+        $afterDiscount = $total - $discount;
+        $vat = $afterDiscount * 0.10;
+        $finalTotal = $afterDiscount + $vat;
     @endphp
 
-    {{-- Floating Discount Notification - ALWAYS SHOWN --}}
-    <div id="discount-float" class="discount-floating-notification">
+    {{-- Floating Discount Notification with close button --}}
+    <div id="discount-float" class="discount-floating-notification" role="alert" aria-live="polite">
         🎉 20% discount on orders over 1000 BDT!
+        <span id="discount-close-btn" aria-label="Close discount notification" role="button" tabindex="0">&times;</span>
     </div>
 
     <h2>Your Shopping Cart</h2>
@@ -53,16 +56,16 @@
                 @foreach($cart as $id => $item)
                     @php $subtotal = $item['price'] * $item['quantity']; @endphp
                     <tr>
-                        <td><img src="{{ url('image/product/' . $item['image']) }}" width="70"></td>
+                        <td><img src="{{ url('image/product/' . $item['image']) }}" width="70" alt="{{ $item['name'] }}"></td>
                         <td>{{ $item['name'] }}</td>
                         <td>BDT. {{ number_format($item['price'], 2) }}</td>
                         <td>
-                            <form action="{{ route('frontend.update.cart', $id) }}" method="POST" class="d-flex align-items-center">
+                            <form action="{{ route('frontend.update.cart', $id) }}" method="POST" class="d-flex align-items-center" id="quantity-buttons-{{ $id }}">
                                 @csrf
                                 <input type="hidden" name="quantity" value="{{ $item['quantity'] }}" id="quantity-{{ $id }}">
-                                <button type="button" onclick="changeQuantity({{ $id }}, -1)" class="btn btn-sm btn-secondary">-</button>
+                                <button type="button" onclick="changeQuantity({{ $id }}, -1)" class="btn btn-sm btn-secondary btn-minus" aria-label="Decrease quantity">-</button>
                                 <span class="mx-2" id="display-qty-{{ $id }}">{{ $item['quantity'] }}</span>
-                                <button type="button" onclick="changeQuantity({{ $id }}, 1)" class="btn btn-sm btn-secondary">+</button>
+                                <button type="button" onclick="changeQuantity({{ $id }}, 1)" class="btn btn-sm btn-secondary btn-plus" aria-label="Increase quantity">+</button>
                                 <button type="submit" class="btn btn-sm btn-primary ms-2">Update</button>
                             </form>
                         </td>
@@ -70,7 +73,7 @@
                         <td>
                             <form action="{{ route('frontend.remove.from.cart', $id) }}" method="POST">
                                 @csrf
-                                <button class="btn btn-danger btn-sm">Remove</button>
+                                <button class="btn btn-danger btn-sm" aria-label="Remove {{ $item['name'] }} from cart">Remove</button>
                             </form>
                         </td>
                     </tr>
@@ -83,6 +86,7 @@
             @if($discount > 0)
                 <h5 class="text-success">Discount (20%): <strong>- BDT {{ number_format($discount, 2) }}</strong></h5>
             @endif
+            <h5 class="text-primary">VAT (10%): <strong>+ BDT {{ number_format($vat, 2) }}</strong></h5>
             <h4 class="fw-bold">Total Payable: <strong>BDT {{ number_format($finalTotal, 2) }}</strong></h4>
 
             <a href="{{ route('frontend.checkout') }}" class="btn btn-success mt-3">Proceed to Checkout</a>
@@ -97,31 +101,139 @@
 
 @section('scripts')
 <script>
-    function changeQuantity(id, change) {
-        let qtyInput = document.getElementById('quantity-' + id);
-        let displayQty = document.getElementById('display-qty-' + id);
-        let currentQty = parseInt(qtyInput.value);
-        let newQty = currentQty + change;
-        if (newQty < 1) return;
+    document.addEventListener('DOMContentLoaded', () => {
+        const discountFloat = document.getElementById('discount-float');
+        const closeBtn = document.getElementById('discount-close-btn');
 
-        qtyInput.value = newQty;
-        displayQty.innerText = newQty;
-    }
+        let notificationTimeout;
+
+        // Function to show the notification
+        function showNotification() {
+            discountFloat.style.display = 'flex';
+            setTimeout(() => {
+                discountFloat.classList.add('show');
+            }, 100); // Small delay for smooth animation
+        }
+
+        // Function to hide the notification
+        function hideNotification() {
+            discountFloat.classList.remove('show');
+            setTimeout(() => {
+                discountFloat.style.display = 'none';
+            }, 500);
+
+            // Show it again after 10 seconds
+            clearTimeout(notificationTimeout);
+            notificationTimeout = setTimeout(() => {
+                showNotification();
+            }, 10000); // 10 seconds
+        }
+
+        // Start by showing it after 0.5s
+        setTimeout(() => {
+            showNotification();
+        }, 500);
+
+        // Handle close button click
+        closeBtn.addEventListener('click', () => {
+            hideNotification();
+        });
+    });
 </script>
 
+
 <style>
+/* Floating discount notification */
 .discount-floating-notification {
     position: fixed;
     bottom: 20px;
     right: 20px;
     background: linear-gradient(135deg, #4caf50, #81c784);
     color: white;
-    padding: 15px 20px;
+    padding: 15px 20px 15px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     font-weight: 600;
     font-size: 16px;
     z-index: 1050;
+    opacity: 0;
+    transform: translateX(120%);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    display: flex;
+    align-items: center;
+    max-width: 320px;
+}
+
+/* Show slide-in */
+.discount-floating-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Close button */
+#discount-close-btn {
+    margin-left: auto;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 1;
+    padding-left: 15px;
+    color: white;
+    user-select: none;
+    transition: color 0.3s ease;
+}
+#discount-close-btn:hover {
+    color: #d0f0c0;
+}
+
+/* Quantity buttons container */
+form.d-flex.align-items-center {
+    gap: 5px;
+}
+
+/* Quantity buttons */
+form.d-flex.align-items-center button.btn-secondary {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    user-select: none;
+}
+
+/* Hover effect on buttons */
+form.d-flex.align-items-center button.btn-secondary:hover {
+    background-color: #3a8d3a;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Click animation */
+button.btn-secondary.clicked {
+    transform: scale(0.9);
+    background-color: #2e6f2e !important;
+}
+
+/* Display quantity text */
+span[id^="display-qty-"] {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 600;
+    user-select: none;
+    display: inline-block;
+}
+
+/* Subtotal and totals */
+.text-end h5, .text-end h4 {
+    transition: color 0.3s ease;
+}
+
+/* Table row hover effect */
+table.table tbody tr:hover {
+    background-color: #f7f9f7;
+    transition: background-color 0.3s ease;
 }
 </style>
 @endsection

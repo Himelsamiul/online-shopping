@@ -79,7 +79,7 @@ class WebOrderController extends Controller
         return redirect()->back()->with('success', 'Cart updated successfully!');
     }
 
-    public function checkout()
+   public function checkout()
 {
     $cart = session('cart', []);
     if (empty($cart)) {
@@ -91,9 +91,12 @@ class WebOrderController extends Controller
     });
 
     $discount = $total > 1000 ? $total * 0.20 : 0;
-    $finalTotal = $total - $discount;
+    $afterDiscount = $total - $discount;
 
-    return view('frontend.pages.checkout', compact('cart', 'total', 'discount', 'finalTotal'));
+    $vat = $afterDiscount * 0.10; // 10% VAT
+    $finalTotal = $afterDiscount + $vat;
+
+    return view('frontend.pages.checkout', compact('cart', 'total', 'discount', 'vat', 'finalTotal'));
 }
 
 
@@ -105,6 +108,7 @@ class WebOrderController extends Controller
         'email' => 'required|email',
         'address' => 'required|string',
         'payment_method' => 'required|string|in:sslcommerz,cash_on_delivery',
+        
     ]);
 
     // 2. Get cart from session
@@ -129,9 +133,9 @@ class WebOrderController extends Controller
     });
 
     // 6. Get discount and final total from form
-    $discount = $request->input('discount', 0);
-    $finalTotal = $request->input('final_total', $total); // fallback to original total if not provided
-
+   $discount = $request->input('discount', 0);
+$vat = $request->input('vat', 0); // retrieve VAT from form
+$finalTotal = $request->input('final_total', $total);
     // 7. Get authenticated customer
     $customer = auth()->guard('customerGuard')->user();
 
@@ -151,6 +155,7 @@ class WebOrderController extends Controller
         'transaction_id' => $transactionId,
         'payment_method' => $validated['payment_method'],
         'payment_status' => $paymentStatus,
+         'vat' => $vat,
     ]);
 
     // 10. Create order details and reduce stock

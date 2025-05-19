@@ -16,15 +16,13 @@
             <h2>{{ $product->name }}</h2>
             <h4 style="color: red;">Price: <span style="text-decoration: line-through;">BDT {{ $product->previous_price }}</span></h4>
 
-
             <h4 class="text-success">Price: BDT {{ $product->price }}</h4>
-            
 
             <p class="text-muted">{{ $product->description }}</p>
             <a href="{{ route('add.to.cart', $product->id) }}" class="btn btn-success mt-3">Add To Cart</a>
 
             <!-- Submit Review Section (directly below product details) -->
-            @auth
+            @auth('customerGuard')
                 <div class="mt-5">
                     <h4 class="mb-3">Leave a Review</h4>
                     <form action="{{ route('submit.review', $product->id) }}" method="POST">

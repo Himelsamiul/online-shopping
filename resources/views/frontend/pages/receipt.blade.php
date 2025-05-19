@@ -2,7 +2,7 @@
 
 @section('content')
 <style>
-  /* Invoice container */
+  /* Styling for invoice container */
   .invoice-container {
     max-width: 800px;
     margin: 2rem auto;
@@ -55,7 +55,7 @@
     margin: 1rem 0;
   }
 
-  /* Signature */
+  /* Signature section */
   .signature-section {
     margin-top: 3rem;
     width: 200px;
@@ -65,7 +65,7 @@
     font-style: italic;
   }
 
-  /* Print button */
+  /* Print button styling */
   .print-btn {
     display: block;
     margin: 1.5rem auto;
@@ -78,20 +78,15 @@
     border-radius: 4px;
   }
 
-  /* Hide elements and fix layout when printing */
+  /* Hide non-invoice elements when printing */
   @media print {
-    /* Hide the print button */
     .print-btn {
       display: none;
     }
-
-    /* Hide site header and footer */
     header,
     footer {
       display: none !important;
     }
-
-    /* Keep the two columns side-by-side */
     .row {
       display: flex !important;
     }
@@ -106,6 +101,7 @@
 <div class="invoice-container">
   <h1 class="text-center mb-4 fw-bold">Order Pay Slip</h1>
 
+  <!-- Customer & Order Info -->
   <div class="row mb-4">
     <div class="col-md-6">
       <h4 class="mb-3">Customer Details</h4>
@@ -120,6 +116,7 @@
     </div>
   </div>
 
+  <!-- Order Items Table -->
   <h4 class="mb-3">Ordered Menu Items</h4>
   <table>
     <thead>
@@ -144,29 +141,42 @@
     </tbody>
   </table>
 
-  @php $calculatedDiscount = $totalBeforeDiscount - $order->total_amount; @endphp
+  @php
+    // Apply 20% discount if total is over 1000
+    $discount = $totalBeforeDiscount > 1000 ? $totalBeforeDiscount * 0.20 : 0;
 
+    // Total after discount
+    $afterDiscount = $totalBeforeDiscount - $discount;
+
+    // Add 10% VAT on discounted amount
+    $vat = $afterDiscount * 0.10;
+
+    // Final grand total after discount and VAT
+    $grandTotal = $afterDiscount + $vat;
+  @endphp
+
+  <!-- Totals Summary -->
   <div class="totals">
     <div><span>Total (Before Discount):</span><span>{{ number_format($totalBeforeDiscount, 2) }} BDT</span></div>
-    <div><span>Discount:</span><span>{{ number_format($calculatedDiscount, 2) }} BDT</span></div>
-    <div><span>Total (After Discount):</span><span>{{ number_format($order->total_amount, 2) }} BDT</span></div>
-    <div><span>VAT:</span><span>0.00 BDT</span></div>
+    <div><span>Discount:</span><span>-{{ number_format($discount, 2) }} BDT</span></div>
+    <div><span>Total (After Discount):</span><span>{{ number_format($afterDiscount, 2) }} BDT</span></div>
+    <div><span>VAT (10%):</span><span>+{{ number_format($vat, 2) }} BDT</span></div>
     <div><span>Shipping Cost:</span><span>0.00 BDT</span></div>
     <hr>
-    <div><span>Grand Total:</span><span>{{ number_format($order->total_amount, 2) }} BDT</span></div>
+    <div><span>Grand Total:</span><span>{{ number_format($grandTotal, 2) }} BDT</span></div>
   </div>
 
+  <!-- Signature and Thank You -->
   <div class="signature-section" style="float: left;">
     Customer Signature
   </div>
-
   <div style="clear: both;"></div>
- <div class="text-center mt-4">
+
+  <div class="text-center mt-4">
     <p>Thank you for your order!</p>
   </div>
+
+  <!-- Print Button -->
   <button class="print-btn" onclick="window.print()">Print Invoice</button>
-
-
- 
 </div>
 @endsection

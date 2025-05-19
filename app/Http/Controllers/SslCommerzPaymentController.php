@@ -49,12 +49,19 @@ class SslCommerzPaymentController extends Controller
         }
 
         // 5. Calculate total amount
-        $total = collect($cart)->sum(function ($item) {
-            return $item['price'] * $item['quantity'];
-        });
+        $subtotal = collect($cart)->sum(function ($item) {
+    return $item['price'] * $item['quantity'];
+});
 
-        $post_data = array();
-        $post_data['total_amount'] = $total ; # You cant not pay less than 10
+        $discount = $subtotal > 1000 ? $subtotal * 0.20 : 0;  // 20% discount if subtotal > 1000
+$afterDiscount = $subtotal - $discount;
+
+$vat = $afterDiscount * 0.10;  // 10% VAT
+
+$finalTotal = $afterDiscount + $vat;
+
+$post_data = array();
+$post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid(); // tran_id must be unique
 
@@ -108,7 +115,7 @@ class SslCommerzPaymentController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'address' => $validated['address'],
-            'total_amount' => $total,
+            'total_amount' => $finalTotal,
             'cart_data' => json_encode($cart),
             'transaction_id' => $transactionId,
             'payment_method' => $validated['payment_method'],

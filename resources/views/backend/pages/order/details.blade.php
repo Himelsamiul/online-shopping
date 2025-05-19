@@ -9,39 +9,46 @@
         <!-- Company Header -->
         <div class="text-center mb-4">
             <h1 style="font-size: 36px; color: #003366; font-weight: 800; margin-bottom: 5px;">Easy Shop</h1>
-            <h3 style="font-size: 20px; font-weight: bold; color: #555;">Order Details : #{{ $order->id }}</h3>
+            <h3 style="font-size: 20px; font-weight: bold; color: #555;">Order Number : #{{ $order->id }}</h3>
         </div>
 
         <!-- Customer and Company Details Side by Side -->
         <div class="row mb-4">
             <div class="col-6">
+                @php
+                    $originalTotal = $order->orderDetails->sum(function($detail) {
+                        return $detail->unit_price * $detail->quantity;
+                    });
+
+                    // Change this to your dynamic discount rate if available
+                    $discountPercent = 0.20; // 20% discount
+                    $discountAmount = $originalTotal * $discountPercent;
+                    $discountedTotal = $originalTotal - $discountAmount;
+
+                    $vatPercent = 0.10; // 10% VAT
+                    $vatAmount = $discountedTotal * $vatPercent;
+
+                    $payableAfterVat = $discountedTotal + $vatAmount;
+                @endphp
+
                 <div class="detail-line"><strong>Customer</strong>       : {{ $order->name }}</div>
                 <div class="detail-line"><strong>Email</strong>          : {{ $order->email }}</div>
                 <div class="detail-line"><strong>Payment Method</strong> : {{ $order->payment_method }}</div>
                 <div class="detail-line"><strong>Payment Status</strong> : {{ ucfirst($order->payment_status) }}</div>
-                
-                <div class="detail-line">
-                    <strong>Original Total</strong> : 
-                    BDT {{ number_format($order->orderDetails->sum(function($detail) {
-                        return $detail->unit_price * $detail->quantity;
-                    }), 2) }}
-                </div>
-                <div class="detail-line">
-                    <strong>Discount</strong> : 
-                    BDT {{ number_format(
-                        $order->orderDetails->sum(function($detail) {
-                            return $detail->unit_price * $detail->quantity;
-                        }) - $order->total_amount, 2) }}
-                </div>
-                <div class="detail-line"><strong>Payment Amount</strong> : BDT {{ number_format($order->total_amount, 2) }}</div>
+                <div class="detail-line"><strong>Address</strong>        : {{ $order->address }}</div>
+                <!-- <div class="detail-line"><strong>Original Total</strong> : BDT {{ number_format($originalTotal, 2) }}</div>
+                <div class="detail-line"><strong>Discount ({{ $discountPercent * 100 }}%)</strong>       : BDT {{ number_format($discountAmount, 2) }}</div>
+                <div class="detail-line"><strong>Subtotal (After Discount)</strong> : BDT {{ number_format($discountedTotal, 2) }}</div>
+                <div class="detail-line"><strong>VAT ({{ $vatPercent * 100 }}%)</strong>       : BDT {{ number_format($vatAmount, 2) }}</div>
+                <div class="detail-line"><strong>Total Payable</strong>  : BDT {{ number_format($payableAfterVat, 2) }}</div> -->
             </div>
 
             <div class="col-6">
                 <div class="detail-line"><strong>Company Location</strong> : Dhaka</div>
-                <div class="detail-line"><strong>Company Email</strong>    : info@shoppaholic.com</div>
+                <div class="detail-line"><strong>Company Email</strong>    : info@easyshop.com</div>
                 <div class="detail-line"><strong>Phone Number</strong>     : +880 1234 567890</div>
                 <div class="detail-line"><strong>Printed By</strong>       : Admin</div>
-                <div class="detail-line"><strong>Address</strong>          : {{ $order->address }}</div>
+                
             </div>
         </div>
 
@@ -66,21 +73,28 @@
                 </tr>
                 @endforeach
             </tbody>
-            <tfoot>
-    <tr>
-        <td colspan="3" style="text-align: right;"><strong>Discount</strong></td>
-        <td>
-            BDT {{ number_format(
-                $order->orderDetails->sum(function($detail) {
-                    return $detail->unit_price * $detail->quantity;
-                }) - $order->total_amount, 2) }}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3" style="text-align: right;"><strong>Payable (After Discount)</strong></td>
-        <td>BDT {{ number_format($order->total_amount, 2) }}</td>
-    </tr>
-</tfoot>
+          <tr>
+    <td colspan="3" style="text-align: right; border-top: none;"><strong>Original Total</strong></td>
+    <td style="border-top: none;">BDT {{ number_format($originalTotal, 2) }}</td>
+</tr>
+<tr>
+    <td colspan="3" style="text-align: right; border-top: none;"><strong>Discount ({{ $discountPercent * 100 }}%)</strong></td>
+    <td style="border-top: none;">BDT {{ number_format($discountAmount, 2) }}</td>
+</tr>
+<tr>
+    <td colspan="3" style="text-align: right; border-top: none;"><strong>Subtotal (After Discount)</strong></td>
+    <td style="border-top: none;">BDT {{ number_format($discountedTotal, 2) }}</td>
+</tr>
+<tr>
+    <td colspan="3" style="text-align: right; border-top: none;"><strong>VAT ({{ $vatPercent * 100 }}%)</strong></td>
+    <td style="border-top: none;">BDT {{ number_format($vatAmount, 2) }}</td>
+</tr>
+<tr>
+    <td colspan="3" style="text-align: right; font-size: 16px; border-top: none;"><strong>Total Payable</strong></td>
+    <td style="font-weight: bold; font-size: 16px; border-top: none;">BDT {{ number_format($payableAfterVat, 2) }}</td>
+</tr>
+
+
 
         </table>
 
