@@ -101,46 +101,51 @@
 
 @section('scripts')
 <script>
+    // Show discount notification with slide-in animation
     document.addEventListener('DOMContentLoaded', () => {
         const discountFloat = document.getElementById('discount-float');
-        const closeBtn = document.getElementById('discount-close-btn');
 
-        let notificationTimeout;
-
-        // Function to show the notification
-        function showNotification() {
-            discountFloat.style.display = 'flex';
-            setTimeout(() => {
-                discountFloat.classList.add('show');
-            }, 100); // Small delay for smooth animation
+        // Check if user dismissed before
+        if(localStorage.getItem('discountDismissed') === 'true') {
+            discountFloat.style.display = 'none';
+            return;
         }
 
-        // Function to hide the notification
-        function hideNotification() {
-            discountFloat.classList.remove('show');
-            setTimeout(() => {
-                discountFloat.style.display = 'none';
-            }, 500);
-
-            // Show it again after 10 seconds
-            clearTimeout(notificationTimeout);
-            notificationTimeout = setTimeout(() => {
-                showNotification();
-            }, 10000); // 10 seconds
-        }
-
-        // Start by showing it after 0.5s
+        // Slide in after 0.5s delay
         setTimeout(() => {
-            showNotification();
+            discountFloat.classList.add('show');
         }, 500);
 
-        // Handle close button click
+        // Close button handler
+        const closeBtn = document.getElementById('discount-close-btn');
         closeBtn.addEventListener('click', () => {
-            hideNotification();
+            discountFloat.classList.remove('show');
+            setTimeout(() => discountFloat.style.display = 'none', 500);
+            // Save dismissal so it doesn't show again
+            localStorage.setItem('discountDismissed', 'true');
         });
     });
-</script>
 
+    // Quantity change with button animation
+    function changeQuantity(id, change) {
+        let qtyInput = document.getElementById('quantity-' + id);
+        let displayQty = document.getElementById('display-qty-' + id);
+        let btnMinus = document.querySelector(`#quantity-buttons-${id} .btn-minus`);
+        let btnPlus = document.querySelector(`#quantity-buttons-${id} .btn-plus`);
+
+        let currentQty = parseInt(qtyInput.value);
+        let newQty = currentQty + change;
+        if (newQty < 1) return;
+
+        qtyInput.value = newQty;
+        displayQty.innerText = newQty;
+
+        // Animate button scale on click
+        const btn = change < 0 ? btnMinus : btnPlus;
+        btn.classList.add('clicked');
+        setTimeout(() => btn.classList.remove('clicked'), 200);
+    }
+</script>
 
 <style>
 /* Floating discount notification */
