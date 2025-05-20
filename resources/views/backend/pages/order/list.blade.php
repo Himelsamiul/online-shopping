@@ -4,6 +4,30 @@
 <div class="container">
     <h2 class="text-center mb-4 fw-bold">Order List</h2>
 
+    <!-- ✅ Date Filter Form -->
+    <form method="GET" class="row mb-4 g-2 align-items-end">
+        <div class="col-md-3">
+            <label for="start_date" class="form-label">Start Date</label>
+            <input type="date" name="start_date" id="start_date"
+                value="{{ request('start_date') }}"
+                class="form-control"
+                max="{{ date('Y-m-d') }}">
+        </div>
+
+        <div class="col-md-3">
+            <label for="end_date" class="form-label">End Date</label>
+            <input type="date" name="end_date" id="end_date"
+                value="{{ request('end_date') }}"
+                class="form-control"
+                max="{{ date('Y-m-d') }}">
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{{ route('order.list') }}" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+
     <!-- ✅ Download PDF Button -->
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-danger" id="downloadPDF">Download PDF</button>
@@ -31,36 +55,36 @@
                 <tr>
                     <th>SL</th>
                     <th>Customer Name</th>
-                    <!-- <th>Email</th> -->
                     <th>Address</th>
                     <th>Total Amount</th>
                     <th>Transaction ID</th>
                     <th>Payment Method</th>
-                    <th>Payment Status</th> <!-- Payment Status Column -->
-                    <th>Order Date</th><!-- New Order Date Column -->
-                    <th>Action</th> <!-- Action Column -->
+                    <th>Payment Status</th>
+                    <th>Order Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
+                @php $pageTotal = 0; @endphp
                 @foreach($orders as $key => $data)
+                    @php $pageTotal += $data->total_amount; @endphp
                     <tr style="background-color: {{ $key % 2 == 0 ? '#f8f9fa' : '#ffffff' }};">
                         <td>{{ $orders->firstItem() + $key }}</td>
                         <td>{{ $data->name }}</td>
-                        <!-- <td>{{ $data->email }}</td> -->
                         <td>{{ $data->address }}</td>
                         <td>BDT. {{ number_format($data->total_amount, 2) }}</td>
                         <td>{{ $data->transaction_id }}</td>
                         <td>
-                           @if(strtolower($data->payment_method) == 'sslcommerz')
-    <span class="badge text-black" style="background-color: orange !important;">SSLCommerz</span>
-@elseif(strtolower($data->payment_method) == 'cashon')
-    <span class="badge text-white" style="background-color: green !important;">CashOn</span>
-@else
-    <span class="badge bg-secondary text-white">{{ ucfirst($data->payment_method) }}</span>
-@endif
+                            @if(strtolower($data->payment_method) == 'sslcommerz')
+                                <span class="badge text-black" style="background-color: orange !important;">SSLCommerz</span>
+                            @elseif(strtolower($data->payment_method) == 'cashon')
+                                <span class="badge text-white" style="background-color: green !important;">CashOn</span>
+                            @else
+                                <span class="badge bg-secondary text-white">{{ ucfirst($data->payment_method) }}</span>
+                            @endif
                         </td>
-                        <td>{{ ucfirst($data->payment_status) }}</td> <!-- Payment Status Column Data -->
-                        <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M Y') }}</td> <!-- Order Date Column Data -->
+                        <td>{{ ucfirst($data->payment_status) }}</td>
+                        <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M Y') }}</td>
                         <td>
                             <a href="{{ route('order.details', $data->id) }}" class="btn btn-info btn-sm">Details</a>
                         </td>
@@ -69,8 +93,8 @@
             </tbody>
             <tfoot class="table-light">
                 <tr>
-                    <td colspan="3" class="text-end fw-bold">Total Order Amount:</td>
-                    <td colspan="4" class="fw-bold text-success">BDT. {{ number_format($totalOrderAmount, 2) }}</td>
+                    <td colspan="3" class="text-end fw-bold">Total on This Page:</td>
+                    <td colspan="4" class="fw-bold text-success">BDT. {{ number_format($pageTotal, 2) }}</td>
                 </tr>
             </tfoot>
         </table>
@@ -78,29 +102,18 @@
 
     <!-- ✅ Pagination -->
     <div class="d-flex justify-content-center mt-4">
-        {{ $orders->links('pagination::bootstrap-4') }}
+        {{ $orders->appends(request()->all())->links('pagination::bootstrap-4') }}
     </div>
 
-    <!-- ✅ Custom Styles -->
+    <!-- ✅ Scripts and Styling -->
     <style>
         table {
             width: 100%;
             border-collapse: collapse;
-            page-break-inside: auto;
         }
 
         tr {
             page-break-inside: avoid;
-            page-break-after: auto;
-        }
-
-        td, th {
-            page-break-inside: avoid;
-            white-space: nowrap;
-        }
-
-        tbody {
-            display: table-row-group;
         }
 
         .badge {
@@ -109,46 +122,21 @@
             border-radius: 5px;
         }
 
-        .btn-danger {
-            font-weight: 500;
-            padding: 6px 18px;
-        }
-
         @media print {
-            #downloadPDF {
+            #downloadPDF, form {
                 display: none;
             }
 
-            /* Ensure proper table cell rendering in PDF */
             .table td, .table th {
-                font-size: 12px; /* Adjust font size for PDF */
-                white-space: normal; /* Ensure content wraps correctly */
-                word-wrap: break-word; /* Break long words for proper rendering */
-                height: auto; /* Allow cells to expand based on content */
-            }
-
-            .table {
-                width: 100%;
-                table-layout: auto; /* Automatically adjust column widths */
-            }
-
-            /* Ensure the payment status and order date columns are correctly shown */
-            .table td:nth-child(8), .table th:nth-child(8),
-            .table td:nth-child(9), .table th:nth-child(9) {
-                word-wrap: break-word;
+                font-size: 12px;
             }
         }
     </style>
 
-    <!-- ✅ JS for html2pdf -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         document.getElementById('downloadPDF').addEventListener('click', function () {
             const element = document.getElementById('orderContent');
-
-            // Re-render content before generating the PDF
-            const htmlContent = element.innerHTML;
-            element.innerHTML = htmlContent;  // Force content re-rendering
 
             const opt = {
                 margin: 0.2,

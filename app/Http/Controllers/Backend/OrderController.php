@@ -9,13 +9,28 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-  public function list()
+  public function list(Request $request)
 {
-    $orders = Order::orderBy('created_at', 'desc')->paginate(10); // ✅ Show latest first
-    $totalOrderAmount = Order::sum('total_amount');
+    $query = Order::with('orderDetails.product')->orderBy('created_at', 'desc');
+
+    if ($request->start_date) {
+        $query->whereDate('created_at', '>=', $request->start_date);
+    }
+
+    if ($request->end_date) {
+        $endDate = \Carbon\Carbon::parse($request->end_date)->greaterThan(\Carbon\Carbon::today())
+            ? \Carbon\Carbon::today()
+            : \Carbon\Carbon::parse($request->end_date);
+
+        $query->whereDate('created_at', '<=', $endDate);
+    }
+
+    $orders = $query->paginate(10)->appends($request->all()); // Append filters to pagination
+    $totalOrderAmount = $query->sum('total_amount'); // Sum filtered orders only
 
     return view('backend.pages.order.list', compact('orders', 'totalOrderAmount'));
 }
+
 
 
     public function viewOrderDetails($orderId)
