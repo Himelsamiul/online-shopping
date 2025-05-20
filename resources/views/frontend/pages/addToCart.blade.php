@@ -16,7 +16,6 @@
 @endphp
 
 <div class="container mt-5">
-
     @foreach($cart as $id => $item)
         @php 
             $subtotal = $item['price'] * $item['quantity']; 
@@ -31,101 +30,110 @@
         $finalTotal = $afterDiscount + $vat;
     @endphp
 
-    {{-- Floating Discount Notification with close button --}}
-    <div id="discount-float" class="discount-floating-notification" role="alert" aria-live="polite">
-        🎉 20% discount on orders over 1000 BDT!
-        <span id="discount-close-btn" aria-label="Close discount notification" role="button" tabindex="0">&times;</span>
+    {{-- Fixed notifications --}}
+    <div id="fixed-notifications">
+        @if($total > 1000)
+            <div class="fixed-notification congrats-notification" role="alert" aria-live="polite">
+                <div class="notification-content">
+                    🎉 20% Discount Applied!
+                </div>
+                <button type="button" class="notification-close" aria-label="Close notification">&times;</button>
+            </div>
+        @elseif($total > 0)
+            <div class="fixed-notification info-notification" role="alert" aria-live="polite">
+                <div class="notification-content">
+                    🛒 Spend {{ number_format(1000 - $total, 2) }} more for 20% off!
+                </div>
+                <button type="button" class="notification-close" aria-label="Close notification">&times;</button>
+            </div>
+        @endif
     </div>
 
-    <h2>Your Shopping Cart</h2>
+    <div class="row">
+        {{-- Left side: Product list --}}
+        <div class="col-lg-8 col-md-12 mb-4">
+            <h2>Your Shopping Cart</h2>
 
-    @if(count($cart) > 0)
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($cart as $id => $item)
-                    @php $subtotal = $item['price'] * $item['quantity']; @endphp
-                    <tr>
-                        <td><img src="{{ url('image/product/' . $item['image']) }}" width="70" alt="{{ $item['name'] }}"></td>
-                        <td>{{ $item['name'] }}</td>
-                        <td>BDT. {{ number_format($item['price'], 2) }}</td>
-                        <td>
-                            <form action="{{ route('frontend.update.cart', $id) }}" method="POST" class="d-flex align-items-center" id="quantity-buttons-{{ $id }}">
-                                @csrf
-                                <input type="hidden" name="quantity" value="{{ $item['quantity'] }}" id="quantity-{{ $id }}">
-                                <button type="button" onclick="changeQuantity({{ $id }}, -1)" class="btn btn-sm btn-secondary btn-minus" aria-label="Decrease quantity">-</button>
-                                <span class="mx-2" id="display-qty-{{ $id }}">{{ $item['quantity'] }}</span>
-                                <button type="button" onclick="changeQuantity({{ $id }}, 1)" class="btn btn-sm btn-secondary btn-plus" aria-label="Increase quantity">+</button>
-                                <button type="submit" class="btn btn-sm btn-primary ms-2">Update</button>
-                            </form>
-                        </td>
-                        <td>BDT. {{ number_format($subtotal, 2) }}</td>
-                        <td>
-                            <form action="{{ route('frontend.remove.from.cart', $id) }}" method="POST">
-                                @csrf
-                                <button class="btn btn-danger btn-sm" aria-label="Remove {{ $item['name'] }} from cart">Remove</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <div class="text-end mt-4">
-            <h5>Subtotal: <strong>BDT {{ number_format($total, 2) }}</strong></h5>
-            @if($discount > 0)
-                <h5 class="text-success">Discount (20%): <strong>- BDT {{ number_format($discount, 2) }}</strong></h5>
+            @if(count($cart) > 0)
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Image</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col" style="min-width: 140px;">Quantity</th>
+                            <th scope="col">Subtotal</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($cart as $id => $item)
+                            @php $subtotal = $item['price'] * $item['quantity']; @endphp
+                            <tr>
+                                <td><img src="{{ url('image/product/' . $item['image']) }}" width="70" alt="{{ $item['name'] }}" class="img-thumbnail"></td>
+                                <td>{{ $item['name'] }}</td>
+                                <td>BDT. {{ number_format($item['price'], 2) }}</td>
+                                <td>
+                                    <form action="{{ route('frontend.update.cart', $id) }}" method="POST" class="d-flex align-items-center justify-content-center" id="quantity-buttons-{{ $id }}">
+                                        @csrf
+                                        <input type="hidden" name="quantity" value="{{ $item['quantity'] }}" id="quantity-{{ $id }}">
+                                        <button type="button" onclick="changeQuantity({{ $id }}, -1)" class="btn btn-sm btn-secondary btn-minus" aria-label="Decrease quantity">-</button>
+                                        <span class="mx-2" id="display-qty-{{ $id }}">{{ $item['quantity'] }}</span>
+                                        <button type="button" onclick="changeQuantity({{ $id }}, 1)" class="btn btn-sm btn-secondary btn-plus" aria-label="Increase quantity">+</button>
+                                        <button type="submit" class="btn btn-sm btn-primary ms-2">Update</button>
+                                    </form>
+                                </td>
+                                <td>BDT. {{ number_format($subtotal, 2) }}</td>
+                                <td>
+                                    <form action="{{ route('frontend.remove.from.cart', $id) }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-danger btn-sm" aria-label="Remove {{ $item['name'] }} from cart">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @else
+                <div class="alert alert-info">Your cart is empty.</div>
             @endif
-            <h5 class="text-primary">VAT (10%): <strong>+ BDT {{ number_format($vat, 2) }}</strong></h5>
-            <h4 class="fw-bold">Total Payable: <strong>BDT {{ number_format($finalTotal, 2) }}</strong></h4>
-
-            <a href="{{ route('frontend.checkout') }}" class="btn btn-success mt-3">Proceed to Checkout</a>
         </div>
 
-    @else
-        <div class="alert alert-info">Your cart is empty.</div>
-    @endif
+        {{-- Right side: Calculation summary --}}
+        <div class="col-lg-4 col-md-12">
+            <div class="summary-box p-4 rounded shadow-sm bg-light">
+                <h4 class="mb-3">Order Summary</h4>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span><strong>BDT {{ number_format($total, 2) }}</strong></span>
+                </div>
+
+                @if($discount > 0)
+                <div class="d-flex justify-content-between mb-2 text-success">
+                    <span>Discount (20%):</span>
+                    <span><strong>- BDT {{ number_format($discount, 2) }}</strong></span>
+                </div>
+                @endif
+
+                <div class="d-flex justify-content-between mb-2 text-primary">
+                    <span>VAT (10%):</span>
+                    <span><strong>+ BDT {{ number_format($vat, 2) }}</strong></span>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between fw-bold fs-5">
+                    <span>Total Payable:</span>
+                    <span>BDT {{ number_format($finalTotal, 2) }}</span>
+                </div>
+
+                <a href="{{ route('frontend.checkout') }}" class="btn btn-success w-100 mt-4">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
 </div>
 
-@endsection
-
-@section('scripts')
 <script>
-    // Show discount notification with slide-in animation
-    document.addEventListener('DOMContentLoaded', () => {
-        const discountFloat = document.getElementById('discount-float');
-
-        // Check if user dismissed before
-        if(localStorage.getItem('discountDismissed') === 'true') {
-            discountFloat.style.display = 'none';
-            return;
-        }
-
-        // Slide in after 0.5s delay
-        setTimeout(() => {
-            discountFloat.classList.add('show');
-        }, 500);
-
-        // Close button handler
-        const closeBtn = document.getElementById('discount-close-btn');
-        closeBtn.addEventListener('click', () => {
-            discountFloat.classList.remove('show');
-            setTimeout(() => discountFloat.style.display = 'none', 500);
-            // Save dismissal so it doesn't show again
-            localStorage.setItem('discountDismissed', 'true');
-        });
-    });
-
     // Quantity change with button animation
     function changeQuantity(id, change) {
         let qtyInput = document.getElementById('quantity-' + id);
@@ -140,55 +148,125 @@
         qtyInput.value = newQty;
         displayQty.innerText = newQty;
 
-        // Animate button scale on click
         const btn = change < 0 ? btnMinus : btnPlus;
         btn.classList.add('clicked');
         setTimeout(() => btn.classList.remove('clicked'), 200);
     }
+
+    // Notification close functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const closeButtons = document.querySelectorAll('.notification-close');
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const notification = this.closest('.fixed-notification');
+                notification.style.animation = 'fadeOutRight 0.3s forwards';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            });
+        });
+
+        // Auto-dismiss after 5 seconds
+        const notifications = document.querySelectorAll('.fixed-notification');
+        notifications.forEach(notification => {
+            setTimeout(() => {
+                notification.style.animation = 'fadeOutRight 0.3s forwards';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 5000);
+        });
+    });
 </script>
 
 <style>
-/* Floating discount notification */
-.discount-floating-notification {
+/* Layout */
+.summary-box {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+/* Fixed notification container */
+#fixed-notifications {
     position: fixed;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
-    background: linear-gradient(135deg, #4caf50, #81c784);
-    color: white;
-    padding: 15px 20px 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    font-weight: 600;
-    font-size: 16px;
     z-index: 1050;
-    opacity: 0;
-    transform: translateX(120%);
-    transition: transform 0.5s ease, opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+}
+
+/* Fixed notification styles */
+.fixed-notification {
+    position: relative;
     display: flex;
     align-items: center;
-    max-width: 320px;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    animation: slideInRight 0.3s forwards;
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
-/* Show slide-in */
-.discount-floating-notification.show {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* Close button */
-#discount-close-btn {
-    margin-left: auto;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 1;
-    padding-left: 15px;
+/* Info notification */
+.info-notification {
+    background-color: #2196F3;
     color: white;
-    user-select: none;
-    transition: color 0.3s ease;
 }
-#discount-close-btn:hover {
-    color: #d0f0c0;
+
+/* Congratulations notification */
+.congrats-notification {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.notification-content {
+    padding-right: 20px;
+}
+
+.notification-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 0 0 10px;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
 
 /* Quantity buttons container */
@@ -230,15 +308,28 @@ span[id^="display-qty-"] {
     display: inline-block;
 }
 
-/* Subtotal and totals */
-.text-end h5, .text-end h4 {
-    transition: color 0.3s ease;
-}
-
 /* Table row hover effect */
 table.table tbody tr:hover {
     background-color: #f7f9f7;
     transition: background-color 0.3s ease;
+}
+
+/* Responsive tweaks */
+@media (max-width: 767.98px) {
+    .summary-box {
+        margin-top: 20px;
+    }
+    
+    #fixed-notifications {
+        top: 10px;
+        right: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .fixed-notification {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
 }
 </style>
 @endsection

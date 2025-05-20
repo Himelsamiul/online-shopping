@@ -6,7 +6,9 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use App\Mail\OrderPlacedMail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Library\SslCommerz\SslCommerzNotification;
 
 class SslCommerzPaymentController extends Controller
@@ -135,7 +137,8 @@ $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
             $product = Product::find($productId);
             $product->decrement('quantity', $item['quantity']);
         }
-
+        // 10. Send confirmation email
+        Mail::to($validated['email'])->send(new OrderPlacedMail($order));
 
         $sslc = new SslCommerzNotification();
 
