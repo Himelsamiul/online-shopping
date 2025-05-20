@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Backend;
 
 
-use Illuminate\Support\Facades\Auth;
+use DB;
+use App\Models\Unit;
+use App\Models\Order;
+use App\Models\Review;
+use App\Models\Contact;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Contact;
-use App\Models\Customer;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\Review;
-use App\Models\Unit;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -49,19 +50,36 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->with('success', 'Logout successful');
     }
 
-    public function home()
-    {
-        // Fetch data for dashboard
-        $category = Category::count();
-        $unit = Unit::count();
-        $product = Product::count();
-        $customerCount = Customer::count();
-        $orderCount = Order::count();
-        $reviewCount = Review::count();
-        $contactCount = Contact::count();
-        // Return dashboard view with data
-        return view('backend.pages.dashboard', compact('category', 'unit', 'customerCount','product','orderCount','reviewCount','contactCount'));
-    }
+   public function home()
+{
+    $category = Category::count();
+    $unit = Unit::count();
+    $product = Product::count();
+    $customerCount = Customer::count();
+    $orderCount = Order::count();
+    $reviewCount = Review::count();
+    $contactCount = Contact::count();
+
+    // Sum of total amounts for Paid orders
+    $totalPaidAmount = Order::where('payment_status', 'Paid')->sum('total_amount');
+
+    // Sum of total amounts for Pending orders
+    $totalPendingAmount = Order::where('payment_status', 'Pending')->sum('total_amount');
+
+    return view('backend.pages.dashboard', compact(
+        'category',
+        'unit',
+        'product',
+        'customerCount',
+        'orderCount',
+        'reviewCount',
+        'contactCount',
+        'totalPaidAmount',
+        'totalPendingAmount'
+    ));
+}
+
+
 
     public function showCustomers()
     {
