@@ -26,9 +26,6 @@ Route::get('/search', [ProductController::class, 'search'])->name('search.produc
 Route::get('/customer', [WebpageController::class, 'form_reg'])->name('reg');
 Route::post('/customer/done', [WebpageController::class, 'reg'])->name('customer.done');
 
-Route::delete('/customers/{id}', [WebpageController::class, 'destroy'])->name('customers.destroy');
-
-
 Route::get('/customer/login', [WebpageController::class, 'login'])->name('login');
 Route::post('/customer/success', [WebpageController::class, 'loginsuccess'])->name('customer.success');
 
@@ -47,7 +44,10 @@ Route::middleware('auth:customerGuard')->group(function () {
 
     //navbar routes
 
+
+
     Route::post('/product/{id}/review', [WebProductController::class, 'storeReview'])->name('submit.review');
+
 
     // SSLCOMMERZ Start
     Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
@@ -66,6 +66,8 @@ Route::middleware('auth:customerGuard')->group(function () {
 
 Route::get('/products/category/{categoryId?}', [WebProductController::class, 'product'])->name('products');
 Route::get('/product/{id}', [WebProductController::class, 'singleProduct'])->name('product.single');
+
+
 
 // Backend Routes
 Route::group(['prefix' => 'admin'], function () {
@@ -88,9 +90,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
+
         //contact us view
         Route::get('/contact-us-view', [NavbarController::class, 'contactusview'])->name('contactusview');
         Route::delete('/contact-delete/{id}', [NavbarController::class, 'destroy'])->name('contact.destroy');
+
 
         // Unit Routes
         Route::get('/units', [UnitController::class, 'unitlist'])->name('units.list');
@@ -131,5 +135,6 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/', [ReviewController::class, 'list'])->name('review');
         });
     });
+
 
 });
