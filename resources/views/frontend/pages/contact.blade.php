@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="phone" class="form-label" style="color: #007bff;">Your Phone Number</label>
-                        <input type="text" name="phone" class="form-control" id="phone" placeholder="Optional" oninput="validatePhone()" style="border-color: #007bff;">
+                        <input type="number" name="phone" class="form-control" id="phone" placeholder="Optional" oninput="validatePhone()" style="border-color: #007bff;">
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="message" class="form-label" style="color: #007bff;">Your Message</label>
