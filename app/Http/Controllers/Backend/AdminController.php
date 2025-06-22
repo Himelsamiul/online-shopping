@@ -89,4 +89,14 @@ class AdminController extends Controller
         // Return the customer list view and pass the customers data
         return view('backend.pages.customerlist', compact('customers'));
     }
+
+    // In CustomerController.php
+public function destroy($id)
+{
+    $customer = Customer::findOrFail($id);
+    $customer->delete();
+
+    return redirect()->back()->with('success', 'Customer deleted successfully.');
+}
+
 }

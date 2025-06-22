@@ -80,6 +80,10 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Customer List View
         Route::get('/customers', [AdminController::class, 'showCustomers'])->name('customers');
+        Route::delete('/admin/customers/delete/{id}', [AdminController::class, 'destroy'])->name('customers.destroy');
+
+
+
 
         // Category Routes
         Route::get('/categories/list', [CategoryController::class, 'list'])->name('categories.list');
