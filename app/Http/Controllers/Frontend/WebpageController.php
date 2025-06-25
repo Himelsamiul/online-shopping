@@ -96,26 +96,25 @@ public function destroy($id)
 
     // Handle login success
     public function loginsuccess(Request $request)
-    {
-        // Validate the input
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6', // Adjust as needed
-        ]);
+{
+    // Validate the input
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:6',
+    ]);
 
-        // Prepare the credentials
-        $credentials = $request->only('email', 'password');
+    $credentials = $request->only('email', 'password');
 
-        // Attempt to log the user in using the customerGuard
-        if (auth()->guard('customerGuard')->attempt($credentials)) {
-            notify()->success('Login successful');
-            return redirect()->route('webpage')->with('success', 'Login successful');
-        }
-
-        // If login failed
-        notify()->error('Invalid login credentials');
-        return redirect()->back()->withInput();
+    // Attempt login with remember me
+    if (auth()->guard('customerGuard')->attempt($credentials, true)) {
+        notify()->success('Login successful');
+        return redirect()->route('webpage')->with('success', 'Login successful');
     }
+
+    // Login failed
+    notify()->error('Invalid login credentials');
+    return redirect()->back()->withInput();
+}
 
     // Handle logout functionality
     public function logoutsuccess()
