@@ -16,7 +16,7 @@ class Customer extends Authenticatable // Extend from Authenticatable class
 
     protected $hidden = [
         'password', 
-        'remember_token',// Hide password in JSON responses
+        'remember_token',// hhHide password in JSON responses
     ];
 
     protected $casts = [
