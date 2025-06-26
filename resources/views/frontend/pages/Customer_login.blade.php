@@ -146,9 +146,10 @@
 
             <div class="form-footer">
                 <div>
-                    <input type="checkbox" name="remember-me" id="remember-me">
-                    <label for="remember-me" style="color: white;">Remember Me</label>
-                </div>
+    <input type="checkbox" name="remember" id="remember-me">
+    <label for="remember-me" style="color: white;">Remember Me</label>
+</div>
+
                 <div>
                     <a href="#">Forgot Password?</a>
                 </div>

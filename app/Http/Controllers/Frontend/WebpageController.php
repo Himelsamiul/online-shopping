@@ -104,9 +104,10 @@ public function destroy($id)
     ]);
 
     $credentials = $request->only('email', 'password');
+    $remember = $request->has('remember');
 
     // Attempt login with remember me
-    if (auth()->guard('customerGuard')->attempt($credentials, true)) {
+    if (auth()->guard('customerGuard')->attempt($credentials, $remember)) {
         notify()->success('Login successful');
         return redirect()->route('webpage')->with('success', 'Login successful');
     }
