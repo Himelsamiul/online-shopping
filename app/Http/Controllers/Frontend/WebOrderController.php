@@ -154,7 +154,7 @@ $finalTotal = $request->input('final_total', $total);
         'cart_data' => json_encode($cart),
         'transaction_id' => $transactionId,
         'payment_method' => $validated['payment_method'],
-        'payment_status' => $paymentStatus,
+        'payment_status' => 'unpaid',
          'vat' => $vat,
     ]);
 

@@ -24,24 +24,28 @@ class AdminController extends Controller
         return view('backend.pages.login');
     }
 
-    public function doLogin(Request $request)
-    {
-        // Validate input
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+   public function doLogin(Request $request)
+{
+    // Validate input
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        // Attempt login
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended(route('dashboard'));  // Redirect to intended page or default to dashboard
-        }
+    // Check if "remember me" was selected
+    $remember = $request->has('remember');
 
-        // If authentication fails, redirect back with an error
-        return redirect()->back()->withErrors([
-            'email' => 'Invalid credentials or account not found.',
-        ]);
+    // Attempt login with "remember" flag
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate(); // Prevent session fixation
+        return redirect()->intended(route('dashboard'));
     }
+
+    // Authentication failed
+    return redirect()->back()->withErrors([
+        'email' => 'Invalid credentials or account not found.',
+    ]);
+}
 
     // Logout the user
     public function signout()
@@ -50,7 +54,7 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->with('success', 'Logout successful');
     }
 
-   public function home()
+  public function home()
 {
     $category = Category::count();
     $unit = Unit::count();
@@ -60,11 +64,22 @@ class AdminController extends Controller
     $reviewCount = Review::count();
     $contactCount = Contact::count();
 
-    // Sum of total amounts for Paid orders
-    $totalPaidAmount = Order::where('payment_status', 'Paid')->sum('total_amount');
+    // Paid amounts
+    $totalPaidAmountSSL = Order::where('payment_method', 'sslcommerz')
+        ->where('payment_status', 'Paid')
+        ->sum('total_amount');
 
-    // Sum of total amounts for Pending orders
-    $totalPendingAmount = Order::where('payment_status', 'Pending')->sum('total_amount');
+    $totalCollectedAmountCOD = Order::where('payment_method', 'cash_on_delivery')
+        ->where('payment_status', 'Paid')
+        ->sum('collected_amount');
+
+    $totalPendingAmountCOD = Order::where('payment_method', 'cash_on_delivery')
+        ->where('payment_status', 'Unpaid')
+        ->sum(DB::raw('total_amount - IFNULL(collected_amount, 0)'));
+
+    // New metrics
+    $totalOrderAmount = Order::sum('total_amount');
+    $totalCollection = $totalPaidAmountSSL + $totalCollectedAmountCOD;
 
     return view('backend.pages.dashboard', compact(
         'category',
@@ -74,8 +89,11 @@ class AdminController extends Controller
         'orderCount',
         'reviewCount',
         'contactCount',
-        'totalPaidAmount',
-        'totalPendingAmount'
+        'totalPaidAmountSSL',
+        'totalCollectedAmountCOD',
+        'totalPendingAmountCOD',
+        'totalOrderAmount',
+        'totalCollection'
     ));
 }
 

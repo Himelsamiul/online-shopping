@@ -1,18 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\AdminController;
-use App\Http\Controllers\Backend\CategoryController;
-use App\Http\Controllers\Backend\NavbarController;
 use App\Http\Controllers\Backend\OrderController;
-use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\NavbarController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReviewController;
-use App\Http\Controllers\Backend\UnitController;
-use App\Http\Controllers\Frontend\WebOrderController;
+use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Frontend\WebpageController;
-use App\Http\Controllers\Frontend\WebProductController;
+use App\Http\Controllers\Frontend\WebOrderController;
 use App\Http\Controllers\SslCommerzPaymentController;
+use App\Http\Controllers\Backendend\paymentController;
+use App\Http\Controllers\Frontend\WebProductController;
 
 // Frontend
 Route::get('/', [WebpageController::class, 'webpage'])->name('webpage');
@@ -83,6 +84,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/admin/customers/delete/{id}', [AdminController::class, 'destroy'])->name('customers.destroy');
 
 
+// Payment Collection Routes
+        Route::get('/cod-unpaid', [PaymentController::class, 'showUnpaidCODOrders'])->name('cod.unpaid');
+Route::post('/cod-collect/{id}', [PaymentController::class, 'collectCOD'])->name('cod.collect');
 
 
         // Category Routes

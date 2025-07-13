@@ -15,21 +15,27 @@
         <!-- Customer and Company Details Side by Side -->
         <div class="row mb-4">
             <div class="col-6">
-                @php
-                    $originalTotal = $order->orderDetails->sum(function($detail) {
-                        return $detail->unit_price * $detail->quantity;
-                    });
+               @php
+    $originalTotal = $order->orderDetails->sum(function($detail) {
+        return $detail->unit_price * $detail->quantity;
+    });
 
-                    // Change this to your dynamic discount rate if available
-                    $discountPercent = 0.20; // 20% discount
-                    $discountAmount = $originalTotal * $discountPercent;
-                    $discountedTotal = $originalTotal - $discountAmount;
+    // Apply 20% discount only if originalTotal > 1000
+    if ($originalTotal > 1000) {
+        $discountPercent = 0.20; // 20% discount
+    } else {
+        $discountPercent = 0.0;  // No discount
+    }
 
-                    $vatPercent = 0.10; // 10% VAT
-                    $vatAmount = $discountedTotal * $vatPercent;
+    $discountAmount = $originalTotal * $discountPercent;
+    $discountedTotal = $originalTotal - $discountAmount;
 
-                    $payableAfterVat = $discountedTotal + $vatAmount;
-                @endphp
+    $vatPercent = 0.10; // 10% VAT
+    $vatAmount = $discountedTotal * $vatPercent;
+
+    $payableAfterVat = $discountedTotal + $vatAmount;
+@endphp
+
 
                 <div class="detail-line"><strong>Customer</strong>       : {{ $order->name }}</div>
                 <div class="detail-line"><strong>Email</strong>          : {{ $order->email }}</div>

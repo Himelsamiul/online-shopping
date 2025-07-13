@@ -23,7 +23,10 @@ return new class extends Migration
             // New fields
             $table->string('transaction_id')->nullable();
             $table->string('payment_method')->default('cash_on_delivery'); // default cash
-            $table->string('payment_status')->default('pending'); // default pending
+           $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
+ // default pending
+ $table->decimal('collected_amount', 10, 2)->nullable();
+
         
             $table->timestamps();
         });

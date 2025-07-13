@@ -1,3 +1,4 @@
+
 @extends('frontend.master')
 @section('content')
 
@@ -8,12 +9,11 @@
     align-items: center;
     min-height: 90vh;
     padding: 20px;
+    background-color:rgb(255, 255, 255);
 }
 
 .registration-form {
-    background: linear-gradient(270deg, #c7d2fe, #d8b4fe, #bae6fd, #fbcfe8, #bbf7d0, #fda4af);
-    background-size: 400% 400%;
-    animation: gradientMove 12s ease infinite;
+    background-color:rgba(161, 173, 246, 0.83);
     padding: 40px 30px;
     border-radius: 18px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -71,12 +71,6 @@
 
 .registration-form button:hover {
     background-color: #4f46e5;
-}
-
-@keyframes gradientMove {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
 }
 </style>
 
