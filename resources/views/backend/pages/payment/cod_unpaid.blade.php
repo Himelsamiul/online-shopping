@@ -176,9 +176,9 @@
             <div class="input-group input-group-sm" style="width: 200px;">
                 <input type="text" 
                        class="form-control text-end" 
-                       value="${{ number_format($order->total_amount, 2) }}" 
+                       value="BDT{{ number_format($order->total_amount, 2) }}" 
                        readonly
-                       style="background-color:rgb(29, 62, 95); border-right: 0;">
+                       style="background-color:rgb(242, 244, 246); border-right: 0;">
                 <button type="submit" class="btn btn-success">
                     <i class="fas fa-hand-holding-usd"></i> Collect
                 </button>
