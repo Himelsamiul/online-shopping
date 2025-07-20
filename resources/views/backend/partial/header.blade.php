@@ -2,8 +2,8 @@
   <nav class="navbar navbar-expand-lg px-4 py-2 bg-dark shadow">
     
     <a class="navbar-brand fw-bold text-uppercase text-animated" href="{{route('dashboard')}}">
-      <span class="d-none d-brand-partial">Online</span>
-      <span class="d-none d-sm-inline">Shopping System</span>
+      <span class="d-none d-brand-partial">Elegance</span>
+      <span class="d-none d-sm-inline">Bd</span>
     </a>
 
     <ul class="ms-auto d-flex align-items-center list-unstyled mb-0">

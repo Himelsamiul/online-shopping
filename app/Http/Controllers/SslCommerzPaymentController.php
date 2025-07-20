@@ -27,6 +27,8 @@ class SslCommerzPaymentController extends Controller
     public function index(Request $request)
     {
 
+        session()->forget('cart');
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -52,18 +54,18 @@ class SslCommerzPaymentController extends Controller
 
         // 5. Calculate total amount
         $subtotal = collect($cart)->sum(function ($item) {
-    return $item['price'] * $item['quantity'];
-});
+            return $item['price'] * $item['quantity'];
+        });
 
         $discount = $subtotal > 1000 ? $subtotal * 0.20 : 0;  // 20% discount if subtotal > 1000
-$afterDiscount = $subtotal - $discount;
+        $afterDiscount = $subtotal - $discount;
 
-$vat = $afterDiscount * 0.10;  // 10% VAT
+        $vat = $afterDiscount * 0.10;  // 10% VAT
 
-$finalTotal = $afterDiscount + $vat;
+        $finalTotal = $afterDiscount + $vat;
 
-$post_data = array();
-$post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
+        $post_data = array();
+        $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid(); // tran_id must be unique
 
@@ -148,7 +150,6 @@ $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
             print_r($payment_options);
             $payment_options = array();
         }
-
     }
 
     public function payViaAjax(Request $request)
@@ -219,7 +220,6 @@ $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
             print_r($payment_options);
             $payment_options = array();
         }
-
     }
 
     public function success(Request $request)
@@ -262,8 +262,6 @@ $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
             #That means something wrong happened. You can redirect customer to your product page.
             echo "Invalid Transaction";
         }
-
-
     }
 
     public function fail(Request $request)
@@ -284,7 +282,6 @@ $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
         } else {
             echo "Transaction is Invalid";
         }
-
     }
 
     public function cancel(Request $request)
@@ -305,8 +302,6 @@ $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
         } else {
             echo "Transaction is Invalid";
         }
-
-
     }
 
     public function ipn(Request $request)
@@ -351,5 +346,4 @@ $post_data['total_amount'] = $finalTotal; # You cant not pay less than 10
             echo "Invalid Data";
         }
     }
-
 }

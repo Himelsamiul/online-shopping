@@ -24,28 +24,28 @@ class AdminController extends Controller
         return view('backend.pages.login');
     }
 
-   public function doLogin(Request $request)
-{
-    // Validate input
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+    public function doLogin(Request $request)
+    {
+        // Validate input
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-    // Check if "remember me" was selected
-    $remember = $request->has('remember');
+        // Check if "remember me" was selected
+        $remember = $request->has('remember');
 
-    // Attempt login with "remember" flag
-    if (Auth::attempt($credentials, $remember)) {
-        $request->session()->regenerate(); // Prevent session fixation
-        return redirect()->intended(route('dashboard'));
+        // Attempt login with "remember" flag
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate(); // Prevent session fixation
+            return redirect()->intended(route('dashboard'));
+        }
+
+        // Authentication failed
+        return redirect()->back()->withErrors([
+            'email' => 'Invalid credentials or account not found.',
+        ]);
     }
-
-    // Authentication failed
-    return redirect()->back()->withErrors([
-        'email' => 'Invalid credentials or account not found.',
-    ]);
-}
 
     // Logout the user
     public function signout()
@@ -54,48 +54,48 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->with('success', 'Logout successful');
     }
 
-  public function home()
-{
-    $category = Category::count();
-    $unit = Unit::count();
-    $product = Product::count();
-    $customerCount = Customer::count();
-    $orderCount = Order::count();
-    $reviewCount = Review::count();
-    $contactCount = Contact::count();
+    public function home()
+    {
+        $category = Category::count();
+        $unit = Unit::count();
+        $product = Product::count();
+        $customerCount = Customer::count();
+        $orderCount = Order::count();
+        $reviewCount = Review::count();
+        $contactCount = Contact::count();
 
-    // Paid amounts
-    $totalPaidAmountSSL = Order::where('payment_method', 'sslcommerz')
-        ->where('payment_status', 'Paid')
-        ->sum('total_amount');
+        // Paid amounts
+        $totalPaidAmountSSL = Order::where('payment_method', 'sslcommerz')
+            ->where('payment_status', 'Paid')
+            ->sum('total_amount');
 
-    $totalCollectedAmountCOD = Order::where('payment_method', 'cash_on_delivery')
-        ->where('payment_status', 'Paid')
-        ->sum('collected_amount');
+        $totalCollectedAmountCOD = Order::where('payment_method', 'cash_on_delivery')
+            ->where('payment_status', 'Paid')
+            ->sum('collected_amount');
 
-    $totalPendingAmountCOD = Order::where('payment_method', 'cash_on_delivery')
-        ->where('payment_status', 'Unpaid')
-        ->sum(DB::raw('total_amount - IFNULL(collected_amount, 0)'));
+        $totalPendingAmountCOD = Order::where('payment_method', 'cash_on_delivery')
+            ->where('payment_status', 'Unpaid')
+            ->sum(DB::raw('total_amount - IFNULL(collected_amount, 0)'));
 
-    // New metrics
-    $totalOrderAmount = Order::sum('total_amount');
-    $totalCollection = $totalPaidAmountSSL + $totalCollectedAmountCOD;
+        // New metrics
+        $totalOrderAmount = Order::sum('total_amount');
+        $totalCollection = $totalPaidAmountSSL + $totalCollectedAmountCOD;
 
-    return view('backend.pages.dashboard', compact(
-        'category',
-        'unit',
-        'product',
-        'customerCount',
-        'orderCount',
-        'reviewCount',
-        'contactCount',
-        'totalPaidAmountSSL',
-        'totalCollectedAmountCOD',
-        'totalPendingAmountCOD',
-        'totalOrderAmount',
-        'totalCollection'
-    ));
-}
+        return view('backend.pages.dashboard', compact(
+            'category',
+            'unit',
+            'product',
+            'customerCount',
+            'orderCount',
+            'reviewCount',
+            'contactCount',
+            'totalPaidAmountSSL',
+            'totalCollectedAmountCOD',
+            'totalPendingAmountCOD',
+            'totalOrderAmount',
+            'totalCollection'
+        ));
+    }
 
 
 
@@ -109,12 +109,11 @@ class AdminController extends Controller
     }
 
     // In CustomerController.php
-public function destroy($id)
-{
-    $customer = Customer::findOrFail($id);
-    $customer->delete();
+    public function destroy($id)
+    {
+        $customer = Customer::findOrFail($id);
+        $customer->delete();
 
-    return redirect()->back()->with('success', 'Customer deleted successfully.');
-}
-
+        return redirect()->back()->with('success', 'Customer deleted successfully.');
+    }
 }

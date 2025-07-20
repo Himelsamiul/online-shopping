@@ -6,8 +6,9 @@
           <div class="col-md-4">
             <ul class="conta_icon">
               <li>
-                <a href="https://www.free-css.com/free-css-templates">
-                  <img src="{{ url('frontend/assets/images/call.png') }}" alt="call">Call us:01851-140972
+                <a href="https://wa.me/8801795-053841" target="_blank">
+                  <img src="{{ url('frontend/assets/images/call.png') }}" alt="call">
+                  WhatsApp: 01795-053841
                 </a>
               </li>
             </ul>
@@ -29,7 +30,7 @@
             <ul class="conta_icon d_none1">
               <li>
                 <a href="https://www.free-css.com/free-css-templates">
-                  <img src="{{ url('frontend/assets/images/email.png') }}" alt="email">abontiahamed@gmail.com
+                  <img src="{{ url('frontend/assets/images/email.png') }}" alt="email">elegance.bd@gmail.com
                 </a>
               </li>
             </ul>
@@ -38,28 +39,22 @@
           <!-- TEXT LOGO START -->
           <div class="col-md-4 text-center">
             <a class="logo" href="https://www.free-css.com/free-css-templates" style="font-size: 30px; font-weight: bold; text-decoration: none; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">
-              <span style="color: rgb(47, 93, 140); text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Easy</span><span style="color: #FFD700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Shop</span>
+              <span style="color: rgb(47, 93, 140); text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Elegance</span><span style="color: #FFD700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Bd</span>
             </a>
           </div>
-
-
-
           <!-- TEXT LOGO END -->
 
+          
           <div class="col-md-4">
-            <ul class="right_icon d_none1">
+            <ul class="right_icon d_none1" style="display: flex; align-items: center;">
               @php
               $cart = session('cart', []);
               $cartCount = collect($cart)->sum('quantity');
               @endphp
 
-              <li>
-                <a href="{{ route('view.cart') }}">
-                  <img src="{{ url('frontend/assets/images/shopping.png') }}" alt="cart">
-                  @php
-                  $cart = session('cart', []);
-                  $cartCount = count($cart);
-                  @endphp
+              <li style="margin-right: 15px;"> {{-- Adds space to the right of the cart --}}
+                <a href="{{ route('view.cart') }}" style="display: inline-flex; align-items: center; gap: 2px;">
+                  <img src="{{ url('frontend/assets/images/shopping.png') }}" alt="cart" style="width: 20px; height: auto;">
                   <span style="color: red;">({{ $cartCount }})</span>
                 </a>
               </li>

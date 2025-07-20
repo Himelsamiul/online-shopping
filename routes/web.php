@@ -84,9 +84,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/admin/customers/delete/{id}', [AdminController::class, 'destroy'])->name('customers.destroy');
 
 
-// Payment Collection Routes
+        // Payment Collection Routes
         Route::get('/cod-unpaid', [PaymentController::class, 'showUnpaidCODOrders'])->name('cod.unpaid');
-Route::post('/cod-collect/{id}', [PaymentController::class, 'collectCOD'])->name('cod.collect');
+        Route::post('/cod-collect/{id}', [PaymentController::class, 'collectCOD'])->name('cod.collect');
 
 
         // Category Routes
@@ -143,6 +143,4 @@ Route::post('/cod-collect/{id}', [PaymentController::class, 'collectCOD'])->name
             Route::get('/', [ReviewController::class, 'list'])->name('review');
         });
     });
-
-
 });
