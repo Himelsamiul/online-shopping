@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReviewController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\QuestionAnswerController;
 use App\Http\Controllers\Frontend\WebpageController;
 use App\Http\Controllers\Frontend\WebOrderController;
 use App\Http\Controllers\SslCommerzPaymentController;
@@ -20,6 +21,9 @@ Route::get('/', [WebpageController::class, 'webpage'])->name('webpage');
 Route::get('/about-us', [NavbarController::class, 'aboutus'])->name('aboutus');
 Route::get('/contact-us', [NavbarController::class, 'contactus'])->name('contactus');
 Route::post('/contact-us', [NavbarController::class, 'contactusSubmit'])->name('contactus.submit');
+Route::get('/faq',[WebPageController::class,'frequentlyAQ'])->name('frequently.ask.question');
+Route::post('/faq/ask', [WebPageController::class, 'storeQuestion'])->name('faq.store.question');
+
 
 Route::get('/search', [ProductController::class, 'search'])->name('search.products');
 
@@ -142,5 +146,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::prefix('/review')->group(function () {
             Route::get('/', [ReviewController::class, 'list'])->name('review');
         });
+
+        // Question Answer routes
+        Route::get('/questions', [QuestionAnswerController::class, 'questionAnswer'])->name('admin.questions.answer');
+        Route::get('/questions/{id}/answer', [QuestionAnswerController::class, 'edit'])->name('admin.questions.edit');
+        Route::post('/questions/{id}/answer', [QuestionAnswerController::class, 'update'])->name('admin.questions.update');
+
     });
 });

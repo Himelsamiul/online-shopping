@@ -53,6 +53,4 @@ class WebProductController extends Controller
         return redirect()->back()->with('success', 'Thanks for your review!');
     }
     
-
-    
 }

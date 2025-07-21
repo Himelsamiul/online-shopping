@@ -6,8 +6,10 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\FaqQuestion;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Question;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -80,13 +82,13 @@ class WebpageController extends Controller
         // Redirect to login page
         return redirect()->route('login');
     }
-public function destroy($id)
-{
-    $customer = Customer::findOrFail($id); // You can use your actual model name
-    $customer->delete();
+    public function destroy($id)
+    {
+        $customer = Customer::findOrFail($id); // You can use your actual model name
+        $customer->delete();
 
-    return redirect()->back()->with('success', 'Customer deleted successfully!');
-}
+        return redirect()->back()->with('success', 'Customer deleted successfully!');
+    }
 
     // Show login form
     public function login()
@@ -96,26 +98,26 @@ public function destroy($id)
 
     // Handle login success
     public function loginsuccess(Request $request)
-{
-    // Validate the input
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|min:6',
-    ]);
+    {
+        // Validate the input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
 
-    $credentials = $request->only('email', 'password');
-    $remember = $request->has('remember');
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
-    // Attempt login with remember me
-    if (auth()->guard('customerGuard')->attempt($credentials, $remember)) {
-        notify()->success('Login successful');
-        return redirect()->route('webpage')->with('success', 'Login successful');
+        // Attempt login with remember me
+        if (auth()->guard('customerGuard')->attempt($credentials, $remember)) {
+            notify()->success('Login successful');
+            return redirect()->route('webpage')->with('success', 'Login successful');
+        }
+
+        // Login failed
+        notify()->error('Invalid login credentials');
+        return redirect()->back()->withInput();
     }
-
-    // Login failed
-    notify()->error('Invalid login credentials');
-    return redirect()->back()->withInput();
-}
 
     // Handle logout functionality
     public function logoutsuccess()
@@ -206,5 +208,22 @@ public function destroy($id)
             'cartItems' => $cartItems,
             'totalAfterDiscount' => $totalAfterDiscount,
         ]);
+    }
+
+    public function frequentlyAQ()
+    {
+        $answeredQuestions = Question::whereNotNull('answer')->latest()->get();
+        return view('frontend.pages.faq', compact('answeredQuestions'));
+    }
+
+    public function storeQuestion(Request $request)
+    {
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'question' => 'required|string',
+        ]);
+
+        Question::create($request->only('customer_name', 'question'));
+        return back()->with('success', 'Your question has been submitted! Admin will reply soon.');
     }
 }

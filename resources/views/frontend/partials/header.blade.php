@@ -99,7 +99,7 @@
                   </li>
                   <li class="nav-item"><a class="nav-link" href="{{ route('contactus') }}">Contact Us</a></li>
                   <li class="nav-item"><a class="nav-link" href="{{ route('aboutus') }}">About Us</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{{route('frequently.ask.question')}}">FAQ</a></li>
                 </ul>
               </div>
             </nav>

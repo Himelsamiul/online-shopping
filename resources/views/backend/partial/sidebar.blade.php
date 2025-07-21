@@ -57,11 +57,11 @@
       </a>
 
     </li>
-<li class="sidebar-list-item">
-  <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('cod.unpaid') }}" onclick="setActiveLink(this)">
-    <i class="fas fa-hand-holding-usd me-3"></i><span class="sidebar-link-title">Payment Collection</span>
-  </a>
-</li>
+    <li class="sidebar-list-item">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('cod.unpaid') }}" onclick="setActiveLink(this)">
+        <i class="fas fa-hand-holding-usd me-3"></i><span class="sidebar-link-title">Payment Collection</span>
+      </a>
+    </li>
 
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('contactusview') }}">
@@ -76,13 +76,19 @@
       </a>
     </li>
 
+    <li class="sidebar-list-item">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{route('admin.questions.answer')}}">
+        <i class="fas fa-question-circle me-2"></i><span class="sidebar-link-title">Questions</span>
+      </a>
+    </li>
+
 
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('review') }}">
         <i class="fas fa-star me-3"></i><span class="sidebar-link-title">Reviews</span>
       </a>
     </li>
-   
+
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('sign.out') }}">
         <i class="fas fa-sign-out-alt me-3"></i><span class="sidebar-link-title">Logout</span>

@@ -10,6 +10,8 @@
 <link rel="stylesheet" type="text/css" href="{{url('frontend/assets/css/plugins.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url('frontend/assets/css/style.css')}}">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Sd4Y0FNgK0sZzW0Y1qjodYxy0phAJ+hdftOt3IR6aBevG3DPn0/nr+6RPZgk9T5q4oInFP5bmZbV2gb3nkztgA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -67,5 +69,6 @@ var gaProperty = 'UA-120201777-1';var disableStr = 'ga-disable-' + gaProperty;if
 function gaOptout(){document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2045 23:59:59 UTC; path=/';window[disableStr] = true;alert('Google Tracking has been deactivated');}
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-120201777-1', 'auto');ga('set', 'anonymizeIp', true);ga('send', 'pageview');
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
