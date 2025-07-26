@@ -13,7 +13,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated" aria-labelledby="userInfo">
           <div class="dropdown-header text-gray-700">
-            <h6 class="text-uppercase font-weight-bold">Sharmin Akter Nishi</h6>
+            <h6 class="text-uppercase font-weight-bold">Sharmin Akter </h6>
             <small>Web Developer</small>
           </div>
           <div class="dropdown-divider"></div>
