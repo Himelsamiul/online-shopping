@@ -9,7 +9,8 @@
     <ul class="ms-auto d-flex align-items-center list-unstyled mb-0">
       <li class="nav-item dropdown ms-auto">
         <a class="nav-link pe-0 text-white" id="userInfo" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img class="avatar p-1 rounded-circle border border-light" src="himel.jpg" alt="Samiul Alam Himel">
+          <img class="avatar p-1 rounded-circle border border-light" src="{{ asset('sharmin.jpg') }}" alt="Sharmin Akter">
+
         </a>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated" aria-labelledby="userInfo">
           <div class="dropdown-header text-gray-700">

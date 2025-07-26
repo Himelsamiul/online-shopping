@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Size;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,7 @@ class ProductController extends Controller
     public function list()
 {
     // Fetch products with their category and unit relationships, and paginate by 5
-    $products = Product::with('category', 'unit')->paginate(5);
+    $products = Product::with('category', 'unit','size')->paginate(5);
 
     // Calculate the total number of products
     $totalProducts = $products->sum('quantity');
@@ -31,9 +32,10 @@ class ProductController extends Controller
     // Show product creation form
     public function create()
     {
-        $categories = Category::all();
-        $units = Unit::all();
-        return view('backend.pages.product.create', compact('categories', 'units'));
+            $categories = Category::all();
+            $units = Unit::all();
+            $sizes = Size::all();
+        return view('backend.pages.product.create', compact('categories', 'units', 'sizes'));
     }
 
     // Store the new product
@@ -46,6 +48,7 @@ class ProductController extends Controller
             'previous_price' => 'nullable|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'unit_id' => 'required|exists:units,id',
+            'size_id' => 'required|exists:sizes,id',
             'status' => 'required|in:active,inactive',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'quantity' => 'required|numeric|min:1'
@@ -64,6 +67,7 @@ class ProductController extends Controller
             'previous_price' => $validatedData['previous_price'],
             'category_id' => $validatedData['category_id'],
             'unit_id' => $validatedData['unit_id'],
+            'size_id' => $validatedData['size_id'],
             'status' => $validatedData['status'],
             'image' => $fileName,
             'quantity' => $validatedData['quantity'],
@@ -78,7 +82,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $categories = Category::all();
         $units = Unit::all();
-        return view('backend.pages.product.edit', compact('product', 'categories', 'units'));
+        $sizes = Size::with('products')->get();
+
+        return view('backend.pages.product.edit', compact('product', 'categories', 'units', 'sizes'));
     }
 
     // Update product
@@ -94,6 +100,7 @@ class ProductController extends Controller
            'previous_price' => 'nullable|numeric|min:0',
            'category_id' => 'required|exists:categories,id',
            'unit_id' => 'required|exists:units,id',
+           'size_id' => 'required|exists:sizes,id',
            'quantity' => 'required|numeric',
            'status' => 'required|in:active,inactive',
            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is nullable
@@ -109,6 +116,7 @@ class ProductController extends Controller
        $product->previous_price = $request->previous_price;
        $product->category_id = $request->category_id;
        $product->unit_id = $request->unit_id;
+       $product->size_id = $request->size_id;
        $product->quantity = $request->quantity;
        $product->status = $request->status;
    

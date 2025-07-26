@@ -144,7 +144,7 @@
             <input id="name" type="text" name="name" class="form-control" value="{{ old('name') }}" required>
         </div>
 
-        <!-- Category & Unit -->
+        <!-- Category, Unit & Size -->
         <div class="form-row mb-3">
             <div class="form-group">
                 <label for="category_id">Category</label>
@@ -165,6 +165,18 @@
                     @foreach($units as $unit)
                         <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
                             {{ $unit->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="size_id">Size</label>
+                <select id="size_id" name="size_id" class="form-control" required>
+                    <option value="">Select Size</option>
+                    @foreach($sizes as $size)
+                        <option value="{{ $size->id }}" {{ old('size_id') == $size->id ? 'selected' : '' }}>
+                            {{ $size->name }}
                         </option>
                     @endforeach
                 </select>
@@ -230,7 +242,7 @@
 
         // Enable submit button only if all required fields are filled
         function validateForm() {
-            const requiredFields = ['name', 'category_id', 'unit_id', 'description', 'price', 'quantity', 'status'];
+            const requiredFields = ['name', 'category_id', 'unit_id', 'size_id', 'description', 'price', 'quantity', 'status'];
             let isValid = true;
 
             for (const fieldId of requiredFields) {

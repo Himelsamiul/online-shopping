@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('category_id')->constrained()->onDelete('restrict'); // Prevent category deletion if products exist
             $table->foreignId('unit_id')->constrained()->onDelete('restrict'); // Prevent unit deletion if products exist
+            $table->foreignId('size_id'); // Prevent size deletion if products exist
             $table->text('description');
             $table->string('image')->nullable(); // Path for image
             $table->decimal('price', 10, 2);

@@ -32,6 +32,7 @@
                     <th>Name</th>
                     <th>Category</th>
                     <th>Unit</th>
+                    <th>Size</th>
                     <th>Previous Price</th>
                     <th>Price</th>
                     <th>Quantity</th>
@@ -58,6 +59,8 @@
                         <td class="fw-normal text-primary">{{ $product->name }}</td>
                         <td>{{ $product->category->name }}</td>
                         <td>{{ $product->unit->name }}</td>
+                       <td>{{ $product->size->name ?? '-' }}</td>
+
                         <td>{{ $product->previous_price }} TK</td>
                         <td class="text-black fw-normal">{{ $product->price }} TK</td>
                         <td>{{ $product->quantity }}</td>

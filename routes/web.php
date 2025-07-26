@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\ReviewController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\QuestionAnswerController;
+use App\Http\Controllers\Backend\SizeController;
 use App\Http\Controllers\Frontend\WebpageController;
 use App\Http\Controllers\Frontend\WebOrderController;
 use App\Http\Controllers\SslCommerzPaymentController;
@@ -116,6 +117,13 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/units/{unit}', [UnitController::class, 'unitupdate'])->name('units.update');
         Route::delete('/units/{unit}', [UnitController::class, 'unitdelete'])->name('units.delete');
         Route::get('/units/{unit}', [UnitController::class, 'unitshow'])->name('units.show');
+//size
+    Route::get('/size/create', [SizeController::class, 'create'])->name('sizes.create');
+    Route::post('/size/store', [SizeController::class, 'store'])->name('sizes.store');
+    Route::get('/size/list', [SizeController::class, 'index'])->name('sizes.list');
+Route::get('/size/edit/{id}', [SizeController::class, 'edit'])->name('sizes.edit');
+Route::put('/size/update/{id}', [SizeController::class, 'update'])->name('sizes.update');
+Route::delete('/size/delete/{id}', [SizeController::class, 'destroy'])->name('sizes.delete');
 
         // Product Routes
         Route::prefix('/products')->group(function () {

@@ -106,6 +106,19 @@
                 </select>
             </div>
 
+
+            <div class="form-group mb-3">
+                <label>Size:</label>
+                <select name="size_id" class="form-control" required>
+                    @foreach($sizes as $size)
+                        <option value="{{ $size->id }}" {{ $size->id == $product->size_id ? 'selected' : '' }}>
+                            {{ $size->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+
             <div class="form-group mb-3">
                 <label>Quantity:</label>
                 <input type="number" name="quantity" value="{{ $product->quantity }}" class="form-control" required>

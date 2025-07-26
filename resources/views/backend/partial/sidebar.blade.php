@@ -44,6 +44,19 @@
       </ul>
     </li>
 
+
+    <li class="sidebar-list-item">
+  <a class="sidebar-link text-white d-flex align-items-center" href="#" onclick="toggleSubmenu('sizeMenu', this); setActiveLink(this)">
+    <i class="fas fa-tshirt me-3"></i><span class="sidebar-link-title">Size</span>
+    <i class="fas fa-chevron-right ms-auto"></i>
+  </a>
+  <ul id="sizeMenu" class="submenu list-unstyled d-none ps-4">
+    <li><a href="{{ route('sizes.create') }}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Add Size</a></li>
+    <li><a href="{{ route('sizes.list') }}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Size List</a></li>
+  </ul>
+</li>
+
+
     <li class="sidebar-list-item">
       <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('order.list') }}" role="button" id="dashboardLink" onclick="setActiveLink(this)">
         <i class="fas fa-receipt me-3"></i><span class="sidebar-link-title">Orders</span>
