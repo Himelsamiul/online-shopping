@@ -1,5 +1,6 @@
 <div class="sidebar py-3" id="sidebar">
-  <button onclick="toggleSidebar()" class="btn btn-primary mb-3 w-100">Toggle Sidebar</button>
+  <button onclick="toggleSidebar()" class="btn btn-outline-light mb-3 w-100 text-white border-0" style="background: transparent;">Toggle Sidebar</button>
+
   <input type="text" id="sidebarSearch" placeholder="Search..." class="form-control sidebar-search mb-2">
 
   <ul class="list-unstyled">

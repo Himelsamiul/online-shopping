@@ -152,41 +152,40 @@
               'link' => route('customers')
             ],
             [
-  'label' => 'Total Sale (SSLCommerz Paid)', 
-  'value' => 'BDT. ' . number_format($totalPaidAmountSSL, 2), 
-  'icon' => 'fas fa-dollar-sign', 
-  'color' => 'bg-dark',
-  'card-color' => 'card-dark'
-],
-[
-  'label' => 'Total COD Collected', 
-  'value' => 'BDT. ' . number_format($totalCollectedAmountCOD, 2), 
-  'icon' => 'fas fa-check-circle', 
-  'color' => 'bg-success',
-  'card-color' => 'card-success'
-],
-[
-  'label' => 'Total COD Pending', 
-  'value' => 'BDT. ' . number_format($totalPendingAmountCOD, 2), 
-  'icon' => 'fas fa-clock', 
-  'color' => 'bg-warning',
-  'card-color' => 'card-warning'
-],
-[
-  'label' => 'Total Order Amount',
-  'value' => 'BDT. ' . number_format($totalOrderAmount, 2),
-  'icon' => 'fas fa-receipt',
-  'color' => 'bg-info',
-  'card-color' => 'card-info'
-],
-[
-  'label' => 'Total Collection',
-  'value' => 'BDT. ' . number_format($totalCollection, 2),
-  'icon' => 'fas fa-wallet',
-  'color' => 'bg-success',
-  'card-color' => 'card-success'
-],
-
+              'label' => 'Total Sale (SSLCommerz Paid)', 
+              'value' => 'BDT. ' . number_format($totalPaidAmountSSL, 2), 
+              'icon' => 'fas fa-dollar-sign', 
+              'color' => 'bg-dark',
+              'card-color' => 'card-dark'
+            ],
+            [
+              'label' => 'Total COD Collected', 
+              'value' => 'BDT. ' . number_format($totalCollectedAmountCOD, 2), 
+              'icon' => 'fas fa-check-circle', 
+              'color' => 'bg-success',
+              'card-color' => 'card-success'
+            ],
+            [
+              'label' => 'Total COD Pending', 
+              'value' => 'BDT. ' . number_format($totalPendingAmountCOD, 2), 
+              'icon' => 'fas fa-clock', 
+              'color' => 'bg-warning',
+              'card-color' => 'card-warning'
+            ],
+            [
+              'label' => 'Total Order Amount',
+              'value' => 'BDT. ' . number_format($totalOrderAmount, 2),
+              'icon' => 'fas fa-receipt',
+              'color' => 'bg-info',
+              'card-color' => 'card-info'
+            ],
+            [
+              'label' => 'Total Collection',
+              'value' => 'BDT. ' . number_format($totalCollection, 2),
+              'icon' => 'fas fa-wallet',
+              'color' => 'bg-success',
+              'card-color' => 'card-success'
+            ],
             [
               'label' => 'Total Messages', 
               'value' => $contactCount, 
@@ -203,6 +202,22 @@
               'card-color' => 'card-success',
               'link' => route('review')
             ],
+            [
+              'label' => 'Total Questions Asked', 
+              'value' => $totalQuestionsAsked, 
+              'icon' => 'fas fa-question-circle', 
+              'color' => 'bg-info',
+              'card-color' => 'card-info',
+              'link' => route('admin.questions.answer')
+            ],
+            [
+              'label' => 'Total Questions Answered', 
+              'value' => $totalQuestionsAnswered, 
+              'icon' => 'fas fa-check-double', 
+              'color' => 'bg-primary',
+              'card-color' => 'card-primary',
+              
+            ]
           ];
         @endphp
 

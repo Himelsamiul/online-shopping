@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Question;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,47 +56,57 @@ class AdminController extends Controller
     }
 
     public function home()
-    {
-        $category = Category::count();
-        $unit = Unit::count();
-        $product = Product::count();
-        $customerCount = Customer::count();
-        $orderCount = Order::count();
-        $reviewCount = Review::count();
-        $contactCount = Contact::count();
+{
+    $category = Category::count();
+    $unit = Unit::count();
+    $product = Product::count();
+    $customerCount = Customer::count();
+    $questionCount = Question::count(); // total questions asked
+    $orderCount = Order::count();
+    $reviewCount = Review::count();
+    $contactCount = Contact::count();
+    $totalQuestionsAsked = Question::count();
+    $totalQuestionsAnswered = Question::whereNotNull('answer')
+                                 ->where('answer', '!=', '')
+                                 ->count();
 
-        // Paid amounts
-        $totalPaidAmountSSL = Order::where('payment_method', 'sslcommerz')
-            ->where('payment_status', 'Paid')
-            ->sum('total_amount');
+    // Paid amounts
+    $totalPaidAmountSSL = Order::where('payment_method', 'sslcommerz')
+        ->where('payment_status', 'Paid')
+        ->sum('total_amount');
 
-        $totalCollectedAmountCOD = Order::where('payment_method', 'cash_on_delivery')
-            ->where('payment_status', 'Paid')
-            ->sum('collected_amount');
+    $totalCollectedAmountCOD = Order::where('payment_method', 'cash_on_delivery')
+        ->where('payment_status', 'Paid')
+        ->sum('collected_amount');
 
-        $totalPendingAmountCOD = Order::where('payment_method', 'cash_on_delivery')
-            ->where('payment_status', 'Unpaid')
-            ->sum(DB::raw('total_amount - IFNULL(collected_amount, 0)'));
+    $totalPendingAmountCOD = Order::where('payment_method', 'cash_on_delivery')
+        ->where('payment_status', 'Unpaid')
+        ->sum(DB::raw('total_amount - IFNULL(collected_amount, 0)'));
 
-        // New metrics
-        $totalOrderAmount = Order::sum('total_amount');
-        $totalCollection = $totalPaidAmountSSL + $totalCollectedAmountCOD;
+    // New metrics
+    $totalOrderAmount = Order::sum('total_amount');
+    $totalCollection = $totalPaidAmountSSL + $totalCollectedAmountCOD;
 
-        return view('backend.pages.dashboard', compact(
-            'category',
-            'unit',
-            'product',
-            'customerCount',
-            'orderCount',
-            'reviewCount',
-            'contactCount',
-            'totalPaidAmountSSL',
-            'totalCollectedAmountCOD',
-            'totalPendingAmountCOD',
-            'totalOrderAmount',
-            'totalCollection'
-        ));
-    }
+    // Add answered questions count
+    $totalQuestionsAnswered = Question::whereNotNull('answer')->where('answer', '!=', '')->count();
+
+    return view('backend.pages.dashboard', compact(
+        'category',
+        'unit',
+        'product',
+        'customerCount',
+        'orderCount',
+        'reviewCount',
+        'contactCount',
+        'totalPaidAmountSSL',
+        'totalCollectedAmountCOD',
+        'totalPendingAmountCOD',
+        'totalOrderAmount',
+        'totalCollection',
+        'totalQuestionsAsked',          // total asked
+        'totalQuestionsAnswered' // total answered
+    ));
+}
 
 
 
