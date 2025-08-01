@@ -46,7 +46,7 @@
     }
 
     .login-card {
-        background:rgb(179, 168, 253);
+        background: rgb(179, 168, 253);
         padding: 2.5rem;
         border-radius: 16px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -102,7 +102,7 @@
 
     .input-field {
         width: 100%;
-        padding: 0.875rem 1rem;
+        padding: 0.875rem 2.75rem 0.875rem 1rem; /* extra right padding for eye icon */
         border: 1px solid #e2e8f0;
         border-radius: 8px;
         font-size: 0.9375rem;
@@ -125,9 +125,27 @@
         transform: translateY(-50%);
         color: var(--gray);
         transition: color 0.3s ease;
+        pointer-events: none;
     }
 
     .input-field:focus + .input-icon {
+        color: var(--primary);
+    }
+
+    /* Eye icon toggle style */
+    .toggle-password {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: var(--gray);
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+        user-select: none;
+    }
+
+    .toggle-password:hover {
         color: var(--primary);
     }
 
@@ -262,6 +280,8 @@
             <div class="input-group">
                 <i class="fas fa-lock input-icon"></i>
                 <input type="password" name="password" placeholder="Password" class="input-field" id="password-field" required>
+                <!-- Eye icon toggle -->
+                <i class="fas fa-eye-slash toggle-password" id="toggle-password"></i>
             </div>
 
             <div class="form-footer">
@@ -331,6 +351,15 @@
         
         passwordField.addEventListener('blur', function() {
             this.parentNode.querySelector('.input-icon').classList.remove('fa-shake');
+        });
+
+        // Password eye toggle
+        const togglePassword = document.getElementById('toggle-password');
+        togglePassword.addEventListener('click', () => {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            togglePassword.classList.toggle('fa-eye');
+            togglePassword.classList.toggle('fa-eye-slash');
         });
     });
 </script>

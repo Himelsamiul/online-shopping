@@ -12,7 +12,7 @@
       --light-gray: #ecf0f1;
       --dark-gray: #7f8c8d;
       --error-color: #e74c3c;
-      --success-color:rgb(46, 204, 125);
+      --success-color: rgb(46, 204, 125);
     }
 
     * {
@@ -64,7 +64,6 @@
       left: 0;
       width: 100%;
       height: 5px;
-      
     }
 
     .login-title {
@@ -99,7 +98,7 @@
 
     .form-group input {
       width: 100%;
-      padding: 0.9rem 1rem;
+      padding: 0.9rem 2.5rem 0.9rem 1rem; /* Add right padding for eye icon */
       border: 1px solid #ddd;
       border-radius: 4px;
       font-size: 0.95rem;
@@ -130,6 +129,18 @@
       top: -0.6rem;
       font-size: 0.75rem;
       color: var(--accent-color);
+    }
+
+    /* Eye icon styling */
+    .form-group .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--dark-gray);
+      font-size: 1.2rem;
+      user-select: none;
     }
 
     button {
@@ -216,11 +227,11 @@
         padding: 1.5rem;
         margin: 0 1rem;
       }
-      
+
       .login-title h2 {
         font-size: 1.5rem;
       }
-      
+
       body {
         background-attachment: scroll;
       }
@@ -229,7 +240,7 @@
 
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
@@ -263,10 +274,12 @@
       <div class="form-group">
         <input type="password" name="password" id="password" required placeholder=" " />
         <label for="password">Password</label>
+        <!-- Eye icon for toggle -->
+        <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
       </div>
 
       <div class="remember-me">
-        <input type="checkbox" name="remember" id="remember">
+        <input type="checkbox" name="remember" id="remember" />
         <label for="remember">Keep me signed in</label>
       </div>
 
@@ -275,14 +288,15 @@
 
     <div class="footer-links">
       <a href="#" style="font-weight: bold;">Forgot password?</a>
-  <span>•</span>
-  <a href="#" style="font-weight: bold;">Contact support</a>
+      <span>•</span>
+      <a href="#" style="font-weight: bold;">Contact support</a>
     </div>
   </div>
 
   <script>
     const passwordField = document.getElementById('password');
     const lockIcon = document.getElementById('lockIcon');
+    const togglePassword = document.getElementById('togglePassword');
 
     passwordField.addEventListener('focus', () => {
       lockIcon.style.transform = 'scale(1.1)';
@@ -299,6 +313,13 @@
       setTimeout(() => {
         lockIcon.style.animation = '';
       }, 300);
+    });
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      togglePassword.classList.toggle('fa-eye');
+      togglePassword.classList.toggle('fa-eye-slash');
     });
 
     // Add shake animation to styles

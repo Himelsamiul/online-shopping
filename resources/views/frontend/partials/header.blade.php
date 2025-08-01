@@ -44,31 +44,28 @@
           </div>
           <!-- TEXT LOGO END -->
 
-          
           <div class="col-md-4">
-  <ul class="right_icon d_none1" style="display: flex; align-items: center;">
-    @php
-      $cart = session('cart', []);
-      $cartCount = count($cart); 
-    @endphp
+            <ul class="right_icon d_none1" style="display: flex; align-items: center;">
+              @php
+                $cart = session('cart', []);
+                $cartCount = count($cart); 
+              @endphp
 
-    <li style="margin-right: 15px;">
-      <a href="{{ route('view.cart') }}" style="display: inline-flex; align-items: center; gap: 2px;">
-        <img src="{{ url('frontend/assets/images/shopping.png') }}" alt="cart" style="width: 20px; height: auto;">
-        <span style="color: red;">({{ $cartCount }})</span>
-      </a>
-    </li>
- 
-
+              <li style="margin-right: 15px;">
+                <a href="{{ route('view.cart') }}" style="display: inline-flex; align-items: center; gap: 2px;">
+                  <img src="{{ url('frontend/assets/images/shopping.png') }}" alt="cart" style="width: 20px; height: auto;">
+                  <span style="color: red;">({{ $cartCount }})</span>
+                </a>
+              </li>
 
               @guest('customerGuard')
-              <a href="{{ route('reg') }}" class="order">Registration</a>
-              <a href="{{ route('login') }}" class="order">Login</a>
+                <a href="{{ route('reg') }}" class="order">Registration</a>
+                <a href="{{ route('login') }}" class="order">Login</a>
               @endguest
 
               @auth('customerGuard')
-              <a href="{{ route('logout.success') }}" class="order">Logout</a>
-              <a href="{{ route('profile') }}" class="order">Profile</a>
+                <a href="#" id="logout-btn" class="order">Logout</a>
+                <a href="{{ route('profile') }}" class="order">Profile</a>
               @endauth
             </ul>
           </div>
@@ -93,9 +90,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="productsDropdown">
                       @foreach($categories as $category)
-                      <a class="dropdown-item" href="{{ route('products', ['categoryId' => $category->id]) }}">
-                        {{ $category->name }}
-                      </a>
+                        <a class="dropdown-item" href="{{ route('products', ['categoryId' => $category->id]) }}">
+                          {{ $category->name }}
+                        </a>
                       @endforeach
                     </div>
                   </li>
@@ -119,4 +116,31 @@
       </div>
     </div>
   </div>
+
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const logoutBtn = document.getElementById('logout-btn');
+      if(logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          Swal.fire({
+            title: 'Are you sure you want to logout?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, logout',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "{{ route('logout.success') }}";
+            }
+          });
+        });
+      }
+    });
+  </script>
 </header>

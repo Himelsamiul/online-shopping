@@ -10,18 +10,18 @@
       <li class="nav-item dropdown ms-auto">
         <a class="nav-link pe-0 text-white" id="userInfo" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <img class="avatar p-1 rounded-circle border border-light" src="{{ asset('sharmin.jpg') }}" alt="Sharmin Akter">
-
         </a>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated" aria-labelledby="userInfo">
           <div class="dropdown-header text-gray-700">
-            <h6 class="text-uppercase font-weight-bold">Sharmin Akter </h6>
+            <h6 class="text-uppercase font-weight-bold">{{ Auth::user()->name }}</h6>
             <small>Web Developer</small>
           </div>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Settings</a>
           <a class="dropdown-item" href="#">Activity Log</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item text-danger" href="{{route('sign.out')}}">
+          <!-- Logout link changed to button with id -->
+          <a class="dropdown-item text-danger" href="#" id="logout-link">
             <i class="fas fa-sign-out-alt"></i> Logout
           </a>
         </div>
@@ -81,3 +81,31 @@
     color: white;
   }
 </style>
+
+<!-- Include SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const logoutLink = document.getElementById('logout-link');
+    if(logoutLink) {
+      logoutLink.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+          title: 'Are you sure you want to logout?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, logout',
+          cancelButtonText: 'Cancel',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Redirect to logout route
+            window.location.href = "{{ route('sign.out') }}";
+          }
+        });
+      });
+    }
+  });
+</script>
