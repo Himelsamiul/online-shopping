@@ -30,6 +30,8 @@
                 <tr>
                     <th>SL</th>
                     <th>Name</th>
+                    <th>Description</th>
+
                     <th>Category</th>
                     <th>Unit</th>
                     <th>Size</th>
@@ -57,6 +59,7 @@
                     <tr>
                         <td>{{ $products->firstItem() + $loop->index }}</td>
                         <td class="fw-normal text-primary">{{ $product->name }}</td>
+                        <td>{{ $product->description }}</td>
                         <td>{{ $product->category->name }}</td>
                         <td>{{ $product->unit->name }}</td>
                        <td>{{ $product->size->name ?? '-' }}</td>

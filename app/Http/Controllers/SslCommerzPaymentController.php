@@ -27,7 +27,6 @@ class SslCommerzPaymentController extends Controller
     public function index(Request $request)
     {
 
-        session()->forget('cart');
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -250,6 +249,7 @@ class SslCommerzPaymentController extends Controller
                 $update_product = DB::table('orders')
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Processing']);
+                    
 
                 echo "<br >Transaction is successfully Completed";
             }

@@ -46,18 +46,20 @@
 
           
           <div class="col-md-4">
-            <ul class="right_icon d_none1" style="display: flex; align-items: center;">
-              @php
-              $cart = session('cart', []);
-              $cartCount = collect($cart)->sum('quantity');
-              @endphp
+  <ul class="right_icon d_none1" style="display: flex; align-items: center;">
+    @php
+      $cart = session('cart', []);
+      $cartCount = count($cart); 
+    @endphp
 
-              <li style="margin-right: 15px;"> {{-- Adds space to the right of the cart --}}
-                <a href="{{ route('view.cart') }}" style="display: inline-flex; align-items: center; gap: 2px;">
-                  <img src="{{ url('frontend/assets/images/shopping.png') }}" alt="cart" style="width: 20px; height: auto;">
-                  <span style="color: red;">({{ $cartCount }})</span>
-                </a>
-              </li>
+    <li style="margin-right: 15px;">
+      <a href="{{ route('view.cart') }}" style="display: inline-flex; align-items: center; gap: 2px;">
+        <img src="{{ url('frontend/assets/images/shopping.png') }}" alt="cart" style="width: 20px; height: auto;">
+        <span style="color: red;">({{ $cartCount }})</span>
+      </a>
+    </li>
+ 
+
 
               @guest('customerGuard')
               <a href="{{ route('reg') }}" class="order">Registration</a>
