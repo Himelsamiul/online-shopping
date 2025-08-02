@@ -17,7 +17,7 @@
       </a>
       <ul id="categoryMenu" class="submenu list-unstyled d-none ps-4">
         <li><a href="{{route('categories.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Category</a></li>
-        <li><a href="{{route('categories.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Category List</a></li>
+        <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Category List</a></li>
       </ul>
     </li>
 
@@ -29,7 +29,7 @@
       </a>
       <ul id="productsMenu" class="submenu list-unstyled d-none ps-4">
         <li><a href="{{route('products.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Product</a></li>
-        <li><a href="{{route('products.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Product List</a></li>
+        <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Product List</a></li>
       </ul>
     </li>
 
@@ -41,7 +41,7 @@
       </a>
       <ul id="unitMenu" class="submenu list-unstyled d-none ps-4">
         <li><a href="{{route('units.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Unit</a></li>
-        <li><a href="{{route('units.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Unit List</a></li>
+        <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Unit List</a></li>
       </ul>
     </li>
 
@@ -53,7 +53,7 @@
   </a>
   <ul id="sizeMenu" class="submenu list-unstyled d-none ps-4">
     <li><a href="{{ route('sizes.create') }}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Add Size</a></li>
-    <li><a href="{{ route('sizes.list') }}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Size List</a></li>
+    <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Size List</a></li>
   </ul>
 </li>
 
@@ -72,33 +72,33 @@
 
     </li>
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('cod.unpaid') }}" onclick="setActiveLink(this)">
+      <a class="sidebar-link text-white d-flex align-items-center" href="" onclick="setActiveLink(this)">
         <i class="fas fa-hand-holding-usd me-3"></i><span class="sidebar-link-title">Payment Collection</span>
       </a>
     </li>
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('contactusview') }}">
+      <a class="sidebar-link text-white d-flex align-items-center" href="">
         <i class="fas fa-envelope me-3"></i><span class="sidebar-link-title">Contacts message </span>
       </a>
     </li>
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('report') }}">
+      <a class="sidebar-link text-white d-flex align-items-center" href="">
         <i class="fas fa-file-alt me-3"></i><span class="sidebar-link-title">Report</span>
       </a>
     </li>
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="{{route('admin.questions.answer')}}">
+      <a class="sidebar-link text-white d-flex align-items-center" href="">
         <i class="fas fa-question-circle me-2"></i><span class="sidebar-link-title">Questions</span>
       </a>
     </li>
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('review') }}">
+      <a class="sidebar-link text-white d-flex align-items-center" href="">
         <i class="fas fa-star me-3"></i><span class="sidebar-link-title">Reviews</span>
       </a>
     </li>
