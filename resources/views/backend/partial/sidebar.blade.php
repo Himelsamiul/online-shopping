@@ -17,7 +17,7 @@
       </a>
       <ul id="categoryMenu" class="submenu list-unstyled d-none ps-4">
         <li><a href="{{route('categories.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Category</a></li>
-        <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Category List</a></li>
+        <li><a href="{{route('categories.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Category List</a></li>
       </ul>
     </li>
 
@@ -41,7 +41,7 @@
       </a>
       <ul id="unitMenu" class="submenu list-unstyled d-none ps-4">
         <li><a href="{{route('units.create')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Create Unit</a></li>
-        <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Unit List</a></li>
+        <li><a href="{{route('units.list')}}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Unit List</a></li>
       </ul>
     </li>
 
@@ -53,13 +53,13 @@
   </a>
   <ul id="sizeMenu" class="submenu list-unstyled d-none ps-4">
     <li><a href="{{ route('sizes.create') }}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Add Size</a></li>
-    <li><a href="" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Size List</a></li>
+    <li><a href="{{ route('sizes.list') }}" class="sidebar-link text-white" onclick="setActiveSubmenuLink(this)">Size List</a></li>
   </ul>
 </li>
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('order.list') }}" role="button" id="dashboardLink" onclick="setActiveLink(this)">
+      <a class="sidebar-link text-white d-flex align-items-center" href="" role="button" id="dashboardLink" onclick="setActiveLink(this)">
         <i class="fas fa-receipt me-3"></i><span class="sidebar-link-title">Orders</span>
       </a>
     </li>
