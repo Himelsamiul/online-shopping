@@ -59,13 +59,13 @@
               </li>
 
               @guest('customerGuard')
-                <a href="{{ route('reg') }}" class="order">Registration</a>
-                <a href="{{ route('login') }}" class="order">Login</a>
+                <a href="" class="order">Registration</a>
+                <a href="" class="order">Login</a>
               @endguest
 
               @auth('customerGuard')
                 <a href="#" id="logout-btn" class="order">Logout</a>
-                <a href="{{ route('profile') }}" class="order">Profile</a>
+                <a href="" class="order">Profile</a>
               @endauth
             </ul>
           </div>
@@ -83,22 +83,22 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarsExample04">
                 <ul class="navbar-nav mr-auto">
-                  <li class="nav-item"><a class="nav-link" href="{{ route('webpage') }}">Home</a></li>
+                  <li class="nav-item"><a class="nav-link" href="">Home</a></li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Products
                     </a>
                     <div class="dropdown-menu" aria-labelledby="productsDropdown">
                       @foreach($categories as $category)
-                        <a class="dropdown-item" href="{{ route('products', ['categoryId' => $category->id]) }}">
+                        <a class="dropdown-item" href="">
                           {{ $category->name }}
                         </a>
                       @endforeach
                     </div>
                   </li>
-                  <li class="nav-item"><a class="nav-link" href="{{ route('contactus') }}">Contact Us</a></li>
-                  <li class="nav-item"><a class="nav-link" href="{{ route('aboutus') }}">About Us</a></li>
-                  <li class="nav-item"><a class="nav-link" href="{{route('frequently.ask.question')}}">FAQ</a></li>
+                  <li class="nav-item"><a class="nav-link" href="">Contact Us</a></li>
+                  <li class="nav-item"><a class="nav-link" href="">About Us</a></li>
+                  <li class="nav-item"><a class="nav-link" href="">FAQ</a></li>
                 </ul>
               </div>
             </nav>
