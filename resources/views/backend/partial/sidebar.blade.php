@@ -66,39 +66,39 @@
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="" role="button" id="customerListLink" onclick="setActiveLink(this)">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('customers') }}" role="button" id="customerListLink" onclick="setActiveLink(this)">
         <i class="fas fa-users me-3"></i><span class="sidebar-link-title">Customers</span>
       </a>
 
     </li>
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="" onclick="setActiveLink(this)">
+        <a class="sidebar-link text-white d-flex align-items-center" href="" onclick="setActiveLink(this)">
         <i class="fas fa-hand-holding-usd me-3"></i><span class="sidebar-link-title">Payment Collection</span>
       </a>
     </li>
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="">
+     <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('contactusview') }}">
         <i class="fas fa-envelope me-3"></i><span class="sidebar-link-title">Contacts message </span>
       </a>
     </li>
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('review') }}">
         <i class="fas fa-file-alt me-3"></i><span class="sidebar-link-title">Report</span>
       </a>
     </li>
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{route('admin.questions.answer')}}">
         <i class="fas fa-question-circle me-2"></i><span class="sidebar-link-title">Questions</span>
       </a>
     </li>
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('review') }}">
         <i class="fas fa-star me-3"></i><span class="sidebar-link-title">Reviews</span>
       </a>
     </li>
