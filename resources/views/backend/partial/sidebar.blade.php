@@ -59,7 +59,7 @@
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="" role="button" id="dashboardLink" onclick="setActiveLink(this)">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('orders.list') }}" role="button" id="dashboardLink" onclick="setActiveLink(this)">
         <i class="fas fa-receipt me-3"></i><span class="sidebar-link-title">Orders</span>
       </a>
     </li>
