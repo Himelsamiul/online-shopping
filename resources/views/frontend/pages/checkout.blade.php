@@ -137,6 +137,7 @@
                 <input type="hidden" name="vat" value="{{ $vat }}">
                 <input type="hidden" name="final_total" value="{{ $finalTotal }}">
 
+                
                 <button type="submit" class="btn btn-success w-100 mt-3">Place Order</button>
             </div>
         </div>
