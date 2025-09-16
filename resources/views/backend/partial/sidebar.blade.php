@@ -85,7 +85,7 @@
 
 
     <li class="sidebar-list-item">
-      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('review') }}">
+      <a class="sidebar-link text-white d-flex align-items-center" href="{{ route('report') }}">
         <i class="fas fa-file-alt me-3"></i><span class="sidebar-link-title">Report</span>
       </a>
     </li>
