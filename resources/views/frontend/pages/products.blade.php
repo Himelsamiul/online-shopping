@@ -12,9 +12,8 @@
 <div class="container my-5">
     <!-- Discount Notification -->
     <div id="discountNotice" class="alert alert-success text-center fw-bold shadow-lg rounded-3 d-none" role="alert" style="font-size: 16px;">
-    🎉 Spend <strong>1000 Taka</strong>, save <span style="color: red;">20%</span>!
-</div>
-
+        🎉 Get <span style="color: red;">20%</span> discount up to <strong>1000 BDT</strong> on your total order!
+    </div>
 
     <!-- Message Area -->
     <div id="cartMessage" class="alert alert-warning text-center d-none" role="alert" style="font-weight: bold; font-size: 16px;">
