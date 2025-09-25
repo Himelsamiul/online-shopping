@@ -10,6 +10,11 @@
 </div>
 
 <div class="container my-5">
+    <!-- Discount Notification -->
+    <div id="discountNotice" class="alert alert-success text-center fw-bold shadow-lg rounded-3 d-none" role="alert" style="font-size: 16px;">
+        🎉 Get <span style="color: red;">20%</span> discount up to <strong>1000 BDT</strong> on your total order!
+    </div>
+
     <!-- Message Area -->
     <div id="cartMessage" class="alert alert-warning text-center d-none" role="alert" style="font-weight: bold; font-size: 16px;">
     </div>
@@ -80,13 +85,39 @@
         background-color: #ffdddd;
         border: 1px solid red;
     }
+
+    #discountNotice {
+        animation: fadeSlide 0.8s ease-in-out;
+    }
+
+    @keyframes fadeSlide {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const cartButtons = document.querySelectorAll('.already-in-cart-btn');
         const cartMessage = document.getElementById('cartMessage');
+        const discountNotice = document.getElementById('discountNotice');
 
+        // Loop show/hide discount banner
+        function toggleDiscount() {
+            discountNotice.classList.remove('d-none');
+
+            setTimeout(() => {
+                discountNotice.classList.add('d-none');
+            }, 5000); // visible for 5s
+
+            setTimeout(toggleDiscount, 7000); 
+            // after 5s visible + 2s hidden = 7s loop
+        }
+
+        // Start the loop after 1s
+        setTimeout(toggleDiscount, 1000);
+
+        // Already in cart message
         cartButtons.forEach(btn => {
             btn.addEventListener('click', function () {
                 const productName = btn.getAttribute('data-product');
