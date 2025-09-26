@@ -25,7 +25,7 @@ class OrderController extends Controller
         $query->whereDate('created_at', '<=', $endDate);
     }
 
-    $orders = $query->paginate(10)->appends($request->all()); // Append filters to pagination
+    $orders = $query->paginate(20)->appends($request->all()); // Append filters to pagination
     $totalOrderAmount = $query->sum('total_amount'); // Sum filtered orders only
 
     return view('backend.pages.order.list', compact('orders', 'totalOrderAmount'));

@@ -24,7 +24,7 @@ class CategoryController extends Controller
         }
 
         // Paginate 
-        $categories = $query->paginate(3);
+        $categories = $query->paginate(10);
         $allCategories = Category::all(); // Fetch all categories for dropdown
 
         return view('backend.pages.categories.list', compact('categories', 'allCategories'));

@@ -15,7 +15,7 @@ class ProductController extends Controller
     public function list()
 {
     // Fetch products with their category and unit relationships, and paginate by 5
-    $products = Product::with('category', 'unit','size')->paginate(5);
+    $products = Product::with('category', 'unit','size')->paginate(15);
 
     // Calculate the total number of products
     $totalProducts = $products->sum('quantity');

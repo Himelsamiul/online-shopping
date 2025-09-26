@@ -33,8 +33,8 @@
         font-weight: 600;
         margin-bottom: 8px;
         color: #303f9f;
-        transition: color 0.3s ease;
     }
+
     /* Input fields */
     .form-control {
         width: 100%;
@@ -85,7 +85,7 @@
         cursor: not-allowed;
     }
 
-    /* List button top left */
+    /* Top left button */
     .top-left-button {
         margin-bottom: 25px;
     }
@@ -105,7 +105,7 @@
         background-color: #1565c0;
     }
 
-    /* Side by side inputs container */
+    /* Form row */
     .form-row {
         display: flex;
         gap: 20px;
@@ -123,7 +123,6 @@
         border-radius: 12px;
         box-shadow: 0 4px 14px rgba(30, 136, 229, 0.25);
         object-fit: contain;
-        transition: opacity 0.3s ease;
     }
 </style>
 
@@ -193,19 +192,22 @@
         <div class="form-row mb-3">
             <div class="form-group">
                 <label for="price">Price</label>
-                <input id="price" type="number" name="price" class="form-control" value="{{ old('price') }}" step="1" required>
+                <input id="price" type="number" name="price" class="form-control" 
+                       value="{{ old('price') }}" step="any" required>
             </div>
 
             <div class="form-group">
                 <label for="previous_price">Previous Price</label>
-                <input id="previous_price" type="number" name="previous_price" class="form-control" value="{{ old('previous_price') }}" step="1">
+                <input id="previous_price" type="number" name="previous_price" class="form-control" 
+                       value="{{ old('previous_price') }}" step="any">
             </div>
         </div>
 
         <!-- Quantity -->
         <div class="form-group mb-3">
             <label for="quantity">Quantity</label>
-            <input id="quantity" type="number" name="quantity" class="form-control" value="{{ old('quantity') }}" required>
+            <input id="quantity" type="number" name="quantity" class="form-control" 
+                   value="{{ old('quantity') }}" step="any" required>
         </div>
 
         <!-- Status -->
@@ -278,7 +280,19 @@
 
         // Initial validation check
         validateForm();
+
+        // Force step increment = 1 on arrow keys
+        document.querySelectorAll('input[type="number"]').forEach(function (el) {
+            el.addEventListener('keydown', function (event) {
+                if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    el.value = (parseFloat(el.value) || 0) + 1;
+                } else if (event.key === "ArrowDown") {
+                    event.preventDefault();
+                    el.value = (parseFloat(el.value) || 0) - 1;
+                }
+            });
+        });
     });
 </script>
-
 @endsection

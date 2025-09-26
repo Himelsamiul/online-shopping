@@ -76,12 +76,16 @@
 
             <div class="form-group mb-3">
                 <label>Price:</label>
-                <input type="number" name="price" value="{{ $product->price }}" class="form-control" required>
+                <input type="number" id="price" name="price" 
+                       value="{{ number_format($product->price, 2, '.', '') }}" 
+                       class="form-control" step="any" required>
             </div>
 
             <div class="form-group mb-3">
                 <label>Previous Price:</label>
-                <input type="number" name="previous_price" value="{{ $product->previous_price }}" class="form-control">
+                <input type="number" id="previous_price" name="previous_price" 
+                       value="{{ number_format($product->previous_price, 2, '.', '') }}" 
+                       class="form-control" step="any">
             </div>
 
             <div class="form-group mb-3">
@@ -106,22 +110,22 @@
                 </select>
             </div>
 
-
             <div class="form-group mb-3">
                 <label>Size:</label>
                 <select name="size_id" class="form-control" required>
                     @foreach($sizes as $size)
                         <option value="{{ $size->id }}" {{ $size->id == $product->size_id ? 'selected' : '' }}>
                             {{ $size->name }}
-            </option>
-        @endforeach
-    </select>
-</div>
-
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
             <div class="form-group mb-3">
                 <label>Quantity:</label>
-                <input type="number" name="quantity" value="{{ $product->quantity }}" class="form-control" required>
+                <input type="number" id="quantity" name="quantity" 
+                       value="{{ $product->quantity }}" 
+                       class="form-control" step="any" required>
             </div>
 
             <div class="form-group mb-3">
@@ -153,6 +157,7 @@
 </div>
 
 <script>
+    // Remove image handler
     document.getElementById('removeImage')?.addEventListener('click', function () {
         document.getElementById('imagePreview').style.display = 'none';
         document.getElementById('imageInput').value = '';
@@ -162,6 +167,19 @@
         hiddenInput.name = 'remove_image';
         hiddenInput.value = 'true';
         document.forms[0].appendChild(hiddenInput);
+    });
+
+    // Force step increment = 1 on arrow keys
+    document.querySelectorAll('input[type="number"]').forEach(function (el) {
+        el.addEventListener('keydown', function (event) {
+            if (event.key === "ArrowUp") {
+                event.preventDefault();
+                el.value = (parseFloat(el.value) || 0) + 1;
+            } else if (event.key === "ArrowDown") {
+                event.preventDefault();
+                el.value = (parseFloat(el.value) || 0) - 1;
+            }
+        });
     });
 </script>
 @endsection
