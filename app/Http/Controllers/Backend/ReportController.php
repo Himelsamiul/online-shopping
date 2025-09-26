@@ -28,7 +28,7 @@ class ReportController extends Controller
             $query->whereDate('created_at', '<=', $endDate);
         }
 
-        $orders = $query->paginate(10);
+        $orders = $query->paginate(20);
 
         // Return the view with the orders data
         return view('backend.pages.report', compact('orders'));
