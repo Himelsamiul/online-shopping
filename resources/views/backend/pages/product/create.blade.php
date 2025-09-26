@@ -193,12 +193,12 @@
         <div class="form-row mb-3">
             <div class="form-group">
                 <label for="price">Price</label>
-                <input id="price" type="number" name="price" class="form-control" value="{{ old('price') }}" step="0.01" required>
+                <input id="price" type="number" name="price" class="form-control" value="{{ old('price') }}" step="1" required>
             </div>
 
             <div class="form-group">
                 <label for="previous_price">Previous Price</label>
-                <input id="previous_price" type="number" name="previous_price" class="form-control" value="{{ old('previous_price') }}" step="0.01">
+                <input id="previous_price" type="number" name="previous_price" class="form-control" value="{{ old('previous_price') }}" step="1">
             </div>
         </div>
 

@@ -44,8 +44,8 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
-            'previous_price' => 'nullable|numeric|min:0',
+            'price' => 'required|numeric|min:1',
+            'previous_price' => 'nullable|numeric|min:1',
             'category_id' => 'required|exists:categories,id',
             'unit_id' => 'required|exists:units,id',
             'size_id' => 'required|exists:sizes,id',
@@ -96,12 +96,12 @@ class ProductController extends Controller
        $request->validate([
            'name' => 'required|string|max:255',
            'description' => 'required|string|max:500',
-           'price' => 'required|numeric',
-           'previous_price' => 'nullable|numeric|min:0',
+           'price' => 'required|numeric|min:1',
+           'previous_price' => 'nullable|numeric|min:1',
            'category_id' => 'required|exists:categories,id',
            'unit_id' => 'required|exists:units,id',
            'size_id' => 'required|exists:sizes,id',
-           'quantity' => 'required|numeric',
+           'quantity' => 'required|numeric|min:1',
            'status' => 'required|in:active,inactive',
            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is nullable
        ]);
