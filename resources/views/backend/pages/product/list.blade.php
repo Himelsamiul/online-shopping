@@ -100,7 +100,7 @@
             </tbody>
             <tfoot class="table-light text-center fw-bold">
                 <tr>
-                    <td colspan="6">Total</td>
+                    <td colspan="8">Total</td>
                     <td>{{ $totalProducts }}</td>
                     <td>{{ $totalStockValue }} TK</td>
                     <td colspan="3"></td>
