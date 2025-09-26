@@ -12,23 +12,41 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function list()
+    public function list(Request $request)
 {
-    // Fetch products with their category and unit relationships, and paginate by 5
-    $products = Product::with('category', 'unit','size')->paginate(15);
+    // Start query with relationships
+    $query = Product::with('category', 'unit', 'size');
 
-    // Calculate the total number of products
+    // If search is provided, filter products
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%")
+              ->orWhereHas('category', function($q2) use ($search) {
+                  $q2->where('name', 'like', "%{$search}%");
+              })
+              ->orWhereHas('unit', function($q3) use ($search) {
+                  $q3->where('name', 'like', "%{$search}%");
+              })
+              ->orWhereHas('size', function($q4) use ($search) {
+                  $q4->where('name', 'like', "%{$search}%");
+              });
+        });
+    }
+
+    // Paginate results
+    $products = $query->paginate(15);
+
+    // Calculate totals
     $totalProducts = $products->sum('quantity');
-
-    // Calculate the total price of all products (price * quantity)
     $totalAmount = $products->sum(function ($product) {
         return $product->price * $product->quantity;
     });
 
-    // Return the view with products, totalProducts, and totalAmount
     return view('backend.pages.product.list', compact('products', 'totalProducts', 'totalAmount'));
 }
-
     // Show product creation form
     public function create()
     {
