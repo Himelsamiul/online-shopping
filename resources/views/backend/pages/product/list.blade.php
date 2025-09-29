@@ -3,13 +3,28 @@
 @section('content')
 <div class="container my-4">
 
+    <!-- Header with Search + Create Button -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-primary fw-bold">📦 Product List</h2>
-        <a href="{{ route('products.create') }}" class="btn btn-success shadow float-button">
-            <i class="fas fa-plus-circle"></i> Create Product
-        </a>
+        <div class="d-flex">
+            <!-- Search Form -->
+            <form action="{{ route('products.list') }}" method="GET" class="d-flex me-2">
+                <input type="text" name="search" value="{{ request('search') }}"
+                       class="form-control me-2" placeholder="🔍 Search products...">
+                <button type="submit" class="btn btn-primary me-2">Search</button>
+                @if(request('search'))
+                    <a href="{{ route('products.list') }}" class="btn btn-secondary">Reset</a>
+                @endif
+            </form>
+
+            <!-- Create Button -->
+            <a href="{{ route('products.create') }}" class="btn btn-success shadow float-button">
+                <i class="fas fa-plus-circle"></i> Create Product
+            </a>
+        </div>
     </div>
 
+    <!-- Success Alert -->
     @if(session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -24,6 +39,7 @@
         </script>
     @endif
 
+    <!-- Product Table -->
     <div class="table-responsive animated fadeInUp">
         <table class="table table-striped table-hover table-bordered shadow-sm">
             <thead class="table-dark text-center">
@@ -31,7 +47,6 @@
                     <th>SL</th>
                     <th>Name</th>
                     <th>Description</th>
-
                     <th>Category</th>
                     <th>Unit</th>
                     <th>Size</th>
@@ -50,7 +65,7 @@
                     $totalProducts = 0;
                 @endphp
 
-                @foreach($products as $product)
+                @forelse($products as $product)
                     @php
                         $stockValue = $product->price * $product->quantity;
                         $totalStockValue += $stockValue;
@@ -62,8 +77,7 @@
                         <td>{{ $product->description }}</td>
                         <td>{{ $product->category->name }}</td>
                         <td>{{ $product->unit->name }}</td>
-                       <td>{{ $product->size->name ?? '-' }}</td>
-
+                        <td>{{ $product->size->name ?? '-' }}</td>
                         <td>{{ $product->previous_price }} TK</td>
                         <td class="text-black fw-normal">{{ $product->price }} TK</td>
                         <td>{{ $product->quantity }}</td>
@@ -96,8 +110,14 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="13" class="text-muted">No products found.</td>
+                    </tr>
+                @endforelse
             </tbody>
+
+            <!-- Totals Row -->
             <tfoot class="table-light text-center fw-bold">
                 <tr>
                     <td colspan="8">Total</td>
@@ -109,8 +129,9 @@
         </table>
     </div>
 
+    <!-- Pagination -->
     <div class="d-flex justify-content-center mt-4">
-        {{ $products->links('pagination::bootstrap-4') }}
+        {{ $products->appends(request()->query())->links('pagination::bootstrap-4') }}
     </div>
 
 </div>
