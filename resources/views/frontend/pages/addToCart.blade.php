@@ -110,13 +110,13 @@
 
                 @if($discount > 0)
                 <div class="d-flex justify-content-between mb-2 text-success">
-                    <span>Discount (30%):</span>
+                    <span>Discount (20%):</span>
                     <span><strong>- BDT {{ number_format($discount, 2) }}</strong></span>
                 </div>
                 @endif
 
                 <div class="d-flex justify-content-between mb-2 text-primary">
-                    <span>VAT (20%):</span>
+                    <span>VAT (10%):</span>
                     <span><strong>+ BDT {{ number_format($vat, 2) }}</strong></span>
                 </div>
 
