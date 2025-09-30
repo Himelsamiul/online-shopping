@@ -24,7 +24,7 @@
     @endforeach
 
     @php
-        $discount = $total > 1000 ? $total * 0.50: 0;
+        $discount = $total > 1000 ? $total * 0.20: 0;
         $afterDiscount = $total - $discount;
         $vat = $afterDiscount * 0.10;
         $finalTotal = $afterDiscount + $vat;
@@ -35,14 +35,14 @@
         @if($total > 1000)
             <div class="fixed-notification congrats-notification" role="alert" aria-live="polite">
                 <div class="notification-content">
-                    🎉 50% Discount Applied!
+                    🎉 20% Discount Applied!
                 </div>
                 <button type="button" class="notification-close" aria-label="Close notification">&times;</button>
             </div>
         @elseif($total > 0)
             <div class="fixed-notification info-notification" role="alert" aria-live="polite">
                 <div class="notification-content">
-                    🛒 Spend {{ number_format(1000 - $total, 2) }} more for 50% off!
+                    🛒 Spend {{ number_format(1000 - $total, 2) }} more for 20% off!
                 </div>
                 <button type="button" class="notification-close" aria-label="Close notification">&times;</button>
             </div>
